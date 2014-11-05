@@ -67,11 +67,11 @@ Install MonetDB
 
 > monetdb create voc
 
-> mounted release voc
+> monetdb release voc
 
 > mclient -u monetdb -d voc
 
-> password:<monetdb>
+> password:monetdb
 
 > sql>
 

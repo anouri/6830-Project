@@ -38,3 +38,27 @@ city text,
 
 PRIMARY KEY (lastname));
 ```
+***MonetDB***:
+
+Download the Software
+
+> https://www.monetdb.org/downloads/MacOSX/Oct2014/
+> Download the file MonetDB-11.19.3-x86_64-Darwin-9-bin.tar.bz2
+
+Install MonetDB
+> Extract MonetDB-11.19.3-x86_64-Darwin-9-bin.tar.bz2 
+> You will now have a folder called usr
+> ln -s usr/local/monetdb /usr/local/monetdb
+> Add MonetDB bin directory to path in shell config: export PATH=/usr/local/monetdb/bin:$PATH
+> Install Xcode Command Line Tools: xcode-select --install
+> Install Homebrew: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+> brew install monetdb
+
+> monetdbd create /path/to/mydbfarm (just name this path anything)
+> monetdbd start /path/to/mydbfarm
+> monetdb create voc
+> mounted release voc
+> mclient -u monetdb -d voc
+> password:<monetdb>
+> sql>
+

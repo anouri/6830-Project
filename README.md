@@ -24,19 +24,7 @@ create keyspace mykeyspace with replication = {'class':'SimpleStrategy','replica
 ``
 
 ```
-CREATE TABLE users (
-
-firstname text,
-
-lastname text,
-
-age int,
-
-email text,
-
-city text,
-
-PRIMARY KEY (lastname));
+CREATE TABLE users (firstname text,lastname text,age int,email text,city text,PRIMARY KEY (lastname));
 ```
 ***MonetDB***:
 
@@ -61,6 +49,7 @@ Install MonetDB
 
 > brew install monetdb
 
+*Create a test database and table on terminal then see java example code*
 > monetdbd create /path/to/mydbfarm (just name this path anything)
 
 > monetdbd start /path/to/mydbfarm
@@ -73,5 +62,4 @@ Install MonetDB
 
 > password:monetdb
 
-> sql>
-
+> sql> CREATE TABLE test (id int, data varchar(30));

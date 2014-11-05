@@ -82,7 +82,7 @@ Install JRuby
 
 > rvm --default use jruby-1.7.16.1
 
-> Run ruby --version. Should get something like jruby 1.7.16.1 (1.9.3p392) 2014-10-28 4e93f31 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_25-b17 +jit [darwin-x86_64]
+> Run ruby --version. You should get something like jruby 1.7.16.1 (1.9.3p392) 2014-10-28 4e93f31 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_25-b17 +jit [darwin-x86_64]
 
 Update Gem Manager
 
@@ -112,7 +112,7 @@ Adding Gemset to Existing Application and Installing Rails
 
 > gem install rails
 
-> Run rails --version. Should get Rails 4.1.7
+> Run rails --version. You should get Rails 4.1.7
 
 > bundle install
 

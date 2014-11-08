@@ -1,10 +1,7 @@
 **Dataset For Test**:
-The smallest version that contains the context and the freebase id is ~5GB in size and is included in this project. 
+The smallest version that contains the context and the freebase id is ~5GB in size and since github has a limit on file size, I only included the first 10 out of 109 files in here for reference. 
 
-To see the online source directory, please go to:
-> http://iesl.cs.umass.edu/downloads/wiki-link/context-only/
-
-To install from source, run:
+To download the entire 5GB dataset, run the following command:
 > for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" $i` ; wget http://iesl.cs.umass.edu/downloads/wiki-link/context-only/$f.gz ; done ; echo "Downloaded all files, verifying MD5 checksums (might take some time)" ; diff --brief <(wget -q -O - http://iesl.cs.umass.edu/downloads/wiki-link/context-only/md5sum) <(md5sum *.gz) ; if [ $? -eq 1 ] ; then echo "ERROR: Download incorrect\!" ; else echo "Download correct" ; fi
 
 **Cassandra**:

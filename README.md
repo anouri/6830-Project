@@ -1,3 +1,70 @@
+**Dataset For Test**:
+The smallest version that contains the context and the freebase id is ~5GB in size and since github has a limit on file size, I only included the first 5 out of 109 files in here for reference. 
+
+To download the entire 5GB dataset, run the following command:
+```shell
+for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" $i` ; wget http://iesl.cs.umass.edu/downloads/wiki-link/context-only/$f.gz ; done ; echo "Downloaded all files, verifying MD5 checksums (might take some time)" ; diff --brief <(wget -q -O - http://iesl.cs.umass.edu/downloads/wiki-link/context-only/md5sum) <(md5sum *.gz) ; if [ $? -eq 1 ] ; then echo "ERROR: Download incorrect\!" ; else echo "Download correct" ; fi
+```
+
+**MongoDB**:
+
+Download the Software
+```shell
+curl -O http://downloads.mongodb.org/osx/mongodb-osx-x86_64-2.6.4.tgz
+```
+
+Install MongoDB
+```shell
+tar -zxvf mongodb-osx-x86_64-2.6.4.tgz
+```
+```shell
+mkdir -p mongodb
+```
+```shell
+cp -R -n mongodb-osx-x86_64-2.6.4/ mongodb
+```
+
+Replace <mongodb-install-directory> with the path to the extracted MongoDB archive.
+
+```shell
+export PATH=<mongodb-install-directory>/bin:$PATH
+```
+
+Make a directory for data **AS ROOT**:
+
+```shell
+sudo mkdir -p /data/db
+```
+
+Check permission on data directory:
+
+```shell
+ls -ld /data/db/
+```
+You should see:
+
+> drwxr-xr-x 4 mongod mongod 4096 Oct 26 10:31 /data/db/
+
+However, if you don't see the right permissions, run:
+
+```shell
+sudo chmod 0755 /data/db
+```
+```shell
+sudo chown mongod:mongod /data/db
+```
+Now, to run without a path:
+
+```shell
+mongod
+```
+
+Run with path:
+
+```shell
+<path to binary>/mongod
+```
+
 **Cassandra**:
 
 Download the Software

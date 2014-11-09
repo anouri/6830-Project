@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  get 'query/insert'
-  get 'query/show'
+  get "query/home"
+  match "/query/insert" => "query#insert", :via => :post
+  get "query/show"
 
-  root 'query#insert'
+  root "query#home"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,7 +1,11 @@
 /**
  * Created by trannguyen on 11/5/14.
  */
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * This example assumes there exist tables a and b filled with some data.

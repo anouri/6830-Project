@@ -1,34 +1,15 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
+import static org.junit.Assert.*;
 
 public class SQLSchemaParserTest {
 
+
     SchemaParser sqlSchemaParser;
     String rawSchema;
-    @BeforeMethod
-    public void setUp() throws Exception {
-        rawSchema = "drop table user;" +
-        "create table user (" +
-                "user_id integer primary key autoincrement," +
-                "username text not null," +
-                "email text not null," +
-                "pw_hash text not null);" +
-        "drop table follower;" +
-        "create table follower (" +
-                "who_id integer," +
-                "whom_id integer);" +
-        "drop table message;" +
-        "create table message (" +
-                "message_id integer primary key autoincrement," +
-                "author_id integer not null," +
-                "text text not null," +
-                "pub_date integer);";
-        sqlSchemaParser = new SQLSchemaParser(rawSchema);
-    }
 
     @Test
     public void testGetTupleDescription() throws Exception {
@@ -42,7 +23,7 @@ public class SQLSchemaParserTest {
         TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE), new Type(Type.SupportedType.STRING_TYPE),
                 new Type(Type.SupportedType.STRING_TYPE), new Type(Type.SupportedType.STRING_TYPE)}, new String[] {"user_id","username","email", "pw_hash"});
         TupleDesc actual = sqlSchemaParser.getTupleDescription("user");
-        Assert.assertEquals(actual,expected);
+        Assert.assertEquals(actual, expected);
 
     }
 
@@ -111,6 +92,5 @@ public class SQLSchemaParserTest {
         JSONObject actual = sqlSchemaParser.getJSON();
 
         Assert.assertEquals(actual.toString(),expected.toString());
-
     }
 }

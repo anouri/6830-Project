@@ -1,3 +1,9 @@
+**Maven**:
+This project is managed using maven. In order to have the jar that include all of the depdency, use ``mvn package`` or ``mvn clean install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
+> java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
+
+For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaParser
+
 **Dataset For Test**:
 The smallest version that contains the context and the freebase id is ~5GB in size and since github has a limit on file size, I only included the first 5 out of 109 files in here for reference. 
 

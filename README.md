@@ -14,13 +14,13 @@ for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" 
 
 **Example for Testing**
 
-Example input schema
-'''shell
+Example Input Schema
+```shell
 drop table user;create table user (user_id integer primary key autoincrement,username text not null,email text not null,pw_hash text not null);drop table follower;create table follower (who_id integer,whom_id integer);drop table message;create table message (message_id integer primary key autoincrement,author_id integer not null,text text not null,pub_date integer);
-'''
+```
 
-Example JSON output for distribution (Kristin can expect this format to generate data set)
-'''shell
+Example JSON Output for Distribution (Kristin can expect this format to generate data set)
+```shell
 {"follower"=>[{"category"=>"Integer", "length"=>4, "name"=>"who_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
 								{"category"=>"Integer", "length"=>4, "name"=>"whom_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}], 
 		"message"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
@@ -32,7 +32,7 @@ Example JSON output for distribution (Kristin can expect this format to generate
 						 {"category"=>"String", "length"=>128, "name"=>"email", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
 						 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}]
 	}
-'''
+```
 
 **MongoDB**:
 

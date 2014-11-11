@@ -1,5 +1,5 @@
 **Maven**:
-This project is managed using maven. In order to have the jar that include all of the depdency, use ``mvn package`` or ``mvn clean install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
+This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
 > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
 
 For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaParser
@@ -11,6 +11,28 @@ To download the entire 5GB dataset, run the following command:
 ```shell
 for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" $i` ; wget http://iesl.cs.umass.edu/downloads/wiki-link/context-only/$f.gz ; done ; echo "Downloaded all files, verifying MD5 checksums (might take some time)" ; diff --brief <(wget -q -O - http://iesl.cs.umass.edu/downloads/wiki-link/context-only/md5sum) <(md5sum *.gz) ; if [ $? -eq 1 ] ; then echo "ERROR: Download incorrect\!" ; else echo "Download correct" ; fi
 ```
+
+**Example for Testing**
+
+Example input schema
+'''shell
+drop table user;create table user (user_id integer primary key autoincrement,username text not null,email text not null,pw_hash text not null);drop table follower;create table follower (who_id integer,whom_id integer);drop table message;create table message (message_id integer primary key autoincrement,author_id integer not null,text text not null,pub_date integer);
+'''
+
+Example JSON output for distribution (Kristin can expect this format to generate data set)
+'''shell
+{"follower"=>[{"category"=>"Integer", "length"=>4, "name"=>"who_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
+								{"category"=>"Integer", "length"=>4, "name"=>"whom_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}], 
+		"message"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
+								{"category"=>"Integer", "length"=>4, "name"=>"author_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
+								{"category"=>"String", "length"=>128, "name"=>"text", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
+								{"category"=>"Integer", "length"=>4, "name"=>"pub_date", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}], 
+		"user"=>[{"category"=>"Integer", "length"=>4, "name"=>"user_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
+						 {"category"=>"String", "length"=>128, "name"=>"username", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
+						 {"category"=>"String", "length"=>128, "name"=>"email", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
+						 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}]
+	}
+'''
 
 **MongoDB**:
 

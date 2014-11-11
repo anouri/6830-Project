@@ -1,1 +1,28 @@
-<%= @test %>
+<h2>Column Distribution View</h2>
+<% @formatted_schema_json.each do |table, data| %>
+	<div>
+		Table: <%= table %> <%= text_field_tag("records-#{table}", nil, placeholder: "Number of Records") %>
+		<table>
+			<tr>
+				<th>Type</th>
+				<th>Column</th>
+				<th>Distribution</th>
+				<th>Number of Distinct Values</th>
+				<th>Minimum Value</th>
+				<th>Maximum Value</th>
+			</tr>
+			<% data.each do |d| %>
+				<tr>
+					<td><%= d["type"] %></td>
+					<td><%= d["name"] %></td>
+					<td><%= text_field_tag("distribution") %></td>
+					<td><%= text_field_tag("distinct_vals") %></td>
+					<td><%= text_field_tag("min") %></td>
+					<td><%= text_field_tag("max") %></td>
+				</tr>
+			<% end %>
+
+		</table>
+	</div>
+	<br> 
+<% end %>

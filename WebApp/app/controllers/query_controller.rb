@@ -1,5 +1,6 @@
 require 'java'
-import java.lang.System
+require 'json'
+SQLSchemaParser = JavaUtilities.get_proxy_class("SQLSchemaParser")
 
 class QueryController < ApplicationController
 
@@ -7,12 +8,13 @@ class QueryController < ApplicationController
 	end
 
   def insert
-  	#@test = System.getProperties["java.runtime.version"]
-  	schema = params[:schema]
   	percent_select = params[:select]
   	percent_update = params[:update]
   	percent_insert = params[:insert]
   	percent_delete = params[:delete]
+    sql_schema_parser = SQLSchemaParser.new(params[:schema])
+    schema_json = JSON.parse(sql_schema_parser.getJSON().toString())
+    @formatted_schema_json = format_schema_json(schema_json)
   end
 
   def show

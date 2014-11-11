@@ -8,15 +8,19 @@ class QueryController < ApplicationController
 	end
 
   def insert
-  	percent_select = params[:select]
-  	percent_update = params[:update]
-  	percent_insert = params[:insert]
-  	percent_delete = params[:delete]
+    @schema = Schema.create(raw_schema: params[:schema])
+
     sql_schema_parser = SQLSchemaParser.new(params[:schema])
     schema_json = JSON.parse(sql_schema_parser.getJSON().toString())
-    @formatted_schema_json = format_schema_json(schema_json)
+    
+    @tables = parse_schema_json(@schema, schema_json)
+    
   end
 
   def show
+    update_tables_and_fields(params)
+    schema = Schema.find(params[:schema_id])
+    schema_distribution_hash = create_schema_distribution_hash(schema)
+    @json = JSON.generate(schema_distribution_hash)
   end
 end

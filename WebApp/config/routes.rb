@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get "query/home"
   match "/query/insert" => "query#insert", :via => :post
+  match "/query/show" => "query#show", :via => :post
   get "query/show"
 
   root "query#home"

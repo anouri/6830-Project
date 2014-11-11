@@ -1,28 +1,40 @@
 <h2>Column Distribution View</h2>
-<% @formatted_schema_json.each do |table, data| %>
-	<div>
-		Table: <%= table %> <%= text_field_tag("records-#{table}", nil, placeholder: "Number of Records") %>
-		<table>
-			<tr>
-				<th>Type</th>
-				<th>Column</th>
-				<th>Distribution</th>
-				<th>Number of Distinct Values</th>
-				<th>Minimum Value</th>
-				<th>Maximum Value</th>
-			</tr>
-			<% data.each do |d| %>
+<%= form_tag("/query/show", method: "post") do %>
+	<%= hidden_field_tag(:schema_id, @schema.id) %>
+	<% @tables.each do |table| %>
+		<div>
+			Table: <%= table.name %> <%= number_field_tag("#{table.id}-cardinality", nil, placeholder: "Number of Records") %>
+			<table>
 				<tr>
-					<td><%= d["type"] %></td>
-					<td><%= d["name"] %></td>
-					<td><%= text_field_tag("distribution") %></td>
-					<td><%= text_field_tag("distinct_vals") %></td>
-					<td><%= text_field_tag("min") %></td>
-					<td><%= text_field_tag("max") %></td>
+					<th>Type</th>
+					<th>Length</th>
+					<th>Field</th>
+					<th>Distribution</th>
+					<th>Number of Distinct Values</th>
+					<th>Minimum Value</th>
+					<th>Maximum Value</th>
 				</tr>
-			<% end %>
-
-		</table>
+				<% table.fields.each do |f| %>
+					<tr>
+						<td><%= f.category %></td>
+						<td><%= f.length %></td>
+						<td><%= f.name %></td>
+						<td><%= select_tag "#{f.id}-distribution", "<option>uniform</option><option>delta</option>".html_safe %></td>
+						<td><%= number_field_tag("#{f.id}-distinct") %></td>
+						<% if f.category == "Integer" %>
+							<td><%= number_field_tag("#{f.id}-min") %></td>
+							<td><%= number_field_tag("#{f.id}-max") %></td>
+						<% else %>
+							<td>N/A</td>
+							<td>N/A</td>
+						<% end %>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+		<br> 
+	<% end %>
+	<div>
+		<%= submit_tag "Submit" %>
 	</div>
-	<br> 
 <% end %>

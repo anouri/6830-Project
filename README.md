@@ -37,6 +37,14 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
 	}
 ```
 
+**SQLite**:
+
+Pre-installed for most Mac and Linux machines - check if you have it already with
+```shell
+sqlite3
+```
+if not, follow instructions here:  http://www.tutorialspoint.com/sqlite/sqlite_installation.htm
+
 **MongoDB**:
 
 Download the Software

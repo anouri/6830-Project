@@ -37,6 +37,29 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
 	}
 ```
 
+Updates to JSON Output to Data Generator:
+- distribution can be "uniform", "delta", or "normal" (and for strings, refers to distribution on length of string)
+- categories can be "String" or "Integer"
+- I'm currently ignoring the length field, so we might not need this
+- add two fields "mean" and "stdv"
+- if distribution is normal: mean and stdv are non-null; min and max are null
+- else: mean and stdv are null; min and max are not
+- if the user doesn't know how many distinct values there are, distinct is null and i'll sample from the distribution every time
+
+Output JSON Grammar from Data Generator:
+```shell
+{tables: [
+	tableName1: {
+		colNames: [colName1, colName2, colName3],
+		colData: [[1,2,3],[4,5,6],[7,8,9]]
+	},
+	tableName2: {
+		colNames: [colName4, colName5, colName6],
+		colData: [['x','y','z'],['x','y','z'],['x','y','z']]
+	}
+]}
+```
+
 **SQLite**:
 
 Pre-installed for most Mac and Linux machines - check if you have it already with

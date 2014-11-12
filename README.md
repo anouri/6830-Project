@@ -21,16 +21,19 @@ drop table user;create table user (user_id integer primary key autoincrement,use
 
 Example JSON Output for Distribution (Kristin can expect this format to generate data set)
 ```shell
-{"follower"=>[{"category"=>"Integer", "length"=>4, "name"=>"who_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
-								{"category"=>"Integer", "length"=>4, "name"=>"whom_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}], 
-		"message"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
-								{"category"=>"Integer", "length"=>4, "name"=>"author_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
-								{"category"=>"String", "length"=>128, "name"=>"text", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
-								{"category"=>"Integer", "length"=>4, "name"=>"pub_date", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}], 
-		"user"=>[{"category"=>"Integer", "length"=>4, "name"=>"user_id", "distribution"=>"uniform", "distinct"=>1, "min"=>1, "max"=>1}, 
-						 {"category"=>"String", "length"=>128, "name"=>"username", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
-						 {"category"=>"String", "length"=>128, "name"=>"email", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}, 
-						 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"uniform", "distinct"=>1, "min"=>nil, "max"=>nil}]
+{"follower":{"cardinality":100,
+							 "fields":[{"category":"Integer","length":4,"name":"who_id","distribution":"uniform","distinct":1,"min":1,"max":1},
+												 {"category":"Integer","length":4,"name":"whom_id","distribution":"uniform","distinct":1,"min":1,"max":1}]},
+		"message":{"cardinality":200,
+							 "fields":[{"category":"Integer","length":4,"name":"message_id","distribution":"uniform","distinct":1,"min":1,"max":1},
+							 					 {"category":"Integer","length":4,"name":"author_id","distribution":"uniform","distinct":1,"min":1,"max":1},
+							 					 {"category":"String","length":128,"name":"text","distribution":"uniform","distinct":1,"min":null,"max":null},
+							 					 {"category":"Integer","length":4,"name":"pub_date","distribution":"uniform","distinct":1,"min":1,"max":1}]},
+		"user":{"cardinality":300,
+						"fields":[{"category":"Integer","length":4,"name":"user_id","distribution":"uniform","distinct":1,"min":1,"max":1},
+											{"category":"String","length":128,"name":"username","distribution":"uniform","distinct":1,"min":null,"max":null},
+											{"category":"String","length":128,"name":"email","distribution":"uniform","distinct":1,"min":null,"max":null},
+											{"category":"String","length":128,"name":"pw_hash","distribution":"uniform","distinct":1,"min":null,"max":null}]}
 	}
 ```
 

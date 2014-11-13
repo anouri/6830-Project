@@ -121,13 +121,13 @@ Download the Software
 > curl -OL http://downloads.datastax.com/community/dsc.tar.gz
 
 Install Cassandra
-> tar -xzf dsc-cassandra-1.2.2-bin.tar.gz
+> tar -xzf dsc.tar.gz
 
 > cd dsc-cassandra-1.2.2/bin
 
 > sudo ./cassandra # this will start cassandra server in background, use -f if want foreground
 
-> ./csql # if you run the above command as background, or open a different terminal
+> ./cqlsh # if you run the above command as background, or open a different terminal
 
 *How to run the demo*:
 

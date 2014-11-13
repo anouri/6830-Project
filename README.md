@@ -24,6 +24,37 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
 {"follower":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"who_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"whom_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"message":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"message_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"author_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"text","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"pub_date","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"user":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"user_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"username","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"email","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"pw_hash","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]}}
 ```
 
+Updates to JSON Output to Data Generator:
+- distribution can be "uniform", "delta", or "normal" (and for strings, refers to distribution on length of string)
+- categories can be "String" or "Integer"
+- I'm currently ignoring the length field, so we might not need this
+- add two fields "mean" and "stdv"
+- if distribution is normal: mean and stdv are non-null; min and max are null
+- else: mean and stdv are null; min and max are not
+- if the user doesn't know how many distinct values there are, distinct is null and i'll sample from the distribution every time
+
+Output JSON Grammar from Data Generator:
+```shell
+{tables: [
+	tableName1: {
+		colNames: [colName1, colName2, colName3],
+		colData: [[1,2,3],[4,5,6],[7,8,9]]
+	},
+	tableName2: {
+		colNames: [colName4, colName5, colName6],
+		colData: [['x','y','z'],['x','y','z'],['x','y','z']]
+	}
+]}
+```
+
+**SQLite**:
+
+Pre-installed for most Mac and Linux machines - check if you have it already with
+```shell
+sqlite3
+```
+if not, follow instructions here:  http://www.tutorialspoint.com/sqlite/sqlite_installation.htm
+
 **MongoDB**:
 
 Download the Software

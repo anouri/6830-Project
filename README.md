@@ -21,20 +21,7 @@ drop table user;create table user (user_id integer primary key autoincrement,use
 
 Example JSON Output for Distribution (Kristin can expect this format to generate data set)
 ```shell
-{"follower":{"cardinality":100,
-							 "fields":[{"category":"Integer","length":4,"name":"who_id","distribution":"uniform","distinct":1,"min":1,"max":1},
-												 {"category":"Integer","length":4,"name":"whom_id","distribution":"uniform","distinct":1,"min":1,"max":1}]},
-		"message":{"cardinality":200,
-							 "fields":[{"category":"Integer","length":4,"name":"message_id","distribution":"uniform","distinct":1,"min":1,"max":1},
-							 					 {"category":"Integer","length":4,"name":"author_id","distribution":"uniform","distinct":1,"min":1,"max":1},
-							 					 {"category":"String","length":128,"name":"text","distribution":"uniform","distinct":1,"min":null,"max":null},
-							 					 {"category":"Integer","length":4,"name":"pub_date","distribution":"uniform","distinct":1,"min":1,"max":1}]},
-		"user":{"cardinality":300,
-						"fields":[{"category":"Integer","length":4,"name":"user_id","distribution":"uniform","distinct":1,"min":1,"max":1},
-											{"category":"String","length":128,"name":"username","distribution":"uniform","distinct":1,"min":null,"max":null},
-											{"category":"String","length":128,"name":"email","distribution":"uniform","distinct":1,"min":null,"max":null},
-											{"category":"String","length":128,"name":"pw_hash","distribution":"uniform","distinct":1,"min":null,"max":null}]}
-	}
+{"follower":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"who_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"whom_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"message":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"message_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"author_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"text","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"pub_date","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"user":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"user_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"username","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"email","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"pw_hash","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]}}
 ```
 
 **MongoDB**:
@@ -216,9 +203,13 @@ Adding Gemset to Existing Application and Installing Rails
 
 *Running the Web Application*
 
-> In the 6830-Project/WebApp directory, run rails s
+> cd to 6830-Project/WebApp directory
 
-> You should see a page with your Java runtime version number by going to http://localhost:3000 
+> rake db:migrate
+
+> rails s
+
+> You should see the home page by going to http://localhost:3000 
 
 > If you get the message Illegal key size: possibly you need to install Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files for your JRE proceed as follows
 

@@ -13,34 +13,8 @@
 				<artifactId>jsqlparser</artifactId>
 				<version>0.8.0</version>
 			</dependency>
-	        <dependency>
-	            <groupId>org.hibernate</groupId>
-	            <artifactId>hibernate-core</artifactId>
-	            <version>4.3.6.Final</version>
-	        </dependency>
 	        
-	        <dependency>
-	            <groupId>org.hibernate.javax.persistence</groupId>
-	            <artifactId>hibernate-jpa-2.0-api</artifactId>
-	            <version>1.0.1.Final</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.hibernate</groupId>
-	            <artifactId>hibernate-entitymanager</artifactId>
-	            <version>4.3.6.Final</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>javax.validation</groupId>
-	            <artifactId>validation-api</artifactId>
-	            <version>1.0.0.GA</version>
-	            <scope>provided</scope>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.hibernate.common</groupId>
-				<artifactId>hibernate-commons-annotations</artifactId>
-				<version>4.0.5.Final</version>
-	        </dependency>
-	        <dependency>
+		        <dependency>
 				<groupId>org.json</groupId>
 				<artifactId>json</artifactId>
 				<version>20140107</version>
@@ -51,46 +25,35 @@
 		      <version>4.11</version>
 		      <scope>test</scope>
 		    </dependency>
-							        
-	        <dependency>
-	            <groupId>org.slf4j</groupId>
-	            <artifactId>slf4j-api</artifactId>
-	            <version>1.5.2</version>
-	        </dependency>
-		    <dependency>
-		    
-	        <groupId>org.jboss.spec.javax.transaction</groupId>
-	        <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-	        <version>1.0.0.Final</version>
-	        <scope>provided</scope>
-	    </dependency>
-	        <dependency>
-	            <groupId>org.jboss.logging</groupId>
-	            <artifactId>jboss-logging</artifactId>
-	            <version>3.1.0.CR2</version>
-	        </dependency>
-	       
+
 	 
 	        <dependency>
 	            <groupId>mysql</groupId>
 	            <artifactId>mysql-connector-java</artifactId>
 	            <version>5.1.34</version>
 	        </dependency>
-	        
+
+            <!-- Monetdb -->
+        <dependency>
+            <groupId>monetdb</groupId>
+            <artifactId>monetdb-jdbc</artifactId>
+            <version>2.8</version>
+        </dependency>
+
 	        <!--  Mongo driver -->
 			<dependency>
 			    <groupId>org.hibernate.ogm</groupId>
 			    <artifactId>hibernate-ogm-mongodb</artifactId>
 			    <version>4.1.0.Beta8</version>
 			</dependency>
-			
+
 			<!--  Neo4j driver -->
 			<dependency>
 			    <groupId>org.hibernate.ogm</groupId>
 			    <artifactId>hibernate-ogm-neo4j</artifactId>
 			    <version>4.1.0.Beta8</version>
 			</dependency>
-			
+
 	 		<!-- Cassandra driver -->
 	 		<dependency>
 			    <groupId>org.hibernate.ogm</groupId>
@@ -136,13 +99,37 @@
 				<version>2.3</version>
 			</dependency>
 	        
-	        <!-- JBoss Transactions dependency -->
-		    <dependency>
-		        <groupId>org.jboss.jbossts</groupId>
-		        <artifactId>jbossjta</artifactId>
-		        <version>4.16.4.Final</version>
-		    </dependency>
+
 	</dependencies>
+    <!--uber jar shade plugin-->
+     <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.3</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <artifactSet>
+                                    <excludes>
+                                        <exclude>classworlds:classworlds</exclude>
+                                        <exclude>junit:junit</exclude>
+                                        <exclude>jmock:*</exclude>
+                                        <exclude>*:xml-apis</exclude>
+                                        <exclude>org.apache.maven:lib:tests</exclude>
+                                        </excludes>
+                                </artifactSet>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
 
     <repositories>
         <repository>

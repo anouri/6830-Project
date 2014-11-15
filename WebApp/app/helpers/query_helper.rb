@@ -70,7 +70,7 @@ module QueryHelper
 	}
 =end
 	def create_schema_distribution_hash(schema)
-		relevant_attributes = [:category, :length, :name, :distribution, :distinct, :min, :max]
+		relevant_attributes = [:category, :length, :name, :distribution, :distinct, :mean, :stdv, :min, :max]
 		result = {}
 		schema.tables.each do |table|
 			data = {}

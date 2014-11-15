@@ -11,6 +11,8 @@
 					<th>Field</th>
 					<th>Distribution</th>
 					<th>Number of Distinct Values</th>
+					<th>Mean</th>
+					<th>Standard Deviation</th>
 					<th>Minimum Value</th>
 					<th>Maximum Value</th>
 				</tr>
@@ -19,15 +21,12 @@
 						<td><%= f.category %></td>
 						<td><%= f.length %></td>
 						<td><%= f.name %></td>
-						<td><%= select_tag "#{f.id}-distribution", "<option>uniform</option><option>delta</option>".html_safe %></td>
+						<td><%= select_tag "#{f.id}-distribution", options_for_select(["uniform", "normal", "delta"]) %></td>
 						<td><%= number_field_tag("#{f.id}-distinct") %></td>
-						<% if f.category == "Integer" %>
-							<td><%= number_field_tag("#{f.id}-min") %></td>
-							<td><%= number_field_tag("#{f.id}-max") %></td>
-						<% else %>
-							<td>N/A</td>
-							<td>N/A</td>
-						<% end %>
+						<td><%= number_field_tag("#{f.id}-mean") %></td>
+						<td><%= number_field_tag("#{f.id}-stdv") %></td>
+						<td><%= number_field_tag("#{f.id}-min") %></td>
+						<td><%= number_field_tag("#{f.id}-max") %></td>
 					</tr>
 				<% end %>
 			</table>

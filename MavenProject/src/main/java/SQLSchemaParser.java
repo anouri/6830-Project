@@ -3,6 +3,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,7 +52,7 @@ public class SQLSchemaParser implements SchemaParser {
                     for (ColumnDefinition def : columns) {
                         columnName.add(def.getColumnName());
                         if (def.getColDataType().getDataType().equalsIgnoreCase("varchar")) {
-                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, Integer.parseInt(def.getColDataType().getArgumentsStringList().get(0))));
+                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, Integer.parseInt((String) def.getColDataType().getArgumentsStringList().get(0))));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("integer")) {
                             columnType.add(new Type(Type.SupportedType.INT_TYPE));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("text")) {

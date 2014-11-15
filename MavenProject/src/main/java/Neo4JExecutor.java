@@ -16,7 +16,7 @@ public class Neo4JExecutor implements QueryExecutor {
 	
 	private GraphDatabaseService graphDb;
 	private ArrayList<Relationship> relationships;
-	private String db_path;
+	private String db_path = "target/neo4j-test";
 	
 	public Neo4JExecutor() throws Exception{
 		this.relationships = new ArrayList<Relationship>();
@@ -24,6 +24,14 @@ public class Neo4JExecutor implements QueryExecutor {
 			throw new Exception("Could not initiate the the Neo4JExecutor Executor");
 		}
 	}
+	
+	public Neo4JExecutor(String db_path) throws Exception{
+		this.relationships = new ArrayList<Relationship>();
+		this.db_path = db_path;
+		if(!connect()){
+			throw new Exception("Could not initiate the the Neo4JExecutor Executor");
+		}
+	} 
     /**
      * Each implementation of this will take in
      * the raw sql query and execute in its underlying database

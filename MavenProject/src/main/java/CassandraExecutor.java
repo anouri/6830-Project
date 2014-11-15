@@ -10,10 +10,17 @@ import com.datastax.driver.core.Session;
 public class CassandraExecutor implements QueryExecutor {
 	private Cluster cluster;
     private Session session;
-    private String contactPoint;
-    private String keyspace;
+    private String contactPoint = "127.0.0.1";
+    private String keyspace = "mykeyspace";
     
     public CassandraExecutor(String contactPoint, String keyspace) throws Exception{
+    	this.contactPoint = contactPoint;
+    	this.keyspace = keyspace;
+    	if (!connect()){
+    		throw new Exception("Could not initiate the the Cassandra Executor");
+    	}
+    }
+    public CassandraExecutor() throws Exception{
     	this.contactPoint = contactPoint;
     	this.keyspace = keyspace;
     	if (!connect()){

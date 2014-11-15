@@ -24,4 +24,3 @@
 	    <mapping class="datamodel.TestData" />
     </session-factory>
 </hibernate-configuration>
-</hibernate-configuration>

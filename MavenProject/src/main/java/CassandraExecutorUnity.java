@@ -1,28 +1,32 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
+
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+
 /**
  * Created by trannguyen on 11/14/14.
  */
-public class MySqlExecutor implements QueryExecutor {
+public class CassandraExecutorUnity implements QueryExecutor {
 	private Connection conn;
-	private String driverLink = "jdbc:mysql://localhost/test";
+	private String driverLink = "jdbc:cassandra://127.0.0.1:9042";
 	
-	public MySqlExecutor(String driverLink) throws Exception{
+	public CassandraExecutorUnity() throws Exception{
+		if(!connect()){
+			throw new Exception("Could not initiate the the cassandra Executor");
+		}
+	}
+	
+	public CassandraExecutorUnity(String driverLink) throws Exception{
 		this.driverLink = driverLink;
 		if(!connect()){
-			throw new Exception("Could not initiate the the Mysql Executor");
+			throw new Exception("Could not initiate the the cassandra Executor");
 		}
-		
 	}
-	public MySqlExecutor() throws Exception{
-		if(!connect()){
-			throw new Exception("Could not initiate the the Mysql Executor");
-		}
-		
-	}
+	
     /**
      * Each implementation of this will take in
      * the raw sql query and execute in its underlying database
@@ -73,11 +77,13 @@ public class MySqlExecutor implements QueryExecutor {
     	}
     }
 
-	@Override
-	public boolean connect() {
-		try {
-		   Class.forName("com.mysql.jdbc.Driver");
-		   this.conn =DriverManager.getConnection(driverLink);
+    @Override
+    public boolean connect(){
+    	try {
+    	   Class.forName("org.apache.cassandra.cql.jdbc.CassandraDriver");
+    	   org.apache.log4j.BasicConfigurator.configure();
+ 		   this.conn =DriverManager.getConnection(driverLink);
+ 		   System.out.println("Connected!");
  		   return true;
  		} catch (SQLException ex){
     	    System.out.println("SQLException: " + ex.getMessage());
@@ -88,14 +94,25 @@ public class MySqlExecutor implements QueryExecutor {
 			e.printStackTrace();
 			return false;
 		}
-	}
+    }
 	@Override
 	public void cleanUP() {
 		try {
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}	
+	}
+	
+	public static void main( String args[] ){
+		CassandraExecutorUnity me;
+		try {
+			me = new CassandraExecutorUnity();
+			
+			me.cleanUP();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
+    
 }
-

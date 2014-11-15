@@ -12,6 +12,7 @@ public class CassandraDemo {
     public CassandraDemo(String contactPoint, String keyspace) {
         cluster = Cluster.builder().addContactPoint(contactPoint).build();
         session = cluster.connect(keyspace);
+        session.execute("CREATE TABLE if not exists users (firstname text,lastname text,age int,email text,city text,PRIMARY KEY (lastname));");
     }
 
     public void executeAndPrint(String sqlStatement, String tableName) {
@@ -23,6 +24,7 @@ public class CassandraDemo {
     }
 
     public void close() {
+        session.execute("DROP TABLE users;");
         session.close();
         cluster.close();
     }

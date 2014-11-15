@@ -35,7 +35,7 @@ Updates to JSON Output to Data Generator:
 
 Output JSON Grammar from Data Generator:
 ```shell
-{tables: [
+{
 	tableName1: {
 		colNames: [colName1, colName2, colName3],
 		colData: [[1,2,3],[4,5,6],[7,8,9]]
@@ -44,7 +44,7 @@ Output JSON Grammar from Data Generator:
 		colNames: [colName4, colName5, colName6],
 		colData: [['x','y','z'],['x','y','z'],['x','y','z']]
 	}
-]}
+}
 ```
 
 **SQLite**:

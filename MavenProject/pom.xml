@@ -123,10 +123,17 @@
 	        	<artifactId>junit</artifactId>
 	        	<version>4.11</version>
 	        </dependency>
+	        
+	        <!-- normal distribution and random string libs for data generator -->
 	        <dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
 				<version>3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.3</version>
 			</dependency>
 	        
 	        <!-- JBoss Transactions dependency -->

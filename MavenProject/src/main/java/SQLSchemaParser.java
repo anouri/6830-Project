@@ -25,7 +25,6 @@ public class SQLSchemaParser implements SchemaParser {
         return rawSqlSchema.split(";");
     }
 
-    @Override
     public TupleDesc getTupleDescription(String tableName) {
         List<Type> columnType = new ArrayList<Type>();
         List<String> columnName = new ArrayList<String>();
@@ -71,7 +70,6 @@ public class SQLSchemaParser implements SchemaParser {
         return new TupleDesc(resultType,resultName);
     }
 
-    @Override
     public String[] getTableName() {
         CCJSqlParserManager pm = new CCJSqlParserManager();
         String[] sqlStatements = readSQL(rawSqlSchema);
@@ -97,12 +95,10 @@ public class SQLSchemaParser implements SchemaParser {
         return resultTableName;
     }
 
-    @Override
     public String getRawSchema() {
         return rawSqlSchema;
     }
 
-    @Override
     public JSONObject getJSON() {
         String[] tableNames = getTableName();
         JSONObject result = new JSONObject();

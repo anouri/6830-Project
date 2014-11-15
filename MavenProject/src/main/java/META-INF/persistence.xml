@@ -12,7 +12,7 @@
         	<!-- defines which JTA Transaction we plan to use -->
             <property name="hibernate.transaction.jta.platform"
                       value="org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform"/>
-            <property name="hibernate.ogm.datastore.provider" value="mongodb"/>
+            <property name="hibernate.ogm.datastore.provide r" value="mongodb"/>
             <property name="hibernate.ogm.mongodb.database" value="test"/>
             <property name="hibernate.ogm.mongodb.username" value=""/>
             <property name="hibernate.ogm.mongodb.password" value=""/>

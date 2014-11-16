@@ -1,5 +1,5 @@
 <h2>Column Distribution View</h2>
-<%= form_tag("/query/show", method: "post") do %>
+<%= form_tag("/benchmark/queries", method: "post") do %>
 	<%= hidden_field_tag(:schema_id, @schema.id) %>
 	<% @tables.each do |table| %>
 		<div>

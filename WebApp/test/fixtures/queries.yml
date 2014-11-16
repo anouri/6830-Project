@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  percentage: 1
+  kind: MyString
+  tables: MyString
+  select_fields: MyString
+  update_fields: MyString
+  groupby_fields: MyString
+  orderby_fields: MyString
+
+two:
+  percentage: 1
+  kind: MyString
+  tables: MyString
+  select_fields: MyString
+  update_fields: MyString
+  groupby_fields: MyString
+  orderby_fields: MyString

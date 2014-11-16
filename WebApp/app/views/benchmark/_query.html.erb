@@ -1,0 +1,12 @@
+<%= div_for query do %>
+	<%= query.percentage %>%
+	<% if query.kind == "SELECT" %>
+		<%= query.create_raw_select %>
+	<% elsif query.kind == "UPDATE" %>
+		<%= query.create_raw_update %>
+	<% elsif query.kind == "INSERT" %>
+		<%= query.create_raw_insert %>
+	<% elsif query.kind == "DELETE" %>
+		<%= query.create_raw_delete %>
+	<% end %>
+<% end %>

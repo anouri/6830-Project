@@ -1,0 +1,70 @@
+<?xml version = "1.0"?>
+
+<XSPEC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xspec.xsd">
+    <semanticDatabaseName></semanticDatabaseName>
+    <databaseName>testdb_mysql</databaseName>
+    <databaseSystemName>test</databaseSystemName>
+    <databaseSchemaName></databaseSchemaName>
+    <databaseId>60050091</databaseId>
+    <databaseProductName>MySQL</databaseProductName>
+    <databaseProductVersion>5.6.21</databaseProductVersion>
+    <urlJDBC>jdbc:mysql://localhost/test</urlJDBC>
+    <userid></userid>
+    <password></password>
+    <driverName>MySQL Connector Java</driverName>
+    <driverClass>com.mysql.jdbc.Driver</driverClass>
+    <delimitId>`</delimitId>
+    <catalogsIncluded></catalogsIncluded>
+    <tablesIncluded></tablesIncluded>
+    <tablesExcluded></tablesExcluded>
+
+   <TABLE>
+        <semanticTableName>test.TestData</semanticTableName>
+        <tableName>TestData</tableName>
+        <schemaName></schemaName>
+        <catalogName>test</catalogName>
+        <comment></comment>
+        <numTuples>0</numTuples>
+     <FIELD>
+        <semanticFieldName>dataPoint</semanticFieldName>
+        <fieldName>dataPoint</fieldName>
+        <dataType>12</dataType>
+        <dataTypeName>VARCHAR</dataTypeName>
+        <fieldSize>255</fieldSize>
+        <decimalDigits>0</decimalDigits>
+        <numberRadixPrecision>10</numberRadixPrecision>
+        <remarks></remarks>
+        <defaultValue></defaultValue>
+        <characterOctetLength>255</characterOctetLength>
+        <ordinalPosition>2</ordinalPosition>
+        <isNullable>YES</isNullable>
+        <numDistinctValues>0</numDistinctValues>
+     </FIELD>
+
+     <FIELD>
+        <semanticFieldName>id</semanticFieldName>
+        <fieldName>id</fieldName>
+        <dataType>-5</dataType>
+        <dataTypeName>BIGINT</dataTypeName>
+        <fieldSize>19</fieldSize>
+        <decimalDigits>0</decimalDigits>
+        <numberRadixPrecision>10</numberRadixPrecision>
+        <remarks></remarks>
+        <defaultValue></defaultValue>
+        <characterOctetLength>0</characterOctetLength>
+        <ordinalPosition>1</ordinalPosition>
+        <isNullable>NO</isNullable>
+        <numDistinctValues>0</numDistinctValues>
+     </FIELD>
+
+     <PRIMARYKEY>
+        <keyName>PRIMARY</keyName>
+        <keyType>1</keyType>
+        <FIELDS>
+        <fieldName>id</fieldName>
+        </FIELDS>
+     </PRIMARYKEY>
+
+   </TABLE>
+
+</XSPEC>

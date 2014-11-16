@@ -1,0 +1,21 @@
+<?xml version = "1.0"?>
+
+<XSPEC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xspec.xsd">
+    <semanticDatabaseName></semanticDatabaseName>
+    <databaseName>testdb_mongodb</databaseName>
+    <databaseSystemName></databaseSystemName>
+    <databaseSchemaName></databaseSchemaName>
+    <databaseId>80020202</databaseId>
+    <databaseProductName>MongoDB</databaseProductName>
+    <databaseProductVersion>2.6.4</databaseProductVersion>
+    <urlJDBC>jdbc:mongo://localhost/test</urlJDBC>
+    <userid></userid>
+    <password></password>
+    <driverName>Mongo JDBC</driverName>
+    <driverClass>mongodb.jdbc.MongoDriver</driverClass>
+    <delimitId>"</delimitId>
+    <catalogsIncluded></catalogsIncluded>
+    <tablesIncluded></tablesIncluded>
+    <tablesExcluded></tablesExcluded>
+    <properties>"usecatalog" : "false", "useschema" : "false"</properties>
+</XSPEC>

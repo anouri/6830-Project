@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -15,8 +16,11 @@ public class QueryExecutorAll {
 	
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
+		System.out.println("mysql");
 //		result.put("mysql", executeQuery(getDataSource("mysql"), rawSQLQuery));
+		System.out.println("mongo");
 //		result.put("mongo", executeQuery(getDataSource("mongo"), rawSQLQuery));
+		System.out.println("cassandra");
 		result.put("cassandra", executeQuery(getDataSource("cassandra"), rawSQLQuery));
 		return result;
 	}
@@ -24,7 +28,6 @@ public class QueryExecutorAll {
         Properties props = new Properties();
         FileInputStream fis = null;
         BasicDataSource ds = new BasicDataSource();
-         
         try {
             fis = new FileInputStream("src/main/java/db.properties");
             props.load(fis);
@@ -66,10 +69,32 @@ public class QueryExecutorAll {
     	    stmt = conn.createStatement();
     	    if (stmt.execute(rawSQLQuery)) {
     	        rs = stmt.getResultSet();
-    	        
     	    }
     	    fEnd = System.currentTimeMillis();
-    	    return (fEnd - fStart);
+    	    System.out.println("\n\nTHE RESULTS:");	
+			int i=0;
+			ResultSetMetaData meta = null;
+            
+			// Print out a row of column headers
+			if(rs != null){
+				meta = rs.getMetaData();
+				System.out.println("Total columns: " + meta.getColumnCount());
+				System.out.print(meta.getColumnName(1));
+				for (int j = 2; j <= meta.getColumnCount(); j++)
+					System.out.print(", " + meta.getColumnName(j));
+				System.out.println();
+				// Print out all rows in the ResultSet
+				while (rs.next()) 
+				{
+					System.out.print(rs.getObject(1));
+					for (int j = 2; j <= meta.getColumnCount(); j++)
+						System.out.print(", " + rs.getObject(j));
+					System.out.println();
+					i++;
+				}	
+			}
+			
+			return (fEnd - fStart);
     	    
     	}
     	catch (SQLException ex){

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class QueryControllerTest < ActionController::TestCase
+class BenchmarkControllerTest < ActionController::TestCase
   test "should get insert" do
     get :insert
     assert_response :success

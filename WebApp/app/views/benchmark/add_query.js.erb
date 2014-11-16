@@ -1,0 +1,5 @@
+console.log("hello");
+var new_query = $("<%= escape_javascript(render(partial: 'query', locals: {query: @query}))%>").hide();
+$("#queries").append(new_query);
+new_query.fadeIn('slow');
+$("#new_query")[0].reset();

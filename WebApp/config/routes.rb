@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
-  get "query/home"
-  match "/query/insert" => "query#insert", :via => :post
-  match "/query/show" => "query#show", :via => :post
-  get "query/show"
+  get "benchmark/schema"
+  match "/benchmark/column_distribution" => "benchmark#column_distribution", :via => :post
+  match "/benchmark/queries" => "benchmark#queries", :via => :post
+  match "/benchmark/add_query" => "benchmark#add_query", :via => :post
+  get "benchmark/show_comparison"
 
-  root "query#home"
+  root "benchmark#schema"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

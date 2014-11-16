@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class DataGenerator {
-	
+
 	private static Iterator<Integer> generateIntegerData(JSONObject colInfo, int count) {
 		// extract data and ensure validity
 		String distribution = colInfo.getString("distribution");
@@ -17,15 +17,11 @@ public class DataGenerator {
 				distribution.equalsIgnoreCase("uniform") || distribution.equalsIgnoreCase("normal"))) {
 			throw new RuntimeException("distribution must be uniform, normal, or delta");
 		}
-		int distinct = colInfo.getInt("distinct");
-		if (distinct > count) distinct = count;
-		// if distinct = 0, assume they know nothing about distinctness of values
 		int max = colInfo.getInt("max");
 		int min = colInfo.getInt("min");
 		double mean = colInfo.getDouble("mean");
 		double stdv = colInfo.getDouble("stdv"); 
 		
-		HashSet<Integer> distinctVals = new HashSet<Integer>();
 		ArrayList<Integer> data = new ArrayList<Integer>();
 		
 		// determine distribution and sample to get distinct values
@@ -38,48 +34,17 @@ public class DataGenerator {
 			return data.iterator();
 		} else if (distribution.equalsIgnoreCase("uniform")) {
 			Random generator = new Random(); 
-			if (distinct > 0) {
-				// get the distinct values to use
-				while (distinctVals.size() < distinct) {
-					int nextValue = generator.nextInt(max-min) + min;
-					distinctVals.add(nextValue);
-				}
-				if (distinct < count) {
-					// sample from the distinct values to get the complete data
-					ArrayList<Integer> distinctList = new ArrayList<Integer>();
-					distinctList.addAll(distinctVals);
-					for (int i = 0; i < count; i++) {
-						data.add(distinctList.get(generator.nextInt(distinct)));
-					}
-					return data.iterator();
-				} else { 
-					// distinct == count
-					return distinctVals.iterator();
-				}
-			} else {
-				// we know nothing about distinctness, so just sample
-				for (int i = 0; i < count; i++) {
-					int nextValue = generator.nextInt(max-min) + min;
-					data.add(nextValue);
-				}
-				return data.iterator();
+			for (int i = 0; i < count; i++) {
+				int nextValue = generator.nextInt(max-min) + min;
+				data.add(nextValue);
 			}
+			return data.iterator();
 		} else { //distribution: normal
-			// TODO: should distinct values > count mean anything here???
 			NormalDistribution dist = new NormalDistribution(mean, stdv);
-			if (distinct == count) {
-				// all values must be distinct
-				while (distinctVals.size() < distinct) {
-					distinctVals.add((int) dist.sample());
-				}
-				return distinctVals.iterator();
-			} else {
-				// we know nothing about distinctness, so just sample
-				for (int i = 0; i < count; i++) {
-					data.add((int) dist.sample());
-				}
-				return data.iterator();
-			}	
+			for (int i = 0; i < count; i++) {
+				data.add((int) dist.sample());
+			}
+			return data.iterator();
 		}
 	}
 	
@@ -158,15 +123,24 @@ public class DataGenerator {
 				return data.iterator();
 			}
 		} else { //distribution: normal
-			// TODO: should distinct values > count mean anything here???
 			NormalDistribution dist = new NormalDistribution(mean, stdv);
-			if (distinct == count) {
-				// all values must be distinct
+			if (distinct > 0) {
 				while (distinctVals.size() < distinct) {
 					int wordLen = (int) dist.sample();
 					distinctVals.add(RandomStringUtils.randomAlphabetic(wordLen));
 				}
-				return distinctVals.iterator();
+				if (distinct < count) {
+					// sample from the distinct values to get the complete data
+					ArrayList<String> distinctList = new ArrayList<String>();
+					distinctList.addAll(distinctVals);
+					for (int i = 0; i < count; i++) {
+						data.add(distinctList.get(generator.nextInt(distinct)));
+					}
+					return data.iterator();
+				} else {
+					// distinct == count
+					return distinctVals.iterator();
+				}
 			} else {
 				// we know nothing about distinctness, so just sample
 				for (int i = 0; i < count; i++) {

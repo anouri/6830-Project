@@ -35,7 +35,7 @@ Updates to JSON Output to Data Generator:
 
 Output JSON Grammar from Data Generator:
 ```shell
-{tables: [
+{
 	tableName1: {
 		colNames: [colName1, colName2, colName3],
 		colData: [[1,2,3],[4,5,6],[7,8,9]]
@@ -44,8 +44,15 @@ Output JSON Grammar from Data Generator:
 		colNames: [colName4, colName5, colName6],
 		colData: [['x','y','z'],['x','y','z'],['x','y','z']]
 	}
-]}
+}
 ```
+
+**On Indices and Joins**:
+Because allowing the user to specify primary key columns could lead to major bottlenecks in randomly generating those distinct values, we'll automatically include an auto-incrementing primary key ID field as the first column in any table the user creates.  We should display this to the user when they create the table in the UI, but they shouldn't be able to change it.  This field should not be included in the UI for choosing distributions for columns, and should not be passed in the JSON input to the data generator, as its values will automatically be created when each record is inserted.
+
+Since foreign keys must reference a primary key of another table to ensure it exists and is unique, users will only be able to have foreign keys that reference our automatically included ID fields on other tables.  Because we know the min and max values these IDs can have (from 0 to the cardinality of that table), we can automatically assume the distribution on the foreign key column to be {distribution: uniform, min: 0, max: cardinality of other table}, which should be included in the JSON input to the data generator.  We can show this in the UI for choosing distributions as unchangeable, or just not show it there at all.  
+
+Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
 
 **SQLite**:
 
@@ -121,13 +128,13 @@ Download the Software
 > curl -OL http://downloads.datastax.com/community/dsc.tar.gz
 
 Install Cassandra
-> tar -xzf dsc-cassandra-1.2.2-bin.tar.gz
+> tar -xzf dsc.tar.gz
 
 > cd dsc-cassandra-1.2.2/bin
 
 > sudo ./cassandra # this will start cassandra server in background, use -f if want foreground
 
-> ./csql # if you run the above command as background, or open a different terminal
+> ./cqlsh # if you run the above command as background, or open a different terminal
 
 *How to run the demo*:
 

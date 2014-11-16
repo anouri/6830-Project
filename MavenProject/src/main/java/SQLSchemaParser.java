@@ -3,6 +3,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,7 +25,6 @@ public class SQLSchemaParser implements SchemaParser {
         return rawSqlSchema.split(";");
     }
 
-    @Override
     public TupleDesc getTupleDescription(String tableName) {
         List<Type> columnType = new ArrayList<Type>();
         List<String> columnName = new ArrayList<String>();
@@ -51,7 +51,7 @@ public class SQLSchemaParser implements SchemaParser {
                     for (ColumnDefinition def : columns) {
                         columnName.add(def.getColumnName());
                         if (def.getColDataType().getDataType().equalsIgnoreCase("varchar")) {
-                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, Integer.parseInt(def.getColDataType().getArgumentsStringList().get(0))));
+                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, Integer.parseInt((String) def.getColDataType().getArgumentsStringList().get(0))));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("integer")) {
                             columnType.add(new Type(Type.SupportedType.INT_TYPE));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("text")) {
@@ -70,7 +70,6 @@ public class SQLSchemaParser implements SchemaParser {
         return new TupleDesc(resultType,resultName);
     }
 
-    @Override
     public String[] getTableName() {
         CCJSqlParserManager pm = new CCJSqlParserManager();
         String[] sqlStatements = readSQL(rawSqlSchema);
@@ -96,12 +95,10 @@ public class SQLSchemaParser implements SchemaParser {
         return resultTableName;
     }
 
-    @Override
     public String getRawSchema() {
         return rawSqlSchema;
     }
 
-    @Override
     public JSONObject getJSON() {
         String[] tableNames = getTableName();
         JSONObject result = new JSONObject();

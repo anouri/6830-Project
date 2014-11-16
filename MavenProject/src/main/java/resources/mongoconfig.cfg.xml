@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <!DOCTYPE hibernate-configuration PUBLIC
+      "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+      "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd" >
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform</property>
+        <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+	    <property name="hibernate.current_session_context_class">thread</property>
+	    <property name="hibernate.ogm.datastore.grid_dialect">org.hibernate.ogm.dialect.mongodb.MongoDBDialect</property>
+	  	<property name="hibernate.ogm.datastore.provider">MONGODB</property>
+	    <property name="hibernate.ogm.mongodb.database">test</property>
+	    <property name="hibernate.ogm.mongodb.host">127.0.0.1</property>
+	    <property name="hibernate.ogm.mongodb.port">27017</property>
+	    <property name="hibernate.ogm.mongodb.username">root</property>
+	    <property name="hibernate.ogm.mongodb.password">root</property>
+     
+        <!-- automatically create tables for you -->
+	    <property name="hbm2ddl.auto">create</property>
+	    <!-- JDBC connection pool (use the built-in) -->
+	    <property name="hibernate.connection.pool_size">1</property>
+	 
+	    <mapping class="datamodel.TestData" />
+    </session-factory>
+</hibernate-configuration>

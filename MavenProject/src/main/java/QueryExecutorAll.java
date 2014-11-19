@@ -17,9 +17,9 @@ public class QueryExecutorAll {
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
 		System.out.println("mysql");
-//		result.put("mysql", executeQuery(getDataSource("mysql"), rawSQLQuery));
+		result.put("mysql", executeQuery(getDataSource("mysql"), rawSQLQuery));
 		System.out.println("mongo");
-//		result.put("mongo", executeQuery(getDataSource("mongo"), rawSQLQuery));
+		result.put("mongo", executeQuery(getDataSource("mongo"), rawSQLQuery));
 		System.out.println("cassandra");
 		result.put("cassandra", executeQuery(getDataSource("cassandra"), rawSQLQuery));
 		return result;

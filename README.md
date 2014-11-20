@@ -47,20 +47,28 @@ Output JSON Grammar from Data Generator:
 }
 ```
 
+**Run the Data Generator:**
+
+(these are method declarations for the stuff I'll implement this weekend)
+
+method declaration for initial call to set up data generator and return min(100, cardinality) rows from each table for the purposes of having data to select for the query generator step:
+```shell
+public String initialGenerateData(String inputJSON)
+```
+where output and input String grammars are defined above.
+
+method declaration for getting subsequent sets of 100 rows until all tables are fully generated:
+```shell
+public String generateMoreData()
+```
+where output String follows the grammar above.  When data is finished being generated, a field "endOfData: true" will be appended to the JSON.  Further calls will return null.
+
 **On Indices and Joins**:
 Because allowing the user to specify primary key columns could lead to major bottlenecks in randomly generating those distinct values, we'll automatically include an auto-incrementing primary key ID field as the first column in any table the user creates.  We should display this to the user when they create the table in the UI, but they shouldn't be able to change it.  This field should not be included in the UI for choosing distributions for columns, and should not be passed in the JSON input to the data generator, as its values will automatically be created when each record is inserted.
 
 Since foreign keys must reference a primary key of another table to ensure it exists and is unique, users will only be able to have foreign keys that reference our automatically included ID fields on other tables.  Because we know the min and max values these IDs can have (from 0 to the cardinality of that table), we can automatically assume the distribution on the foreign key column to be {distribution: uniform, min: 0, max: cardinality of other table}, which should be included in the JSON input to the data generator.  We can show this in the UI for choosing distributions as unchangeable, or just not show it there at all.  
 
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
-
-**SQLite**:
-
-Pre-installed for most Mac and Linux machines - check if you have it already with
-```shell
-sqlite3
-```
-if not, follow instructions here:  http://www.tutorialspoint.com/sqlite/sqlite_installation.htm
 
 **MongoDB**:
 

@@ -157,13 +157,6 @@ create keyspace mykeyspace with replication = {'class':'SimpleStrategy','replica
 ```
 CREATE TABLE users (firstname text,lastname text,age int,email text,city text,PRIMARY KEY (lastname));
 ```
-**MonetDB**:
-
-Download the Software
-
-> https://www.monetdb.org/downloads/MacOSX/Oct2014/
-
-> Download the file MonetDB-11.19.3-x86_64-Darwin-9-bin.tar.bz2
 
 **Installing Ruby on Rails**
 

@@ -48,19 +48,26 @@ These parameters set heap space to 500 MB.  Do not set higher than 80% of physic
 Pooling is supported by ApacheCommonsDBCP, and libraries are in pom.xml
 Why pooling? With connection pooling, a pool of connections can be used over and over again, avoiding the expense of creating a new connection for every database access. 
 
-**Running Queries**
+**Running Queries in QueryExecutorAll.java**
 
-Sample queries are in ApacheCommonsDBCPTest.
+CREAT TABLES
+create_table_mongo(String creation_q);
+create_table_cassandra(String creation_q);
+create_table_mysql(String creation_q);
 
 For Mysql and Cassandra, you need to create tables and keyspaces first with the right table creation syntax (different between mysql and cassandra)
-
 For Mongo, don't need to apply schema or create json. Just run a SELECT statement.
+
+OTHER QUERIES
+run_all(String query);
+
+Samples are in ApacheCommonsDBCPTest.
 
 **Benchmarking Output**
 
-db is: cassandra run time is: 0
-db is: mongo run time is: 124
-db is: mysql run time is: 284
+db is: cassandra run time is: 96
+db is: mongo run time is: 107
+db is: mysql run time is: 7
 
 **Additional Resources**
 
@@ -73,6 +80,10 @@ http://www.unityjdbc.com/mongojdbc/code/ExampleMongoTranslate.java
 ===================================================================================================
 
 **MySQL**
+
+Download:
+
+http://dev.mysql.com/downloads/mysql/
 
 Start/end server:
 

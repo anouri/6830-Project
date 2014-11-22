@@ -136,15 +136,21 @@
 				<version>2.3</version>
 			</dependency>
 
-           <!-- log4j for CassandraExecutorUnity -->
+               <!-- log4j for CassandraExecutorUnity -->
+             <dependency>
+                 <groupId>log4j</groupId>
+                 <artifactId>log4j</artifactId>
+                 <version>1.2.17</version>
+             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
+                <groupId>org.apache.cassandra</groupId>
+                <artifactId>cassandra-clientutil</artifactId>
+                <version>1.2.19</version>
             </dependency>
 
 
-	</dependencies>
+
+    </dependencies>
     <!--uber jar shade plugin-->
      <build>
             <plugins>

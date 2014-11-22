@@ -37,7 +37,7 @@ Then, manually add in the following dependencies:
 
 **Configure Cassandra**
 
-In cassandra.yaml, change thrift_framed_transport_size_in_mb: 18
+In cassandra.yaml (you can find this in the dsc-cassandra-2.1.1/conf directory), change thrift_framed_transport_size_in_mb: 18
 
 Make sure port is set to 9160.
 
@@ -295,6 +295,20 @@ Since foreign keys must reference a primary key of another table to ensure it ex
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
 
 **MongoDB**:
+
+*Preferred*: 
+If you have homebrew, you can simply use
+```shell
+brew update (optional)
+brew doctor (optional)
+brew upgrade (optional)
+brew install mongodb 
+```
+Assume successfully run, you can now use
+```shell
+mongod
+```
+this will start the mongodb server.
 
 Download the Software
 ```shell

@@ -76,7 +76,9 @@ Samples are in ApacheCommonsDBCPTest.
 **Benchmarking Output**
 
 db is: cassandra run time is: 96
+
 db is: mongo run time is: 107
+
 db is: mysql run time is: 7
 
 **Additional Resources**

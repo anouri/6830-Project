@@ -25,9 +25,8 @@ for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" 
 
 **Dependencies**
 
-All dependencies are here:
+All of the dependecies can be found in UnityJar folder on root directory
 
-https://drive.google.com/drive/u/0/#folders/0B_l66GUkyYQGNzZ4QVpmRnRGSVk/0B_8QOJg_fjVxVTBoczJ4bHBaX3M
 
 First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (signed up for a free trial)
 

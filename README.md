@@ -16,12 +16,136 @@ for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" 
 
 Example Input Schema
 ```shell
-drop table user;create table user (user_id integer primary key autoincrement,username text not null,email text not null,pw_hash text not null);drop table follower;create table follower (who_id integer,whom_id integer);drop table message;create table message (message_id integer primary key autoincrement,author_id integer not null,text text not null,pub_date integer);
+DROP TABLE USER;
+CREATE TABLE USER (user_id integer PRIMARY KEY autoincrement,
+                   username text NOT NULL, email text NOT NULL,
+                    pw_hash text NOT NULL);
+
+DROP TABLE follower;
+
+CREATE TABLE follower (who_id integer,whom_id integer);
+
+DROP TABLE message;
+
+CREATE TABLE message (message_id integer PRIMARY KEY autoincrement,author_id integer NOT NULL,text text NOT NULL,pub_date integer);
 ```
 
 Example JSON Output for Distribution (Kristin can expect this format to generate data set)
 ```shell
-{"follower":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"who_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"whom_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"message":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"message_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"author_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"text","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"Integer","length":4,"name":"pub_date","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]},"user":{"cardinality":0,"fields":[{"category":"Integer","length":4,"name":"user_id","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"username","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"email","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0},{"category":"String","length":128,"name":"pw_hash","distribution":"uniform","distinct":0,"mean":0,"stdv":0,"min":0,"max":0}]}}
+{
+    "follower": {
+        "cardinality": 0,
+        "fields": [{
+            "category": "Integer",
+            "length": 4,
+            "name": "who_id",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "Integer",
+            "length": 4,
+            "name": "whom_id",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }]
+    },
+    "message": {
+        "cardinality": 0,
+        "fields": [{
+            "category": "Integer",
+            "length": 4,
+            "name": "message_id",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "Integer",
+            "length": 4,
+            "name": "author_id",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "String",
+            "length": 128,
+            "name": "text",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "Integer",
+            "length": 4,
+            "name": "pub_date",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }]
+    },
+    "user": {
+        "cardinality": 0,
+        "fields": [{
+            "category": "Integer",
+            "length": 4,
+            "name": "user_id",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "String",
+            "length": 128,
+            "name": "username",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "String",
+            "length": 128,
+            "name": "email",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }, {
+            "category": "String",
+            "length": 128,
+            "name": "pw_hash",
+            "distribution": "uniform",
+            "distinct": 0,
+            "mean": 0,
+            "stdv": 0,
+            "min": 0,
+            "max": 0
+        }]
+    }
+}
 ```
 
 Updates to JSON Output to Data Generator:
@@ -231,5 +355,4 @@ Adding Gemset to Existing Application and Installing Rails
 > Move these two files into $JAVA_HOME/jre/lib/security directory
 
 > For me, I did sudo mv local_policy.jar /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/security
-
 

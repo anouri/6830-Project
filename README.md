@@ -12,6 +12,76 @@ To download the entire 5GB dataset, run the following command:
 for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" $i` ; wget http://iesl.cs.umass.edu/downloads/wiki-link/context-only/$f.gz ; done ; echo "Downloaded all files, verifying MD5 checksums (might take some time)" ; diff --brief <(wget -q -O - http://iesl.cs.umass.edu/downloads/wiki-link/context-only/md5sum) <(md5sum *.gz) ; if [ $? -eq 1 ] ; then echo "ERROR: Download incorrect\!" ; else echo "Download correct" ; fi
 ```
 
+===================================================================================================
+**Unity for Consistent Multi-db Accesses**
+
+**Dependencies**
+
+First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (signed up for a free trial)
+
+Then, manually add in the following dependencies:
+- unityjdbc.jar
+- mongodb_unityjdbc_full.jar
+- cassandra-jdbc-2.1.jar
+
+**Configure Cassandra**
+
+In cassandra.yaml, change thrift_framed_transport_size_in_mb: 18
+
+Make sure port is set to 9160.
+
+**Query Runner**
+
+QueryExecutorAll.java
+
+**Test**
+
+ApacheCommonsDBCPTest.java
+
+*NOTE: PATH IS SET HARD IN THESE FILES
+Another thing to point out: for large queries, need to set aside large heap space:
+JVM command line parameters: -Xms500m -Xmx500m
+These parameters set heap space to 500 MB.  Do not set higher than 80% of physical machine memory size.
+
+**POOLING**
+
+Pooling is supported by ApacheCommonsDBCP, and libraries are in pom.xml
+Why pooling? With connection pooling, a pool of connections can be used over and over again, avoiding the expense of creating a new connection for every database access. 
+
+**Running Queries**
+
+Sample queries are in ApacheCommonsDBCPTest.
+
+For Mysql and Cassandra, you need to create tables and keyspaces first with the right table creation syntax (different between mysql and cassandra)
+
+For Mongo, don't need to apply schema or create json. Just run a SELECT statement.
+
+**Benchmarking Output**
+
+db is: cassandra run time is: 0
+db is: mongo run time is: 124
+db is: mysql run time is: 284
+
+**Additional Resources**
+
+SQL to NoSQL Translation
+
+http://www.unityjdbc.com/mongojdbc/mongosqltranslate.php
+
+http://www.unityjdbc.com/mongojdbc/code/ExampleMongoTranslate.java
+
+===================================================================================================
+
+**MySQL**
+
+Start/end server:
+
+sudo /usr/local/mysql/support-files/mysql.server start
+
+sudo /usr/local/mysql/support-files/mysql.server stop
+
+===================================================================================================
+
 **Example for Testing**
 
 Example Input Schema

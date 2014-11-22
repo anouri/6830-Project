@@ -51,14 +51,20 @@ Why pooling? With connection pooling, a pool of connections can be used over and
 **Running Queries in QueryExecutorAll.java**
 
 CREAT TABLES
+
 create_table_mongo(String creation_q);
+
 create_table_cassandra(String creation_q);
+
 create_table_mysql(String creation_q);
 
+
 For Mysql and Cassandra, you need to create tables and keyspaces first with the right table creation syntax (different between mysql and cassandra)
+
 For Mongo, don't need to apply schema or create json. Just run a SELECT statement.
 
 OTHER QUERIES
+
 run_all(String query);
 
 Samples are in ApacheCommonsDBCPTest.

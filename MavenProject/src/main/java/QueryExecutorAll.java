@@ -24,6 +24,16 @@ public class QueryExecutorAll {
 		result.put("cassandra", executeQuery(getDataSource("cassandra"), rawSQLQuery));
 		return result;
 	}
+	
+	public static void create_table_cassandra(String creation_q){
+		executeQuery(getDataSource("cassandra"), creation_q);
+	}
+	public static void create_table_mongo(String creation_q){
+		executeQuery(getDataSource("mongo"), creation_q);
+	}
+	public static void create_table_mysql(String creation_q){
+		executeQuery(getDataSource("mysql"), creation_q);
+	}
     public static DataSource getDataSource(String dbType){
         Properties props = new Properties();
         FileInputStream fis = null;

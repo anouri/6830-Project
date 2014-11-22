@@ -13,7 +13,7 @@ for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" 
 ```
 
 ===================================================================================================
-**How to add a lib dependency in Eclipse**
+**How to Create a user defined library in Eclipse**
 
 1. Right click on the project and select properties
 2. Create a Library -> User Library called “xxx”, in this case, can be called "Unity Library"

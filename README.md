@@ -35,6 +35,12 @@ Then, manually add in the following dependencies:
 - mongodb_unityjdbc_full.jar
 - cassandra-jdbc-2.1.jar
 
+**DB Configurations**
+
+All the db configurations are in:
+
+src/main/java/db.properties
+
 **Configure Cassandra**
 
 In cassandra.yaml, change thrift_framed_transport_size_in_mb: 18

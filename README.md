@@ -147,7 +147,7 @@ http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15
 Example Input Schema
 ```shell
 DROP TABLE user;
-CREATE TABLE user (user_id integer PRIMARY KEY autoincrement,
+CREATE TABLE user (user_id integer PRIMARY KEY auto_increment,
                    username text NOT NULL, email text NOT NULL,
                     pw_hash text NOT NULL);
 
@@ -157,7 +157,7 @@ CREATE TABLE follower (who_id integer,whom_id integer);
 
 DROP TABLE message;
 
-CREATE TABLE message (message_id integer PRIMARY KEY autoincrement,author_id integer NOT NULL,text text NOT NULL,pub_date integer);
+CREATE TABLE message (message_id integer PRIMARY KEY auto_increment,author_id integer NOT NULL,text text NOT NULL,pub_date integer);
 ```
 
 Example JSON Output for Distribution (Kristin can expect this format to generate data set)

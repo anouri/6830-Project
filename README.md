@@ -272,7 +272,8 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
       "distinct": 18, 
       "mean": nil, 
       "stdv": nil, 
-      "min": 20, "max": 60
+      "min": 20, 
+      "max": 60
     }]
   }
 }

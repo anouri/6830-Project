@@ -5,7 +5,8 @@ public class ApacheCommonsDBCPTest {
     public static void main(String[] args) {
     	
     	////////Creation for Cassandra
-    	QueryExecutorAll.create_table_cassandra("test", "CREATE TABLE example (a text,b text, PRIMARY KEY (a))");
+    	QueryExecutorAll.set_cassandra_keyspace("test");
+    	QueryExecutorAll.create_table_cassandra("CREATE TABLE example (a text,b text, PRIMARY KEY (a))");
     	
     	////////Creation for Mysql
     	QueryExecutorAll.create_table_mysql("CREATE TABLE IF NOT EXISTS example (a VARCHAR(20), b VARCHAR(20))");

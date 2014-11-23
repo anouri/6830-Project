@@ -27,6 +27,13 @@ public class QueryExecutorAll {
 		return props;
 	}
 	
+	public static void set_cassandra_keyspace(String keyspaceName){
+		BasicDataSource ds = (BasicDataSource)getDataSource("cassandra");
+		executeQuery(ds, "create keyspace "+ keyspaceName+" with replication = {'class':'SimpleStrategy','replication_factor':1}");
+		String url_base = props.getProperty("CASSANDRA_DB_URL");
+		props.setProperty("CASSANDRA_DB_URL", url_base+ "/" + keyspaceName);
+		
+	}
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
 		System.out.println("mysql");
@@ -38,11 +45,7 @@ public class QueryExecutorAll {
 		return result;
 	}
 	
-	public static void create_table_cassandra(String keyspaceName, String creation_q){
-		BasicDataSource ds = (BasicDataSource)getDataSource("cassandra");
-		executeQuery(ds, "create keyspace "+ keyspaceName+" with replication = {'class':'SimpleStrategy','replication_factor':1}");
-		String url_base = props.getProperty("CASSANDRA_DB_URL");
-		props.setProperty("CASSANDRA_DB_URL", url_base+ "/" + keyspaceName);
+	public static void create_table_cassandra(String creation_q){
 		executeQuery(getDataSource("cassandra"), creation_q);
 	}
 	public static void create_table_mongo(String creation_q){

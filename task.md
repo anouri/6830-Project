@@ -25,5 +25,5 @@ Restore oldest version with distinct option for integer types and for string typ
 ===================
 *  Wiring (Tony, Tran)
 *  Support large data (Kristin)
-*  Final display screen (take in a table of stats and generate bar graph)
+*  Final display screen (take in a table of stats and generate bar graph) (Shirley)
 *  generate automatic query generator: think of the different work load to feed into the random generator.

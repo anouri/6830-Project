@@ -15,20 +15,21 @@ import java.util.List;
 /**
  * Created by trannguyen on 11/9/14.
  */
-public class SQLSchemaParser implements SchemaParser {
+public class SQLSchemaParser {
     private static String rawSqlSchema;
     private static String[] tableNameStatic;
     private static TupleDesc tupleDescStatic;
+    private static JSONObject tableJSON;
 
     public SQLSchemaParser(String rawSqlSchema) {
         this.rawSqlSchema = rawSqlSchema;
     }
 
     private static String[] readSQL(String rawSqlSchema) {
-        return rawSqlSchema.split(";");
+        return rawSqlSchema.trim().split(";");
     }
 
-    public TupleDesc getTupleDescription(String tableName) {
+    public static TupleDesc getTupleDescription(String tableName) {
         List<Type> columnType = new ArrayList<Type>();
         List<String> columnName = new ArrayList<String>();
         CCJSqlParserManager pm = new CCJSqlParserManager();
@@ -74,11 +75,7 @@ public class SQLSchemaParser implements SchemaParser {
         return tupleDescStatic;
     }
 
-    public static String[] getTableNameStatic() {
-        return tableNameStatic;
-    }
-
-    public String[] getTableName() {
+    public static String[] getTableName() {
         CCJSqlParserManager pm = new CCJSqlParserManager();
         String[] sqlStatements = readSQL(rawSqlSchema);
         List<String> tableName = new ArrayList<String>();
@@ -103,15 +100,11 @@ public class SQLSchemaParser implements SchemaParser {
         return tableNameStatic;
     }
 
-    public static String getRawSqlSchemaStatic() {
+    public static String getRawSchema() {
         return rawSqlSchema;
     }
 
-    public String getRawSchema() {
-        return rawSqlSchema;
-    }
-
-    public JSONObject getJSON() {
+    public static JSONObject getJSON() {
         String[] tableNames = getTableName();
         JSONObject result = new JSONObject();
         result.put("table", tableNames);
@@ -139,7 +132,8 @@ public class SQLSchemaParser implements SchemaParser {
             all.put(lengthJson);
             result.put(tName, all);
         }
-        return result;
+        tableJSON = result;
+        return tableJSON;
     }
 
     public static void main(String[] args) {
@@ -155,7 +149,7 @@ public class SQLSchemaParser implements SchemaParser {
                 "whom_id integer);" +
                 "drop table message;" +
                 "create table message (" +
-                "message_id integer primary key autoincrement," +
+                "message_id integer primary key auto_increment," +
                 "author_id integer not null," +
                 "text text not null," +
                 "pub_date integer);";

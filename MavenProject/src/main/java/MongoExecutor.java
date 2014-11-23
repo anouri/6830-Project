@@ -1,12 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
+import java.sql.*;
 
 /**
  * Created by trannguyen on 11/14/14.
@@ -36,7 +28,6 @@ public class MongoExecutor implements QueryExecutor {
      * @param rawSQLQuery SQL statement
      * @return time it takes to excute those in mili seconds
      */
-    @Override
     public long executeQuery(String rawSQLQuery) {
     	long fStart = 0;
     	long fEnd = 0;
@@ -96,7 +87,6 @@ public class MongoExecutor implements QueryExecutor {
     	}
     }
 
-    @Override
     public boolean connect(){
     	try {
     	   Class.forName("mongodb.jdbc.MongoDriver");
@@ -113,7 +103,7 @@ public class MongoExecutor implements QueryExecutor {
 			return false;
 		}
     }
-	@Override
+
 	public void cleanUP() {
 		try {
 			conn.close();

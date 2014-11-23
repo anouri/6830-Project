@@ -65,27 +65,13 @@
 				<version>2.12.2</version>
 			</dependency>
 
-			<!--  Neo4j driver -->
-			<dependency>
-			    <groupId>org.hibernate.ogm</groupId>
-			    <artifactId>hibernate-ogm-neo4j</artifactId>
-			    <version>4.1.0.Beta8</version>
-			</dependency>
-
 	 		<!-- Cassandra driver -->
 	 		<dependency>
 				<groupId>org.apache.cassandra</groupId>
 				<artifactId>cassandra-thrift</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.thrift</groupId>
-				<artifactId>libthrift</artifactId>
-				<version>0.9.1</version>
-			</dependency>
-						
-				 		
 	 		<dependency>
 				<groupId>org.apache.cassandra</groupId>
 				<artifactId>cassandra-all</artifactId>
@@ -148,7 +134,24 @@
                 <version>1.2.19</version>
             </dependency>
 
+        <!-- external dependency -->
+         <dependency>
+            <groupId>unityjdbc</groupId>
+            <artifactId>unityjdbc</artifactId>
+            <version>1.0</version>
+        </dependency>
 
+        <dependency>
+            <groupId>mongodb</groupId>
+            <artifactId>mongodb</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cassandra</groupId>
+            <artifactId>cassandra</artifactId>
+            <version>2.1</version>
+        </dependency>
 
     </dependencies>
     <!--uber jar shade plugin-->
@@ -181,7 +184,13 @@
             </plugins>
         </build>
 
+
     <repositories>
+        <repository>
+            <id>in-project</id>
+            <name>external jar</name>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
         <repository>
             <id>pentaho-releases</id>
             <url>http://repository.pentaho.org/artifactory/repo/</url>

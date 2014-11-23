@@ -1,12 +1,12 @@
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
-
-import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.lang.RandomStringUtils;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 public class DataGenerator {
 
@@ -152,7 +152,7 @@ public class DataGenerator {
 		}
 	}
 
-    private static String generateJsonData(JSONObject json) {
+    public static String generateJsonData(JSONObject json) {
     	JSONObject outputJson = new JSONObject();
     	
     	// get info for each table

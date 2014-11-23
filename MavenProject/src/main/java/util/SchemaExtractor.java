@@ -1,12 +1,10 @@
 package util;
 
-import java.sql.*;
-import java.io.*;
-
 import com.unityjdbc.sourcebuilder.AnnotatedExtractor;
-
 import unity.io.FileManager;
-import unity.util.EncryptDecrypt;
+
+import java.io.OutputStream;
+import java.sql.SQLException;
 
 /**
  Builds an XML schema document describing a database schema.
@@ -19,10 +17,10 @@ import unity.util.EncryptDecrypt;
  names to tables and fields in the sources.  Those names can then be used in queries.
 
  To compile (if in the code directory): 
- javac -cp ..\\unityjdbc.jar com\\unityjdbc\\sourcebuilder\\SchemaExtractor.java
+ javac -cp ..\\unityjdbc-1.0.jar com\\unityjdbc\\sourcebuilder\\SchemaExtractor.java
  
  To run:
- java -cp ..\\unityjdbc.jar com.unityjdbc.sourcebuilder.SchemaExtractor
+ java -cp ..\\unityjdbc-1.0.jar com.unityjdbc.sourcebuilder.SchemaExtractor
  */
 public class SchemaExtractor
 {

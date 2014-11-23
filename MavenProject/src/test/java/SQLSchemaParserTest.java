@@ -3,12 +3,10 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class SQLSchemaParserTest {
 
 
-    SchemaParser sqlSchemaParser;
+    SQLSchemaParser sqlSchemaParser;
     String rawSchema;
 
     @Test
@@ -91,6 +89,6 @@ public class SQLSchemaParserTest {
 
         JSONObject actual = sqlSchemaParser.getJSON();
 
-        Assert.assertEquals(actual.toString(),expected.toString());
+        Assert.assertEquals(expected.toString(),actual.toString());
     }
 }

@@ -32,7 +32,7 @@ All of the dependecies can be found in UnityJar folder on root directory
 
 First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (signed up for a free trial)
 
-Then, manually add in the following dependencies:
+Then, manually add in the following dependencies: *This step is no longer needed*
 - unityjdbc.jar
 - mongodb_unityjdbc_full.jar
 - cassandra-jdbc-2.1.jar

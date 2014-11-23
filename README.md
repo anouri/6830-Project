@@ -1,3 +1,5 @@
+**NOTE: DON'T INCLUDE YOUR OWN JAR IF YOU DON' HAVE TOO. PLEASE USE POM.XML TO INCLUDE YOUR DEPENDENCY**
+
 **Maven**:
 This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
 > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
@@ -35,9 +37,15 @@ Then, manually add in the following dependencies:
 - mongodb_unityjdbc_full.jar
 - cassandra-jdbc-2.1.jar
 
+**DB Configurations**
+
+All the db configurations are in:
+
+src/main/java/db.properties
+
 **Configure Cassandra**
 
-In cassandra.yaml, change thrift_framed_transport_size_in_mb: 18
+In cassandra.yaml (you can find this in the dsc-cassandra-2.1.1/conf directory), change thrift_framed_transport_size_in_mb: 18
 
 Make sure port is set to 9160.
 
@@ -295,6 +303,20 @@ Since foreign keys must reference a primary key of another table to ensure it ex
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
 
 **MongoDB**:
+
+*Preferred*: 
+If you have homebrew, you can simply use
+```shell
+brew update (optional)
+brew doctor (optional)
+brew upgrade (optional)
+brew install mongodb 
+```
+Assume successfully run, you can now use
+```shell
+mongod
+```
+this will start the mongodb server.
 
 Download the Software
 ```shell

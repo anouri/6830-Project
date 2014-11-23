@@ -124,8 +124,8 @@ sudo /usr/local/mysql/support-files/mysql.server stop
 
 Example Input Schema
 ```shell
-DROP TABLE USER;
-CREATE TABLE USER (user_id integer PRIMARY KEY autoincrement,
+DROP TABLE user;
+CREATE TABLE user (user_id integer PRIMARY KEY autoincrement,
                    username text NOT NULL, email text NOT NULL,
                     pw_hash text NOT NULL);
 
@@ -140,119 +140,119 @@ CREATE TABLE message (message_id integer PRIMARY KEY autoincrement,author_id int
 
 Example JSON Output for Distribution (Kristin can expect this format to generate data set)
 ```shell
-{
-    "follower": {
-        "cardinality": 0,
-        "fields": [{
-            "category": "Integer",
-            "length": 4,
-            "name": "who_id",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "Integer",
-            "length": 4,
-            "name": "whom_id",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }]
-    },
-    "message": {
-        "cardinality": 0,
-        "fields": [{
-            "category": "Integer",
-            "length": 4,
-            "name": "message_id",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "Integer",
-            "length": 4,
-            "name": "author_id",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "String",
-            "length": 128,
-            "name": "text",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "Integer",
-            "length": 4,
-            "name": "pub_date",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }]
-    },
-    "user": {
-        "cardinality": 0,
-        "fields": [{
-            "category": "Integer",
-            "length": 4,
-            "name": "user_id",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "String",
-            "length": 128,
-            "name": "username",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "String",
-            "length": 128,
-            "name": "email",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }, {
-            "category": "String",
-            "length": 128,
-            "name": "pw_hash",
-            "distribution": "uniform",
-            "distinct": 0,
-            "mean": 0,
-            "stdv": 0,
-            "min": 0,
-            "max": 0
-        }]
-    }
+{ 
+  "user" : {
+    "cardinality" : 1000, 
+    "fields" : [{
+      "category": "Integer", 
+      "length": 4, 
+      "name": "user_id", 
+      "distribution": "normal", 
+      "distinct": 10, 
+      "mean": 5, 
+      "stdv": 1, 
+      "min": nil, 
+      "max": nil
+    }, {
+      "category": "String", 
+      "length": 128, 
+      "name": "username", 
+      "distribution": "uniform", 
+      "distinct": 50, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 4, 
+      "max": 8
+    }, {
+      "category": "String", 
+      "length": 128, 
+      "name": "email", 
+      "distribution": "delta", 
+      "distinct": 100, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 6, 
+      "max": 18
+    }, {
+      "category": "String", 
+      "length": 128, 
+      "name": "pw_hash", 
+      "distribution": "normal", 
+      "distinct": nil, 
+      "mean": 10, 
+      "stdv": 4, 
+      "min": nil, 
+      "max": nil
+    }]
+  }, 
+  "follower": {
+    "cardinality": 2000, 
+    "fields": [{
+      "category": "Integer", 
+      "length": 4, 
+      "name": "who_id", 
+      "distribution": 
+      "normal", 
+      "distinct": 10, 
+      "mean": 5, 
+      "stdv": 1, 
+      "min": nil, 
+      "max": nil
+    }, {
+      "category": "Integer", 
+      "length": 4, 
+      "name": "whom_id", 
+      "distribution": "delta", 
+      "distinct": 10, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 1, 
+      "max": 100
+    }]
+  }, 
+  "message": {
+    "cardinality": 3000, 
+    "fields": [{
+      "category": "Integer", 
+      "length": 4, 
+      "name": "message_id", 
+      "distribution": "uniform", 
+      "distinct": 10, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 1, 
+      "max": 100
+    }, {
+      "category": "Integer", 
+      "length": 4, 
+      "name": "author_id", 
+      "distribution": "normal", 
+      "distinct": 10, 
+      "mean": 2, 
+      "stdv": 1, 
+      "min": nil, 
+      "max": nil
+    }, {
+      "category": "String", 
+      "length": 128, 
+      "name": "text", 
+      "distribution": "delta",
+      "distinct": 20, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 10, 
+      "max": 40
+    }, {
+      "category": "Integer", 
+      "length": 4, 
+      "name": "pub_date", 
+      "distribution": "uniform", 
+      "distinct": 18, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": 20, "max": 60
+    }]
+  }
 }
 ```
 

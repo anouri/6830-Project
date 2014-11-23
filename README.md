@@ -145,7 +145,7 @@ http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15
 Example Input Schema
 ```shell
 DROP TABLE USER;
-CREATE TABLE USER (user_id integer PRIMARY KEY autoincrement,
+CREATE TABLE USER (user_id integer PRIMARY KEY autoi_ncrement,
                    username text NOT NULL, email text NOT NULL,
                     pw_hash text NOT NULL);
 

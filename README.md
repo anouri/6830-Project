@@ -105,7 +105,6 @@ http://www.unityjdbc.com/mongojdbc/mongosqltranslate.php
 http://www.unityjdbc.com/mongojdbc/code/ExampleMongoTranslate.java
 
 ===================================================================================================
-
 **MySQL**
 
 Download:
@@ -119,7 +118,28 @@ sudo /usr/local/mysql/support-files/mysql.server start
 sudo /usr/local/mysql/support-files/mysql.server stop
 
 ===================================================================================================
+**Sybase Setup**
 
+Download the Sybase ASE Enterprise installer pushed in the repo (i signed up for trial, if it doesn't work sign up for an account):
+
+Create /opt/sybase and /var/sybase directories, and make sure the user you are have write permission.
+
+Run the following command to start the installer:
+
+> sudo sh setup.bin LAX_VM /usr/bin/java
+
+Click through to install the free developer version.
+
+MAKE SURE THAT THE INSTALLER SAID INSTALLATION WAS SUCCESSFUL.
+
+Your Sybase is installed here:
+ASE-16_0/
+
+Guideline for an earlier version:
+
+http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15.5
+
+===================================================================================================
 **Example for Testing**
 
 Example Input Schema

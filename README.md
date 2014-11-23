@@ -1,6 +1,8 @@
 **NOTE: DON'T INCLUDE YOUR OWN JAR IF YOU DON' HAVE TOO. PLEASE USE POM.XML TO INCLUDE YOUR DEPENDENCY**
 
 **Maven**:
+Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
+
 This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
 > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
 
@@ -105,7 +107,6 @@ http://www.unityjdbc.com/mongojdbc/mongosqltranslate.php
 http://www.unityjdbc.com/mongojdbc/code/ExampleMongoTranslate.java
 
 ===================================================================================================
-
 **MySQL**
 
 Download:
@@ -119,7 +120,28 @@ sudo /usr/local/mysql/support-files/mysql.server start
 sudo /usr/local/mysql/support-files/mysql.server stop
 
 ===================================================================================================
+**Sybase Setup**
 
+Download the Sybase ASE Enterprise installer pushed in the repo (i signed up for trial, if it doesn't work sign up for an account):
+
+Create /opt/sybase and /var/sybase directories, and make sure the user you are have write permission.
+
+Run the following command to start the installer:
+
+> sudo sh setup.bin LAX_VM /usr/bin/java
+
+Click through to install the free developer version.
+
+MAKE SURE THAT THE INSTALLER SAID INSTALLATION WAS SUCCESSFUL.
+
+Your Sybase is installed here:
+ASE-16_0/
+
+Guideline for an earlier version:
+
+http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15.5
+
+===================================================================================================
 **Example for Testing**
 
 Example Input Schema
@@ -450,9 +472,9 @@ Adding Gemset to Existing Application and Installing Rails
 
 > rvm use jruby-1.7.16.1@WebApp --ruby-version --create
 
-> gem install rails
+> gem install rails 
 
-> Run rails --version. You should get Rails 4.1.7
+> Run rails --version. You should get Rails 4.1.7 (might have to run `bundle install` if this command fails)
 
 > bundle install
 

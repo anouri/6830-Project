@@ -16,12 +16,15 @@ import java.util.List;
  * Created by trannguyen on 11/9/14.
  */
 public class SQLSchemaParser implements SchemaParser {
-    String rawSqlSchema;
+    private static String rawSqlSchema;
+    private static String[] tableNameStatic;
+    private static TupleDesc tupleDescStatic;
+
     public SQLSchemaParser(String rawSqlSchema) {
         this.rawSqlSchema = rawSqlSchema;
     }
 
-    private String[] readSQL(String rawSqlSchema) {
+    private static String[] readSQL(String rawSqlSchema) {
         return rawSqlSchema.split(";");
     }
 
@@ -67,7 +70,12 @@ public class SQLSchemaParser implements SchemaParser {
         String[] resultName = new String[columnName.size()];
         columnType.toArray(resultType);
         columnName.toArray(resultName);
-        return new TupleDesc(resultType,resultName);
+        tupleDescStatic = new TupleDesc(resultType, resultName);
+        return tupleDescStatic;
+    }
+
+    public static String[] getTableNameStatic() {
+        return tableNameStatic;
     }
 
     public String[] getTableName() {
@@ -90,9 +98,13 @@ public class SQLSchemaParser implements SchemaParser {
                 tableName.add(name);
             }
         }
-        String[] resultTableName = new String[tableName.size()];
-        tableName.toArray(resultTableName);
-        return resultTableName;
+        tableNameStatic = new String[tableName.size()];
+        tableName.toArray(tableNameStatic);
+        return tableNameStatic;
+    }
+
+    public static String getRawSqlSchemaStatic() {
+        return rawSqlSchema;
     }
 
     public String getRawSchema() {

@@ -82,7 +82,7 @@ public class CassandraExecutorUnity implements QueryExecutor {
     public boolean connect(){
     	try {
     	   Class.forName("org.apache.cassandra.cql.jdbc.CassandraDriver");
-    	   org.apache.log4j.BasicConfigurator.configure();
+//    	   org.apache.log4j.BasicConfigurator.configure();
  		   this.conn =DriverManager.getConnection(driverLink);
  		   System.out.println("Connected!");
  		   return true;

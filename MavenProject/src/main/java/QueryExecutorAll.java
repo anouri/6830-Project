@@ -13,6 +13,19 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
  
 public class QueryExecutorAll {
+	private static Properties props = initializeProp();
+	public static Properties initializeProp(){
+		FileInputStream fis = null;
+		Properties props = new Properties();
+		try {
+            fis = new FileInputStream("src/main/java/db.properties");
+            props.load(fis);
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
+		return props;
+	}
 	
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
@@ -25,7 +38,11 @@ public class QueryExecutorAll {
 		return result;
 	}
 	
-	public static void create_table_cassandra(String creation_q){
+	public static void create_table_cassandra(String keyspaceName, String creation_q){
+		BasicDataSource ds = (BasicDataSource)getDataSource("cassandra");
+		executeQuery(ds, "create keyspace "+ keyspaceName+" with replication = {'class':'SimpleStrategy','replication_factor':1}");
+		String url_base = props.getProperty("CASSANDRA_DB_URL");
+		props.setProperty("CASSANDRA_DB_URL", url_base+ "/" + keyspaceName);
 		executeQuery(getDataSource("cassandra"), creation_q);
 	}
 	public static void create_table_mongo(String creation_q){
@@ -35,16 +52,9 @@ public class QueryExecutorAll {
 		executeQuery(getDataSource("mysql"), creation_q);
 	}
     public static DataSource getDataSource(String dbType){
-        Properties props = new Properties();
-        FileInputStream fis = null;
+        
         BasicDataSource ds = new BasicDataSource();
-        try {
-            fis = new FileInputStream("src/main/java/db.properties");
-            props.load(fis);
-        }catch(IOException e){
-            e.printStackTrace();
-            return null;
-        }
+        
         if("mysql".equals(dbType)){
             ds.setDriverClassName(props.getProperty("MYSQL_DB_DRIVER_CLASS"));
             ds.setUrl(props.getProperty("MYSQL_DB_URL"));

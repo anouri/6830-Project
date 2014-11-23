@@ -470,9 +470,9 @@ Adding Gemset to Existing Application and Installing Rails
 
 > rvm use jruby-1.7.16.1@WebApp --ruby-version --create
 
-> gem install rails
+> gem install rails 
 
-> Run rails --version. You should get Rails 4.1.7
+> Run rails --version. You should get Rails 4.1.7 (might have to run `bundle install` if this command fails)
 
 > bundle install
 

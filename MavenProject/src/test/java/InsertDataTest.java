@@ -16,12 +16,13 @@ public class InsertDataTest {
                 "create table message (" +
                 "message_id integer primary key auto_increment," +
                 "text text not null);");
-        QueryExecutorAll.create_table_cassandra("test", schemaParser.getRawSchema());
-        String[] shortQuery = schemaParser.getRawSchema().split(";");
+        QueryExecutorAll.set_cassandra_keyspace("test");
+
+        String[] shortQuery = schemaParser.getRawSchema().trim().split(";");
         for (String i : shortQuery) {
             ////////Creation for Cassandra
 
-
+            QueryExecutorAll.create_table_cassandra(i);
             ////////Creation for Mysql
             QueryExecutorAll.create_table_mysql(i);
         }

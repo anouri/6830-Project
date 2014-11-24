@@ -38,6 +38,7 @@ public class InsertData {
             for (int i = 0 ; i < columnData.length(); i++) {
                 StringBuffer insertStatement = new StringBuffer(String.format(buffer.toString() + " VALUES %s", columnData.get(i).toString()
                         .replace("[", "(").replace("]", ")").replace("\"", "'")));
+                insertStatement.append(";");
                 resultQuery.add(insertStatement.toString());
             }
         }

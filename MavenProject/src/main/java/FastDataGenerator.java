@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.util.Incrementor;
 import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -47,7 +48,7 @@ public class FastDataGenerator {
 	}
 	
 	private class Row {
-		private int dist; // 0=delta, 1=uniform, 2=normal
+		private int dist; // 0=delta, 1=uniform, 2=normal, 3=autoincrement
 		private int max;
 		private int min;
 		private double mean;
@@ -57,6 +58,7 @@ public class FastDataGenerator {
 		private NormalDistribution normal;
 		private Random generator;
 		private Object delta;
+		private Incrementor inc;
 				
 		private Row (JSONObject colInfo) {
 			this.name = colInfo.getString("name");
@@ -67,14 +69,18 @@ public class FastDataGenerator {
 			}
 			String distribution = colInfo.getString("distribution");
 			if (distribution == null || !(distribution.equalsIgnoreCase("delta") || 
-					distribution.equalsIgnoreCase("uniform") || distribution.equalsIgnoreCase("normal"))) {
-				throw new RuntimeException("distribution must be uniform, normal, or delta");
+					distribution.equalsIgnoreCase("uniform") || distribution.equalsIgnoreCase("normal")
+					|| distribution.equalsIgnoreCase("autoincrement"))) {
+				throw new RuntimeException("distribution must be uniform, normal, delta, or autoincrement");
 			}
 			if (distribution.equalsIgnoreCase("normal")) {
 				this.dist = 2;
 				this.mean = colInfo.getDouble("mean");
 				this.stdv = colInfo.getDouble("stdv");
 				this.normal = new NormalDistribution(mean, stdv);
+			} else if (distribution.equalsIgnoreCase("autoincrement")) {
+				this.dist = 3;
+				this.inc = new Incrementor(Integer.MAX_VALUE);
 			} else {
 				this.max = colInfo.getInt("max");
 				this.min = colInfo.getInt("min");
@@ -99,12 +105,17 @@ public class FastDataGenerator {
 				case 0: return delta;
 				case 1: return generator.nextInt(max-min) + min;
 				case 2: return (int) normal.sample();
+				case 3:
+					int count = inc.getCount();
+					inc.incrementCount();
+					return count;
 				}
 			} else {
 				switch (dist) {
 				case 0: return delta;
 				case 1: return RandomStringUtils.randomAlphabetic(generator.nextInt(max-min) + min);
 				case 2: return RandomStringUtils.randomAlphabetic((int) normal.sample());
+				case 3: throw new RuntimeException("auto-incrementing distributions must go with category: Integer");
 				}
 			}
 			System.out.println("why are you here for row: "+this.name);
@@ -160,12 +171,16 @@ public class FastDataGenerator {
     public static void main(String[] args) {
         String sampleTables = '{' +
         		"follower: {cardinality:3, fields:"+
-        			"[{category:Integer,length:4,name:who_id,distribution:uniform,"+
+        			"[{category:Integer,length:4,name:ID,distribution:autoincrement,"+
+        				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
+        			"{category:Integer,length:4,name:who_id,distribution:uniform,"+
         				"distinct:3,mean:0,stdv:0,min:1,max:10},"+
         			"{category:Integer,length:4,name:whom_id,distribution:delta,"+
         				"distinct:0,mean:0,stdv:0,min:1,max:10}]},"+
         		"message: {cardinality:4, fields:"+
-        			"[{category:Integer,length:4,name:message_id,distribution:normal,"+
+        			"[{category:Integer,length:4,name:ID,distribution:autoincrement,"+
+        				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
+        			"{category:Integer,length:4,name:message_id,distribution:normal,"+
         				"distinct:0,mean:50,stdv:10,min:0,max:0},"+
         			"{category:String,length:128,name:text,distribution:uniform,"+
         				"distinct:2,mean:0,stdv:0,min:3,max:6},"+

@@ -14,22 +14,26 @@ class Schema < ActiveRecord::Base
 		result
 	end
 
-	def raw_sample_queries
-		result = []
+	def next_query
+		p = Random.rand(100.0)
+		cumulative = 0.0
 		self.queries.each do |query|
-			raw_query = ""
-			if query.kind == "SELECT"
-				raw_query = query.create_raw_select
-			elsif query.kind == "UPDATE"
-				raw_query = query.create_raw_update
-			elsif query.kind == "INSERT"
-				raw_query = query.create_raw_insert
-			elsif query.kind == "DELETE"
-				raw_query = query.create_raw_delete
+			cumulative += query.percentage
+			if cumulative >= p
+				case query.kind
+					when "SELECT" 
+						return query.create_raw_select
+					when "UPDATE" 
+						return query.create_raw_update
+					when "INSERT" 
+						return query.create_raw_insert
+					when "DELETE" 
+						return query.create_raw_delete
+					else 
+						return query.create_raw_select
+				end
 			end
-			result << [raw_query, query.percentage]
 		end
-		return result
 	end
 
 end

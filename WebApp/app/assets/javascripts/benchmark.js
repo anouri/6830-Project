@@ -130,4 +130,19 @@ $(document).ready(function() {
 		orderby_direction.show();
 	}
 
+	$(".distribution").on("change", function() {
+		var tr = $(this).closest("tr");
+		if ($(this).val() == "normal") {
+			tr.find(".mean").prop("disabled", false);
+			tr.find(".stdv").prop("disabled", false);
+			tr.find(".min").prop("disabled", true);
+			tr.find(".max").prop("disabled", true);
+		} else {
+			tr.find(".mean").prop("disabled", true);
+			tr.find(".stdv").prop("disabled", true);
+			tr.find(".min").prop("disabled", false);
+			tr.find(".max").prop("disabled", false);
+		}
+	})
+
 });

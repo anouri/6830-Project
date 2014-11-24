@@ -152,7 +152,8 @@ public class DataGenerator {
 		}
 	}
 
-    public static String generateJsonData(JSONObject json) {
+    public static String generateJsonData(String jsonString) {
+    	JSONObject json = new JSONObject(jsonString);
     	JSONObject outputJson = new JSONObject();
     	
     	// get info for each table
@@ -226,7 +227,7 @@ public class DataGenerator {
 //        				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
 //        			"{category:String,length:128,name:pw_hash,distribution:uniform,"+
 //        				"distinct:0,mean:0,stdv:0,min:0,max:0}]}};";
-        JSONObject json = new JSONObject(sampleTables);
-        System.out.println(generateJsonData(json));
+        //JSONObject json = new JSONObject(sampleTables);
+        System.out.println(generateJsonData(sampleTables));
     }
 }

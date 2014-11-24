@@ -1,6 +1,6 @@
 <SOURCES>
 	<DATABASE>
-		<URL>jdbc:cassandra://127.0.0.1:9160/test</URL>
+		<URL>jdbc:cassandra://127.0.0.1:7000/test</URL>
 		<!-- <USER></USER>
 		<PASSWORD></PASSWORD> -->
 		<DRIVER>org.apache.cassandra.cql.jdbc.CassandraDriver</DRIVER>

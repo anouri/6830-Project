@@ -18,7 +18,7 @@ public class QueryExecutorAll {
 		FileInputStream fis = null;
 		Properties props = new Properties();
 		try {
-            fis = new FileInputStream("src/main/java/db.properties");
+            fis = new FileInputStream("../MavenProject/src/main/java/db.properties");
             props.load(fis);
         }catch(IOException e){
             e.printStackTrace();

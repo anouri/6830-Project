@@ -10,9 +10,9 @@ import java.util.List;
  * and column from the data base
  */
 public class GetDataValue {
-    Connection conn = null;
-    ResultSet results = null;
-    Statement stmt = null;
+    private static Connection conn = null;
+    private static ResultSet results = null;
+    private static Statement stmt = null;
 
     /**
      * In order to reduce the dependency between each component
@@ -28,7 +28,7 @@ public class GetDataValue {
      * @param table name of the table
      * @return value of the record of null if there is none.
      */
-    public String getValueFromColumnTable(String column, String table) {
+    public static String getValueFromColumnTable(String column, String table) {
         String sqlQuery = String.format("Select %s from %s limit 1;", column, table);
         ResultSet results = executeAndGet(sqlQuery);
         if (results == null) {
@@ -46,7 +46,7 @@ public class GetDataValue {
         return null;
     }
 
-    protected ResultSet executeAndGet(String rawQuery) {
+    protected static ResultSet executeAndGet(String rawQuery) {
         DataSource ds = QueryExecutorAll.getDataSource("mysql");
         try {
             conn = ds.getConnection();
@@ -62,7 +62,7 @@ public class GetDataValue {
         return results;
     }
 
-    private void close() {
+    private static void close() {
         if (results != null) {
             try {
                 results.close();
@@ -97,7 +97,7 @@ public class GetDataValue {
      * @param table the name of the table
      * @return row in the format (columnValue1, columnValue2, columnValue3)
      */
-    public String[] getRowFromTable(String table) {
+    public static String[] getRowFromTable(String table) {
         String sqlQuery = String.format("Select * from %s limit 1;", table);
         ResultSet results =  executeAndGet(sqlQuery);
         if (results == null) {
@@ -144,7 +144,7 @@ public class GetDataValue {
         return columnValues;
     }
 
-    private String getDatabaseFormat(List<String> iterator) {
+    private static String getDatabaseFormat(List<String> iterator) {
         StringBuffer buffer = new StringBuffer("(");
         for (int i = 0; i < iterator.size(); i++) {
             buffer.append(iterator.get(i));

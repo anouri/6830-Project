@@ -2,16 +2,21 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.CallableStatement;
 
+import org.math.plot.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 import java.sql.Connection;
 
 import javax.sql.DataSource;
+import javax.swing.JFrame;
 
 import org.apache.commons.dbcp.BasicDataSource;
  
@@ -37,9 +42,6 @@ public class QueryExecutorAll {
 		props.setProperty("CASSANDRA_DB_URL", url_base+ "/" + keyspaceName);
 	}
 	
-	public static void plot_result(HashMap<String, Long> results){
-		
-	}
 	
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
@@ -57,7 +59,6 @@ public class QueryExecutorAll {
 		}
 	}
 	public static void create_table_mongo(String creation_q){
-		System.out.println("mongo");
 		executeQuery(getDataSource("mongo"), creation_q);
 	}
 	public static void create_table_mysql(String creation_q){
@@ -241,6 +242,12 @@ public class QueryExecutorAll {
 
     	        conn = null;
     	    }
+    	}
+    }
+    
+    public static void dropTables(String[] tableNames){
+    	for (String t: tableNames){
+    		run_all("DROP table " + t + ";");
     	}
     }
     

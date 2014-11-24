@@ -1,3 +1,4 @@
+import org.jfree.ui.RefineryUtilities;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -7,8 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InsertDataTest {
+	HashMap<String, HashMap<String, Long>> results = new HashMap<String, HashMap<String, Long>>();
+	
 	@BeforeClass
-    public static void setup() throws Exception {
+    public static void setup(){
 //        SQLSchemaParser schemaParser = new SQLSchemaParser("DROP TABLE IF EXISTS USER;CREATE TABLE USER (user_id integer PRIMARY KEY autoincrement, username text NOT NULL, email text NOT NULL, pw_hash text NOT NULL);\nDROP TABLE IF EXISTS follower;\nCREATE TABLE follower (who_id integer,whom_id integer);\nDROP TABLE IF EXISTS message;\nCREATE TABLE message (message_id integer PRIMARY KEY autoincrement,author_id integer NOT NULL,text text NOT NULL,pub_date integer);\n");
 //        String shortQuery = schemaParser.getRawSchema();
     	
@@ -40,21 +43,8 @@ public class InsertDataTest {
       QueryExecutorAll.create_table_mongo("SELECT _id, message_id, text from message");
     }
 
-    @Test
+    
     public void testDataModificationFromJSON() throws Exception {
-//    	String sampleTables = '{' +
-//        		"follower: {cardinality:3, fields:"+
-//        			"[{category:Integer,length:4,name:who_id,distribution:uniform,"+
-//        				"distinct:3,mean:0,stdv:0,min:1,max:10},"+
-//        			"{category:Integer,length:4,name:whom_id,distribution:delta,"+
-//        				"distinct:0,mean:0,stdv:0,min:1,max:10}]},"+
-//        		"message: {cardinality:4, fields:"+
-//        			"[{category:Integer,length:4,name:message_id,distribution:normal,"+
-//        				"distinct:0,mean:50,stdv:10,min:0,max:0},"+
-//        			"{category:String,length:128,name:text,distribution:uniform,"+
-//        				"distinct:2,mean:0,stdv:0,min:3,max:6},"+
-//        			"]}}";
-//    	List<String> allInsert = InsertData.InsertStatementFromJSON(DataGenerator.generateJsonData(sampleTables));
     	SQLSchemaParser schemaParser = new SQLSchemaParser("drop table follower;" +
                  "create table follower (" +
                  "who_id integer," +
@@ -64,19 +54,47 @@ public class InsertDataTest {
                  "message_id integer primary key autoincrement," +
                  "text text not null);");
     	List<String> allInsert = InsertData.InsertStatementFromJSON("{\"follower\":{\"colNames\":[\"who_id\",\"whom_id\"],\"colData\":[[4,1],[2,1],[4,1]]},\"message\":{\"colNames\":[\"message_id\",\"text\"],\"colData\":[[43,\"ecM\"],[56,\"ecM\"],[28,\"ecM\"],[51,\"ecM\"]]}}");
-    	for (String s : allInsert) {
-        	System.out.println(s);
-        	HashMap<String, Long> result =  QueryExecutorAll.run_all(s);
-        	for (String name: result.keySet()){
-                String key =name.toString();
-                String value = result.get(name).toString();
-                System.out.println("db is: "+ key + " run time is: " + value);
-        	}
-        }
-    }
-  
-    @Test
-    public void testBatchStatementFromJSON() throws Exception {
     	
+    	/// adding runtime for each insertion
+    	for (int i = 0; i < allInsert.size(); i++) {
+    		String s = allInsert.get(i);
+        	HashMap<String, Long> result =  QueryExecutorAll.run_all(s);
+	        if (result != null){
+	        	results.put("insertion_"+i, result);
+        	}
+        	
+        }
+    	for (String name: results.keySet()){
+            System.out.println(name);
+        	
+            HashMap<String, Long> runtimes = results.get(name);
+            for (String db: runtimes.keySet()){
+            	String runt = runtimes.get(db).toString();
+            	System.out.println("db is: "+ db + " run time is: " + runt);
+            }
+    	}
+    }
+    
+    
+    public void cleanUpTables() throws Exception {
+    	String[] tables = new String[]{"follower","message"};
+    	QueryExecutorAll.dropTables(tables);
+    }
+    
+    public void testBatchInsertionFromJSON() throws Exception {
+    	
+    }
+    
+    public void plotResult(){
+    	 final BarChart demo = new BarChart("Bar Chart Demo", results);
+         demo.pack();
+         RefineryUtilities.centerFrameOnScreen(demo);
+         demo.setVisible(true); 
+    }
+    
+    @Test
+    public void testWrapper() throws Exception{
+    	testDataModificationFromJSON();
+    	cleanUpTables();
     }
 }

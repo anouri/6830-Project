@@ -18,8 +18,8 @@ public class SQLSchemaParserTest {
                 "email text not null," +
                 "pw_hash text not null);";
         sqlSchemaParser = new SQLSchemaParser(rawSchema);
-        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE), new Type(Type.SupportedType.STRING_TYPE),
-                new Type(Type.SupportedType.STRING_TYPE), new Type(Type.SupportedType.STRING_TYPE)}, new String[] {"user_id","username","email", "pw_hash"});
+        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE, true), new Type(Type.SupportedType.STRING_TYPE, false),
+                new Type(Type.SupportedType.STRING_TYPE, false), new Type(Type.SupportedType.STRING_TYPE, false)}, new String[] {"user_id","username","email", "pw_hash"});
         TupleDesc actual = sqlSchemaParser.getTupleDescription("user");
         Assert.assertEquals(actual, expected);
 
@@ -81,10 +81,13 @@ public class SQLSchemaParserTest {
         columnLength.put(128);
         JSONObject lengthJSON = new JSONObject();
         lengthJSON.put("columnLength", columnLength);
+        JSONObject primaryKey = new JSONObject();
+        primaryKey.put("primaryKey","user_id");
         JSONArray all = new JSONArray();
         all.put(nameJSON);
         all.put(typeJson);
         all.put(lengthJSON);
+        all.put(primaryKey);
         expected.put("user",all);
 
         JSONObject actual = sqlSchemaParser.getJSON();

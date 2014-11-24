@@ -3,14 +3,11 @@ import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by trannguyen on 11/9/14.
@@ -20,6 +17,7 @@ public class SQLSchemaParser {
     private static String[] tableNameStatic;
     private static TupleDesc tupleDescStatic;
     private static JSONObject tableJSON;
+    private static Set<String> primaryKeyWord = new HashSet<String> (Arrays.asList("primary", "key", "auto_incremented"));
 
     public SQLSchemaParser(String rawSqlSchema) {
         this.rawSqlSchema = rawSqlSchema;
@@ -54,12 +52,19 @@ public class SQLSchemaParser {
                     List<ColumnDefinition> columns = create.getColumnDefinitions();
                     for (ColumnDefinition def : columns) {
                         columnName.add(def.getColumnName());
+                        boolean isPrimaryKey = false;
+                        for (Object extra: def.getColumnSpecStrings()) {
+                            if (primaryKeyWord.contains(extra.toString().toLowerCase())) {
+                                isPrimaryKey = true;
+                                break;
+                            }
+                        }
                         if (def.getColDataType().getDataType().equalsIgnoreCase("varchar")) {
-                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, Integer.parseInt((String) def.getColDataType().getArgumentsStringList().get(0))));
-                        } else if (def.getColDataType().getDataType().equalsIgnoreCase("integer")) {
-                            columnType.add(new Type(Type.SupportedType.INT_TYPE));
+                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, isPrimaryKey,Integer.parseInt((String) def.getColDataType().getArgumentsStringList().get(0))));
+                        } else if (def.getColDataType().getDataType().equalsIgnoreCase("integer") || def.getColDataType().getDataType().equalsIgnoreCase("bigint")) {
+                            columnType.add(new Type(Type.SupportedType.INT_TYPE, isPrimaryKey));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("text")) {
-                            columnType.add(new Type(Type.SupportedType.STRING_TYPE));
+                            columnType.add(new Type(Type.SupportedType.STRING_TYPE, isPrimaryKey));
                         } else {
                             System.out.println(def.getColDataType().toString());
                         }
@@ -114,11 +119,15 @@ public class SQLSchemaParser {
             JSONArray columnName = new JSONArray();
             JSONArray columnType = new JSONArray();
             JSONArray columnLength = new JSONArray();
+            JSONObject primaryKey = new JSONObject();
             while (iter.hasNext()) {
                 TupleDesc.TDItem current = iter.next();
                 columnName.put(current.fieldName);
                 columnType.put(current.fieldType.toString());
                 columnLength.put(current.fieldType.getLen());
+                if (current.fieldType.isPrimaryKey) {
+                    primaryKey.put("primaryKey", current.fieldName);
+                }
             }
             JSONObject nameJson = new JSONObject();
             nameJson.put("columnName", columnName);
@@ -130,6 +139,7 @@ public class SQLSchemaParser {
             all.put(nameJson);
             all.put(typeJson);
             all.put(lengthJson);
+            all.put(primaryKey);
             result.put(tName, all);
         }
         tableJSON = result;
@@ -139,7 +149,7 @@ public class SQLSchemaParser {
     public static void main(String[] args) {
         String rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key autoincrement," +
+                "user_id integer primary key auto_increment," +
                 "username text not null," +
                 "email text not null," +
                 "pw_hash text not null);" +

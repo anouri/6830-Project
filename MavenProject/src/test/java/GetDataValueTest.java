@@ -24,7 +24,7 @@ public class GetDataValueTest {
         try {
             conn = ds.getConnection();
             stmt = conn.createStatement();
-            stmt.execute("CREATE TABLE if not exists users (lastname text,age int,city text,email text, firstname text);");
+            stmt.execute("CREATE TABLE if not exists users (lastname text,age int,city text,email text, firstname text, id int auto_increment, primary key (id));");
             String firstInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Kristin', 25, 'Austin', 'kristin@example.com', 'Bob');";
             String secondInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tony', 10, 'California', 'tuantran@example.com', 'Bob');";
             String thirdInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tran', 12, 'Seattle', 'viettran@example.com', 'Bob');";
@@ -102,5 +102,23 @@ public class GetDataValueTest {
         String[] actual = getDataValue.getRowFromTable("users");
         Assert.assertTrue(expected.contains(actual[1]));
         Assert.assertEquals("(lastname,age,city,email,firstname)", actual[0]);
+    }
+
+    @Test
+    public void testAutoIncrementedFromTable() throws Exception {
+        DataSource ds = QueryExecutorAll.getDataSource("mysql");
+        conn = ds.getConnection();
+        stmt = conn.createStatement();
+
+        Set<Integer> expected = new HashSet<Integer>(
+                Arrays.asList(1,2,3,4));
+        if (stmt.execute("Select id from users")) {
+            ResultSet actual = stmt.getResultSet();
+            while (actual.next()) {
+                Assert.assertTrue(expected.contains(actual.getInt(1)));
+            }
+        } else {
+            Assert.assertTrue(false);
+        }
     }
 }

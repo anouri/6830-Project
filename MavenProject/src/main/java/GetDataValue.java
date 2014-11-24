@@ -108,13 +108,21 @@ public class GetDataValue {
             ResultSetMetaData metaData = results.getMetaData();
             List<String> metaList = new ArrayList<String>();
             for (int i = 1 ;i <= metaData.getColumnCount(); i ++) {
-                metaList.add(metaData.getColumnName(i));
+                if (!metaData.isAutoIncrement(i)) {
+                    metaList.add(metaData.getColumnName(i));
+                }
             }
             columnValues[0] = getDatabaseFormat(metaList);
             StringBuffer buffer = null;
             while (results.next()) {
                  buffer = new StringBuffer("(");
                 for (int i = 1; i <= metaData.getColumnCount(); i ++) {
+                    if (metaData.isAutoIncrement(i)) {
+                        if (i == metaData.getColumnCount()) {
+                            buffer.replace(buffer.length()-1,buffer.length(),")");
+                        }
+                        continue;
+                    }
                     if (metaData.getColumnType(i) == Types.INTEGER) {
                         buffer.append(results.getInt(i));
                     } else {

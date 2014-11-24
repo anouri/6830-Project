@@ -150,6 +150,15 @@ Can run callable stored procedures:
 http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callable.html
 
 ===================================================================================================
+
+** Plotting results**
+
+BarChar.java
+
+Sample also included in the main class.
+
+===================================================================================================
+
 **Example for Testing**
 
 Example Input Schema

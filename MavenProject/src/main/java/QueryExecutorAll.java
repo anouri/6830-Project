@@ -1,9 +1,6 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.CallableStatement;
-
-import org.math.plot.*;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -14,7 +11,6 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
 import java.sql.Connection;
-
 import javax.sql.DataSource;
 import javax.swing.JFrame;
 

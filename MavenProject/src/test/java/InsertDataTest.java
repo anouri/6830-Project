@@ -42,7 +42,6 @@ public class InsertDataTest {
       QueryExecutorAll.create_table_mongo("SELECT who_id, whom_id from follower");
       QueryExecutorAll.create_table_mongo("SELECT _id, message_id, text from message");
     }
-
     
     public void testDataModificationFromJSON() throws Exception {
     	SQLSchemaParser schemaParser = new SQLSchemaParser("drop table follower;" +

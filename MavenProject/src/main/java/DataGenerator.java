@@ -8,6 +8,11 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+// TODO: add back in ditinct int values
+// TODO: throw exceptions if the distribution is too narrow to get x distinct values fast
+// TODO: throw exceptions if distinct values take too long to generate
+// TODO: add auto-incrementing distribution
+
 public class DataGenerator {
 
 	private static Iterator<Integer> generateIntegerData(JSONObject colInfo, int count) {

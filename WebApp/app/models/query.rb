@@ -74,7 +74,7 @@ class Query < ActiveRecord::Base
 			raw_predicates = "WHERE "
 			predicates.each do |p|
 				if p.field2 == "?"
-					val = getPredicateVal(p.field2, tables)
+					val = getPredicateVal(p.field1, tables)
 					basic = "#{p.field1} #{p.operator} #{val}"
 				else
 					basic = "#{p.field1} #{p.operator} #{p.field2}"

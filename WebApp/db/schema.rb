@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141116012647) do
+ActiveRecord::Schema.define(version: 20141124035331) do
 
   create_table "fields", force: true do |t|
     t.string   "category"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20141116012647) do
     t.datetime "updated_at"
     t.integer  "schema_id"
     t.string   "name"
+    t.string   "primary_key"
   end
 
 end

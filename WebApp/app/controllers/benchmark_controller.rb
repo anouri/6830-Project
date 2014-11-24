@@ -54,8 +54,7 @@ class BenchmarkController < ApplicationController
 
   def show_comparison
     schema = Schema.find(params[:schema_id])
-    x = schema.next_query
-    raise x.inspect
+    5.times { |i| QueryExecutorAll.run_all(schema.next_query) }
   end
 
 end

@@ -4,13 +4,16 @@ module BenchmarkHelper
 =begin
 	{"follower"=>[{"columnName"=>["who_id", "whom_id"]}, 
 								{"columnType"=>["Integer", "Integer"]}, 
-								{"columnLength"=>[4, 4]}], 
+								{"columnLength"=>[4, 4]},
+							 ], 
 	 "message"=>[{"columnName"=>["message_id", "author_id", "text", "pub_date"]}, 
 	             {"columnType"=>["Integer", "Integer", "String", "Integer"]}, 
-	             {"columnLength"=>[4, 4, 128, 4]}], 
+	             {"columnLength"=>[4, 4, 128, 4]}
+	            ], 
 	 "user"=>[{"columnName"=>["user_id", "username", "email", "pw_hash"]}, 
 	          {"columnType"=>["Integer", "String", "String", "String"]}, 
-	          {"columnLength"=>[4, 128, 128, 128]}], 
+	          {"columnLength"=>[4, 128, 128, 128]}
+	         ], 
 	 "table"=>["user", "follower", "message"]
 	}
 =end
@@ -18,13 +21,15 @@ module BenchmarkHelper
 	def create_models_from_schema_json(schema, json)
 		table_names = json["table"]
 		table_names.each do |table_name|
-			data = json[table_name]
 			table = schema.tables.create(name: table_name)
-			columnName = data[0]["columnName"]		 # ["who_id", "whom_id"]
-			columnType = data[1]["columnType"]  	 # ["Integer", "Integer"]
-			columnLength = data[2]["columnLength"] # [4, 4]
-			for i in 0...columnName.length
-				field = table.fields.create(category: columnType[i], name: columnName[i], length: columnLength[i])
+			data = json[table_name]
+			column_names = data[0]["columnName"]		 # ["who_id", "whom_id"]
+			column_types = data[1]["columnType"]  	 # ["Integer", "Integer"]
+			column_lengths = data[2]["columnLength"] # [4, 4]
+			primary_key = data[3]["primaryKey"]
+			table.update_attribute(:primary_key, primary_key)
+			for i in 0...column_names.length
+				field = table.fields.create(category: column_types[i], name: column_names[i], length: column_lengths[i])
 			end
 		end
 	end
@@ -53,15 +58,21 @@ module BenchmarkHelper
 						"fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"user_id", "distribution"=>"normal", "distinct"=>10, "mean"=>5, "stdv"=>1, "min"=>nil, "max"=>nil}, 
 											 {"category"=>"String", "length"=>128, "name"=>"username", "distribution"=>"uniform", "distinct"=>50, "mean"=>nil, "stdv"=>nil, "min"=>4, "max"=>8}, 
 											 {"category"=>"String", "length"=>128, "name"=>"email", "distribution"=>"delta", "distinct"=>100, "mean"=>nil, "stdv"=>nil, "min"=>6, "max"=>18}, 
-											 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"normal", "distinct"=>nil, "mean"=>10, "stdv"=>4, "min"=>nil, "max"=>nil}]}, 
+											 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"normal", "distinct"=>nil, "mean"=>10, "stdv"=>4, "min"=>nil, "max"=>nil}
+											]
+						}, 
 	 "follower"=>{"cardinality"=>2000, 
 	 							"fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"who_id", "distribution"=>"normal", "distinct"=>10, "mean"=>5, "stdv"=>1, "min"=>nil, "max"=>nil}, 
-	 												 {"category"=>"Integer", "length"=>4, "name"=>"whom_id", "distribution"=>"delta", "distinct"=>10, "mean"=>nil, "stdv"=>nil, "min"=>1, "max"=>100}]}, 
+	 												 {"category"=>"Integer", "length"=>4, "name"=>"whom_id", "distribution"=>"delta", "distinct"=>10, "mean"=>nil, "stdv"=>nil, "min"=>1, "max"=>100}
+	 												]
+	 							}, 
 	 "message"=>{"cardinality"=>3000, 
 	 						 "fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"uniform", "distinct"=>10, "mean"=>nil, "stdv"=>nil, "min"=>1, "max"=>100}, 
 	 						 						{"category"=>"Integer", "length"=>4, "name"=>"author_id", "distribution"=>"normal", "distinct"=>10, "mean"=>2, "stdv"=>1, "min"=>nil, "max"=>nil}, 
 	 						 						{"category"=>"String", "length"=>128, "name"=>"text", "distribution"=>"delta", "distinct"=>20, "mean"=>nil, "stdv"=>nil, "min"=>10, "max"=>40}, 
-	 						 						{"category"=>"Integer", "length"=>4, "name"=>"pub_date", "distribution"=>"uniform", "distinct"=>18, "mean"=>nil, "stdv"=>nil, "min"=>20, "max"=>60}]}
+	 						 						{"category"=>"Integer", "length"=>4, "name"=>"pub_date", "distribution"=>"uniform", "distinct"=>18, "mean"=>nil, "stdv"=>nil, "min"=>20, "max"=>60}
+	 						 					 ]
+	 						}
 	}
 =end
 	def create_schema_distribution_hash(schema)
@@ -71,13 +82,17 @@ module BenchmarkHelper
 			data = {}
 			data["cardinality"] = table.cardinality
 			fields_array = []
+
 			table.fields.each do |field|
-				field_hash = {}
-				relevant_attributes.each do |att|
-					field_hash[att.to_s] = field[att]
+				if field.name != table.primary_key
+					field_hash = {}
+					relevant_attributes.each do |att|
+						field_hash[att.to_s] = field[att]
+					end
+					fields_array << field_hash
 				end
-				fields_array << field_hash
 			end
+
 			data["fields"] = fields_array
 			result[table.name] = data
 		end
@@ -225,11 +240,11 @@ module BenchmarkHelper
 	end
 
 	def create_database_tables()
-		#QueryExecutorAll.set_cassandra_keyspace("test");
+		# QueryExecutorAll.set_cassandra_keyspace("test");
     shortQuery = SQLSchemaParser.getRawSchema.split(";")
     shortQuery.each do |query|
       # Creation for Cassandra
-      #QueryExecutorAll.create_table_cassandra(query)
+      # QueryExecutorAll.create_table_cassandra(query)
       # Creation for MySQL
       QueryExecutorAll.create_table_mysql(query)
     end

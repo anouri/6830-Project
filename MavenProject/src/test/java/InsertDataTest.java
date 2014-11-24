@@ -19,7 +19,7 @@ public class InsertDataTest {
     	///// make sure you run the following:
         ///// GRANT ALL PRIVILEGES ON *.* TO ''@'localhost';
         ///// FLUSH PRIVILEGES;
-        String createProcedure_mysql =
+		String createProcedure_mysql =
         		"CREATE PROCEDURE mysql_create()"+
                 "BEGIN " +
                 	"DROP TABLE IF EXISTS follower;" +

@@ -142,6 +142,14 @@ Guideline for an earlier version:
 http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15.5
 
 ===================================================================================================
+
+**Batch Queries**
+
+Can run callable stored procedures:
+
+http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callable.html
+
+===================================================================================================
 **Example for Testing**
 
 Example Input Schema

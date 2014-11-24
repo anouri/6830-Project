@@ -24,6 +24,7 @@ Restore oldest version with distinct option for integer types and for string typ
 *Tasks left*:
 ===================
 *  Wiring (Tony, Tran)
+*  Supply next max id when doing insertion (Tran)
 *  Schema + fast data generator + Test (Kristin)
 *  Create_table_all() + Steps for table creation, insertion, plotting etc + API (Shirley)
 *  generate automatic query generator: think of the different work load to feed into the random generator.

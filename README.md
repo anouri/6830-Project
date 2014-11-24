@@ -301,19 +301,16 @@ Output JSON Grammar from Data Generator:
 
 **Run the Data Generator:**
 
-(these are method declarations for the stuff I'll implement this weekend)
-
-method declaration for initial call to set up data generator and return min(100, cardinality) rows from each table for the purposes of having data to select for the query generator step:
+create a new FastDataGenerator with 
 ```shell
-public String initialGenerateData(String inputJSON)
+public FastDataGenerator(String jsonString)
 ```
-where output and input String grammars are defined above.
 
-method declaration for getting subsequent sets of 100 rows until all tables are fully generated:
+then use that FastDataGenerator to get subsequent sets of 100 rows (or fewer if the current table is finishing) until all tables are fully generated:
 ```shell
 public String generateMoreData()
 ```
-where output String follows the grammar above.  When data is finished being generated, a field "endOfData: true" will be appended to the JSON.  Further calls will return null.
+where output String follows the grammar above.  When data is finished being generated, further calls will return null.
 
 **On Indices and Joins**:
 Because allowing the user to specify primary key columns could lead to major bottlenecks in randomly generating those distinct values, we'll automatically include an auto-incrementing primary key ID field as specified in any table the user creates.  We should display this to the user when they create the table in the UI, but they shouldn't be able to change it.  In the UI, this field should not be available for choosing distributions for columns, and should not be passed in the JSON input to the data generator, as its values will automatically be created when each record is inserted.

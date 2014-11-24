@@ -41,7 +41,16 @@ public class InsertData {
                 resultQuery.add(insertStatement.toString());
             }
         }
+        if (!jsonObject.isNull("endOfData")) {
+            isEOF = true;
+        } else {
+            isEOF = false;
+        }
         return resultQuery;
+    }
+
+    public static boolean isDone() {
+        return isEOF;
     }
 
     public static void main(String argsp[]) {

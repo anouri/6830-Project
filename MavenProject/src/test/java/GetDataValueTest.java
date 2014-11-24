@@ -1,36 +1,75 @@
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class GetDataValueTest {
-    Cluster cluster ;
-    Session session;
+
+    Connection conn;
+    ResultSet results;
+    Statement stmt;
     @Before
     public void setUp() throws Exception {
-        cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-        session = cluster.connect("mykeyspace");
-        session.execute("CREATE TABLE if not exists users (firstname text,lastname text,age int,email text,city text,PRIMARY KEY (lastname));");
-        String firstInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Kristin', 25, 'Austin', 'kristin@example.com', 'Bob');";
-        String secondInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tony', 10, 'California', 'tuantran@example.com', 'Bob');";
-        String thirdInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tran', 12, 'Seattle', 'viettran@example.com', 'Bob');";
-        String forthInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Shirley', 20, 'Beijing', 'shirley@example.com', 'Bob');";
-        List<String> sqlStatement = new ArrayList<String>(
-                Arrays.asList(firstInsert, secondInsert, thirdInsert,forthInsert));
-        for (String sql : sqlStatement) {
-            session.execute(sql);
+        conn = null;
+        results = null;
+        stmt = null;
+        DataSource ds = QueryExecutorAll.getDataSource("mysql");
+        try {
+            conn = ds.getConnection();
+            stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE if not exists users (lastname text,age int,city text,email text, firstname text);");
+            String firstInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Kristin', 25, 'Austin', 'kristin@example.com', 'Bob');";
+            String secondInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tony', 10, 'California', 'tuantran@example.com', 'Bob');";
+            String thirdInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tran', 12, 'Seattle', 'viettran@example.com', 'Bob');";
+            String forthInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Shirley', 20, 'Beijing', 'shirley@example.com', 'Bob');";
+            List<String> sqlStatement = new ArrayList<String>(
+                    Arrays.asList(firstInsert, secondInsert, thirdInsert, forthInsert));
+            for (String sql : sqlStatement) {
+                stmt.execute(sql);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
         }
     }
 
     @After
     public void tearDown() throws Exception {
-        session.execute("Drop table users");
-        cluster.close();
-        session.close();
+            stmt.execute("Drop table users");
+            if (results != null) {
+                try {
+                    results.close();
+                } catch (SQLException sqlEx) {
+                } // ignore
+
+                results = null;
+            }
+
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException sqlEx) {
+                } // ignore
+
+                stmt = null;
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException sqlEx) {
+                } // ignore
+
+                conn = null;
+            }
     }
 
     @Test
@@ -60,7 +99,8 @@ public class GetDataValueTest {
                         "('Tran',12,'Seattle','viettran@example.com','Bob')", "('Shirley',20,'Beijing','shirley@example.com','Bob')")
         );
 
-        String actual = getDataValue.getRowFromTable("users");
-        Assert.assertTrue(expected.contains(actual));
+        String[] actual = getDataValue.getRowFromTable("users");
+        Assert.assertTrue(expected.contains(actual[1]));
+        Assert.assertEquals("(lastname,age,city,email,firstname)", actual[0]);
     }
 }

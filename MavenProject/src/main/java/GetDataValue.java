@@ -1,4 +1,7 @@
-import com.datastax.driver.core.*;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -7,13 +10,10 @@ import com.datastax.driver.core.*;
  * and column from the data base
  */
 public class GetDataValue {
+    Connection conn = null;
+    ResultSet results = null;
+    Statement stmt = null;
 
-    Cluster cluster;
-    Session session;
-    public GetDataValue() {
-        cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-        session = cluster.connect("mykeyspace");
-    }
     /**
      * In order to reduce the dependency between each component
      * and deal with randomness of the data, this class is created
@@ -29,43 +29,123 @@ public class GetDataValue {
      * @return value of the record of null if there is none.
      */
     public String getValueFromColumnTable(String column, String table) {
-        String sqlQuery = String.format("Select %s from mykeyspace.%s limit 1;", column, table);
-        ResultSet results =  session.execute(sqlQuery);
-        for (Row row : results) {
-            if (row.getColumnDefinitions().getType(column).getName().equals(DataType.Name.INT)) {
-                return String.valueOf(row.getInt(column));
-            } else {
-                return String.valueOf(row.getString(column));
+        String sqlQuery = String.format("Select %s from %s limit 1;", column, table);
+        ResultSet results = executeAndGet(sqlQuery);
+        if (results == null) {
+            return null;
+        }
+        try {
+            while (results.next()) {
+                return results.getObject(1).toString();
             }
+        } catch (SQLException e1) {
+
+        } finally {
+            close();
         }
         return null;
     }
+
+    protected ResultSet executeAndGet(String rawQuery) {
+        DataSource ds = QueryExecutorAll.getDataSource("mysql");
+        try {
+            conn = ds.getConnection();
+            stmt = conn.createStatement();
+            if (stmt.execute(rawQuery)) {
+                results = stmt.getResultSet();
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return results;
+    }
+
+    private void close() {
+        if (results != null) {
+            try {
+                results.close();
+            } catch (SQLException sqlEx) {
+            } // ignore
+
+            results = null;
+        }
+
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException sqlEx) {
+            } // ignore
+
+            stmt = null;
+        }
+
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException sqlEx) {
+            } // ignore
+
+            conn = null;
+        }
+    }
+
 
     /**
      * Get the row in the database associated with the table
      * @param table the name of the table
      * @return row in the format (columnValue1, columnValue2, columnValue3)
      */
-    public String getRowFromTable(String table) {
-        String sqlQuery = String.format("Select * from mykeyspace.%s limit 1;", table);
-        ResultSet results =  session.execute(sqlQuery);
-        for (Row row : results) {
-            StringBuffer buffer = new StringBuffer("(");
-            for (int i = 0; i < row.getColumnDefinitions().size(); i ++) {
-                if (row.getColumnDefinitions().getType(i).getName().equals(DataType.Name.INT)) {
-                    buffer.append(row.getInt(i));
-                } else {
-                    buffer.append('\'').append(row.getString(i)).append('\'');
-                }
-                if (i == row.getColumnDefinitions().size()-1) {
-                    buffer.append(")");
-                } else {
-                    buffer.append(",");
+    public String[] getRowFromTable(String table) {
+        String sqlQuery = String.format("Select * from %s limit 1;", table);
+        ResultSet results =  executeAndGet(sqlQuery);
+        if (results == null) {
+            return null;
+        }
+        String[] columnValues = new String[2];
+        try {
+            ResultSetMetaData metaData = results.getMetaData();
+            List<String> metaList = new ArrayList<String>();
+            for (int i = 1 ;i <= metaData.getColumnCount(); i ++) {
+                metaList.add(metaData.getColumnName(i));
+            }
+            columnValues[0] = getDatabaseFormat(metaList);
+            StringBuffer buffer = null;
+            while (results.next()) {
+                 buffer = new StringBuffer("(");
+                for (int i = 1; i <= metaData.getColumnCount(); i ++) {
+                    if (metaData.getColumnType(i) == Types.INTEGER) {
+                        buffer.append(results.getInt(i));
+                    } else {
+                        buffer.append('\'').append(results.getString(i)).append('\'');
+                    }
+                    if (i == metaData.getColumnCount()) {
+                        buffer.append(")");
+                    } else {
+                        buffer.append(",");
+                    }
                 }
             }
-            return buffer.toString();
+            columnValues[1] =  buffer.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
         }
-        return null;
+        return columnValues;
     }
 
+    private String getDatabaseFormat(List<String> iterator) {
+        StringBuffer buffer = new StringBuffer("(");
+        for (int i = 0; i < iterator.size(); i++) {
+            buffer.append(iterator.get(i));
+            if (i == iterator.size() - 1) {
+                buffer.append(")");
+            } else {
+                buffer.append(",");
+            }
+        }
+        return buffer.toString();
+    }
 }

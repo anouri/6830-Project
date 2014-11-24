@@ -1,11 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
+import java.sql.*;
 
 /**
  * Created by trannguyen on 11/14/14.
@@ -35,7 +28,6 @@ public class MongoExecutor implements QueryExecutor {
      * @param rawSQLQuery SQL statement
      * @return time it takes to excute those in mili seconds
      */
-    @Override
     public long executeQuery(String rawSQLQuery) {
     	long fStart = 0;
     	long fEnd = 0;
@@ -49,7 +41,23 @@ public class MongoExecutor implements QueryExecutor {
     	        rs = stmt.getResultSet();
     	        
     	    }
-    	    fEnd = System.currentTimeMillis();
+    	    int i=0;
+    	    ResultSetMetaData meta = rs.getMetaData();
+    	 // Print out a row of column headers
+ 			System.out.println("Total columns: " + meta.getColumnCount());
+ 			System.out.print(meta.getColumnName(1));
+ 			for (int j = 2; j <= meta.getColumnCount(); j++)
+ 				System.out.print(", " + meta.getColumnName(j));
+ 			System.out.println();
+    	 // Print out all rows in the ResultSet
+			while (rs.next()) 
+			{
+				System.out.print(rs.getObject(1));
+				for (int j = 2; j <= meta.getColumnCount(); j++)
+					System.out.print(", " + rs.getObject(j));
+				System.out.println();
+				i++;
+			}		
     	    System.out.println(fEnd - fStart);
     	    return (fEnd - fStart);
     	    
@@ -79,7 +87,6 @@ public class MongoExecutor implements QueryExecutor {
     	}
     }
 
-    @Override
     public boolean connect(){
     	try {
     	   Class.forName("mongodb.jdbc.MongoDriver");
@@ -96,7 +103,7 @@ public class MongoExecutor implements QueryExecutor {
 			return false;
 		}
     }
-	@Override
+
 	public void cleanUP() {
 		try {
 			conn.close();

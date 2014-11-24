@@ -1,0 +1,20 @@
+<SOURCES>
+	<DATABASE>
+		<URL>jdbc:cassandra://127.0.0.1:7000/test</URL>
+		<!-- <USER></USER>
+		<PASSWORD></PASSWORD> -->
+		<DRIVER>org.apache.cassandra.cql.jdbc.CassandraDriver</DRIVER>
+		<SCHEMA>src/main/java/xspec/testdb_cassandra.xml</SCHEMA>
+	</DATABASE>
+	<DATABASE>
+		<URL>jdbc:mongo://localhost/test</URL>
+		<DRIVER>mongodb.jdbc.MongoDriver</DRIVER>
+		<SCHEMA>src/main/java/xspec/testdb_mongodb.xml</SCHEMA>
+	</DATABASE>
+	<DATABASE>
+		<URL>jdbc:mysql://localhost/test</URL>
+		<DRIVER>com.mysql.jdbc.Driver</DRIVER>
+		<SCHEMA>src/main/java/xspec/testdb_mysql.xml</SCHEMA>
+	</DATABASE>
+	
+</SOURCES>

@@ -1,0 +1,7 @@
+<%= form_tag("/benchmark/column_distribution", method: "post") do %>
+	<div>SQL Schema</div>
+	<%= text_area_tag(:schema, "", size: "30x6") %>
+	<div>
+		<%= submit_tag "Submit" %>
+	</div>
+<% end %>

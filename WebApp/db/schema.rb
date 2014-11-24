@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141112233710) do
+ActiveRecord::Schema.define(version: 20141124035331) do
 
   create_table "fields", force: true do |t|
     t.string   "category"
@@ -28,6 +28,30 @@ ActiveRecord::Schema.define(version: 20141112233710) do
     t.integer  "stdv"
   end
 
+  create_table "predicates", force: true do |t|
+    t.string   "prefix"
+    t.string   "field1"
+    t.string   "operator"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "query_id"
+    t.string   "field2"
+  end
+
+  create_table "queries", force: true do |t|
+    t.integer  "percentage"
+    t.string   "kind"
+    t.string   "tables"
+    t.string   "select_fields"
+    t.string   "update_fields"
+    t.string   "groupby_fields"
+    t.string   "orderby_fields"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "schema_id"
+    t.boolean  "orderby_direction"
+  end
+
   create_table "schemas", force: true do |t|
     t.text     "raw_schema"
     t.datetime "created_at"
@@ -40,6 +64,7 @@ ActiveRecord::Schema.define(version: 20141112233710) do
     t.datetime "updated_at"
     t.integer  "schema_id"
     t.string   "name"
+    t.string   "primary_key"
   end
 
 end

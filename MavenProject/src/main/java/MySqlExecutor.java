@@ -31,7 +31,6 @@ public class MySqlExecutor implements QueryExecutor {
      * @param rawSQLQuery SQL statement
      * @return time it takes to excute those in mili seconds
      */
-    @Override
     public long executeQuery(String rawSQLQuery) {
     	long fStart = 0;
     	long fEnd = 0;
@@ -73,7 +72,6 @@ public class MySqlExecutor implements QueryExecutor {
     	}
     }
 
-	@Override
 	public boolean connect() {
 		try {
 		   Class.forName("com.mysql.jdbc.Driver");
@@ -89,7 +87,6 @@ public class MySqlExecutor implements QueryExecutor {
 			return false;
 		}
 	}
-	@Override
 	public void cleanUP() {
 		try {
 			conn.close();

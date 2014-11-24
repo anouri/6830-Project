@@ -1,0 +1,52 @@
+<h2>Column Distribution View</h2>
+<%= form_tag("/benchmark/queries", method: "post") do %>
+	<%= hidden_field_tag(:schema_id, @schema.id) %>
+	<% @schema.tables.each do |table| %>
+		<div>
+			Table: <%= table.name %> <%= number_field_tag("#{table.id}-cardinality", nil, placeholder: "Number of Records", min: 0) %>
+			<table>
+				<tr>
+					<th>Type</th>
+					<!-- <th>Length</th> -->
+					<th>Field</th>
+					<th>Distribution</th>
+					<th>Number of Distinct Values</th>
+					<th>Mean</th>
+					<th>Standard Deviation</th>
+					<th>Minimum Value</th>
+					<th>Maximum Value</th>
+				</tr>
+				<% table.fields.each do |f| %>
+					<% if f == table.primary_key %>
+						<tr>
+							<td><%= f.category %></td>
+							<td><%= f.name %> (primary key)</td>
+							<td>N/A</td>
+							<td>N/A</td>
+							<td>N/A</td>
+							<td>N/A</td>
+							<td>N/A</td>
+							<td>N/A</td>
+						</tr>
+					<% else %>
+						<tr>
+							<td><%= f.category %></td>
+							<!-- <td><%= f.length %></td> -->
+							<td><%= f.name %></td>
+							<td><%= select_tag "#{f.id}-distribution", options_for_select(["uniform", "normal", "delta"]), class: "distribution" %></td>
+							<td><%= number_field_tag("#{f.id}-distinct", nil, min: 0, class: "distinct") %></td>
+							<td><%= number_field_tag("#{f.id}-mean", nil, min: 0, class: "mean") %></td>
+							<td><%= number_field_tag("#{f.id}-stdv", nil, min: 0, class: "stdv") %></td>
+							<td><%= number_field_tag("#{f.id}-min", nil, min: 0, class: "min") %></td>
+							<td><%= number_field_tag("#{f.id}-max", nil, min: 0, class: "max") %></td>
+						</tr>
+					<% end %>
+				<% end %>
+			</table>
+		</div>
+		<br> 
+	<% end %>
+	<div>
+		<%= submit_tag "Submit" %>
+	</div>
+<% end %>

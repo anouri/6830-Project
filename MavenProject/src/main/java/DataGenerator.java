@@ -1,14 +1,14 @@
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.lang.RandomStringUtils;
-import org.json.JSONObject;
-import org.json.JSONArray;
-
-// TODO: add back in ditinct int values
+// TODO: add back in distinct int values
 // TODO: throw exceptions if the distribution is too narrow to get x distinct values fast
 // TODO: throw exceptions if distinct values take too long to generate
 // TODO: add auto-incrementing distribution
@@ -157,7 +157,8 @@ public class DataGenerator {
 		}
 	}
 
-    private static String generateJsonData(JSONObject json) {
+    public static String generateJsonData(String jsonString) {
+    	JSONObject json = new JSONObject(jsonString);
     	JSONObject outputJson = new JSONObject();
     	
     	// get info for each table
@@ -231,7 +232,7 @@ public class DataGenerator {
 //        				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
 //        			"{category:String,length:128,name:pw_hash,distribution:uniform,"+
 //        				"distinct:0,mean:0,stdv:0,min:0,max:0}]}};";
-        JSONObject json = new JSONObject(sampleTables);
-        System.out.println(generateJsonData(json));
+        //JSONObject json = new JSONObject(sampleTables);
+        System.out.println(generateJsonData(sampleTables));
     }
 }

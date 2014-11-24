@@ -3,25 +3,23 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class SQLSchemaParserTest {
 
 
-    SchemaParser sqlSchemaParser;
+    SQLSchemaParser sqlSchemaParser;
     String rawSchema;
 
     @Test
     public void testGetTupleDescription() throws Exception {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key autoincrement," +
+                "user_id integer primary key auto_increment," +
                 "username text not null," +
                 "email text not null," +
                 "pw_hash text not null);";
         sqlSchemaParser = new SQLSchemaParser(rawSchema);
-        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE), new Type(Type.SupportedType.STRING_TYPE),
-                new Type(Type.SupportedType.STRING_TYPE), new Type(Type.SupportedType.STRING_TYPE)}, new String[] {"user_id","username","email", "pw_hash"});
+        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE, true), new Type(Type.SupportedType.STRING_TYPE, false),
+                new Type(Type.SupportedType.STRING_TYPE, false), new Type(Type.SupportedType.STRING_TYPE, false)}, new String[] {"user_id","username","email", "pw_hash"});
         TupleDesc actual = sqlSchemaParser.getTupleDescription("user");
         Assert.assertEquals(actual, expected);
 
@@ -31,7 +29,7 @@ public class SQLSchemaParserTest {
     public void testGetTableName() throws Exception {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key autoincrement," +
+                "user_id integer primary key auto_increment," +
                 "username text not null," +
                 "email text not null," +
                 "pw_hash text not null);" +
@@ -41,7 +39,7 @@ public class SQLSchemaParserTest {
                 "whom_id integer);" +
                 "drop table message;" +
                 "create table message (" +
-                "message_id integer primary key autoincrement," +
+                "message_id integer primary key auto_increment," +
                 "author_id integer not null," +
                 "text text not null," +
                 "pub_date integer);";
@@ -55,7 +53,7 @@ public class SQLSchemaParserTest {
     public void testGetJSON() {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key autoincrement," +
+                "user_id integer primary key auto_increment," +
                 "username text not null," +
                 "email text not null," +
                 "pw_hash text not null);";
@@ -83,14 +81,17 @@ public class SQLSchemaParserTest {
         columnLength.put(128);
         JSONObject lengthJSON = new JSONObject();
         lengthJSON.put("columnLength", columnLength);
+        JSONObject primaryKey = new JSONObject();
+        primaryKey.put("primaryKey","user_id");
         JSONArray all = new JSONArray();
         all.put(nameJSON);
         all.put(typeJson);
         all.put(lengthJSON);
+        all.put(primaryKey);
         expected.put("user",all);
 
         JSONObject actual = sqlSchemaParser.getJSON();
 
-        Assert.assertEquals(actual.toString(),expected.toString());
+        Assert.assertEquals(expected.toString(),actual.toString());
     }
 }

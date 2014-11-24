@@ -12,7 +12,8 @@ import com.mongodb.MongoClient;
  */
 public class CassandraExecutorUnity implements QueryExecutor {
 	private Connection conn;
-	private String driverLink = "jdbc:cassandra://127.0.0.1:9042";
+	// The default port is set to 9160
+	private String driverLink = "jdbc:cassandra://127.0.0.1:9160/mykeyspace";
 	
 	public CassandraExecutorUnity() throws Exception{
 		if(!connect()){
@@ -81,7 +82,7 @@ public class CassandraExecutorUnity implements QueryExecutor {
     public boolean connect(){
     	try {
     	   Class.forName("org.apache.cassandra.cql.jdbc.CassandraDriver");
-    	   org.apache.log4j.BasicConfigurator.configure();
+//    	   org.apache.log4j.BasicConfigurator.configure();
  		   this.conn =DriverManager.getConnection(driverLink);
  		   System.out.println("Connected!");
  		   return true;

@@ -1,6 +1,4 @@
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 /**
@@ -42,13 +40,12 @@ public class CassandraExecutor implements QueryExecutor {
 	    return (fEnd - fStart);
     }
 
-	@Override
 	public boolean connect() {
 		this.cluster = Cluster.builder().addContactPoint(contactPoint).build();
         this.session = cluster.connect(keyspace);
         return true;
 	}
-	@Override
+
 	public void cleanUP() {
         session.close();
         cluster.close();

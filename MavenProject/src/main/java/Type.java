@@ -18,19 +18,21 @@ public class Type {
 
     SupportedType type;
     int length;
+    boolean isPrimaryKey;
 
     /**
      * The Type of the column, currently support INT and STRING,
      * this constructor assume the default length of INT and STRING
      * @param type
      */
-    public Type(SupportedType type) {
+    public Type(SupportedType type, boolean isPrimaryKey) {
         this.type = type;
         if (type == SupportedType.INT_TYPE) {
             this.length = INT_LEN;
         } else if (type == SupportedType.STRING_TYPE) {
             this.length = STRING_LEN;
         }
+        this.isPrimaryKey = isPrimaryKey;
     }
 
     /**
@@ -38,8 +40,8 @@ public class Type {
      * @param type INT_TYPE or STRING_TYPE
      * @param length how long the type is
      */
-    public Type(SupportedType type, int length) {
-        this.type = type;
+    public Type(SupportedType type, boolean isPrimaryKey, int length) {
+        this(type,isPrimaryKey);
         this.length = length;
     }
 
@@ -55,6 +57,10 @@ public class Type {
 
     public SupportedType getType(){
         return type;
+    }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
     }
 
     @Override

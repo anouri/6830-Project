@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 // TODO: add auto-incrementing distribution
+// TODO: update README with new documentation
+// TODO: write unit tests
 
 public class FastDataGenerator {
 	private JSONObject outputTemplate = null;

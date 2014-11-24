@@ -53,15 +53,17 @@ public class SQLSchemaParser {
                     for (ColumnDefinition def : columns) {
                         columnName.add(def.getColumnName());
                         boolean isPrimaryKey = false;
-                        for (Object extra: def.getColumnSpecStrings()) {
-                            if (primaryKeyWord.contains(extra.toString().toLowerCase())) {
-                                isPrimaryKey = true;
-                                break;
+                        if (def.getColumnSpecStrings() != null) {
+                            for (Object extra : def.getColumnSpecStrings()) {
+                                if (primaryKeyWord.contains(extra.toString().toLowerCase())) {
+                                    isPrimaryKey = true;
+                                    break;
+                                }
                             }
                         }
                         if (def.getColDataType().getDataType().equalsIgnoreCase("varchar")) {
                             columnType.add(new Type(Type.SupportedType.STRING_TYPE, isPrimaryKey,Integer.parseInt((String) def.getColDataType().getArgumentsStringList().get(0))));
-                        } else if (def.getColDataType().getDataType().equalsIgnoreCase("integer") || def.getColDataType().getDataType().equalsIgnoreCase("bigint")) {
+                        } else if (def.getColDataType().getDataType().equalsIgnoreCase("int") || def.getColDataType().getDataType().equalsIgnoreCase("integer") || def.getColDataType().getDataType().equalsIgnoreCase("bigint")) {
                             columnType.add(new Type(Type.SupportedType.INT_TYPE, isPrimaryKey));
                         } else if (def.getColDataType().getDataType().equalsIgnoreCase("text")) {
                             columnType.add(new Type(Type.SupportedType.STRING_TYPE, isPrimaryKey));
@@ -119,13 +121,14 @@ public class SQLSchemaParser {
             JSONArray columnName = new JSONArray();
             JSONArray columnType = new JSONArray();
             JSONArray columnLength = new JSONArray();
-            JSONObject primaryKey = new JSONObject();
+            JSONObject primaryKey = null;
             while (iter.hasNext()) {
                 TupleDesc.TDItem current = iter.next();
                 columnName.put(current.fieldName);
                 columnType.put(current.fieldType.toString());
                 columnLength.put(current.fieldType.getLen());
                 if (current.fieldType.isPrimaryKey) {
+                    primaryKey = new JSONObject();
                     primaryKey.put("primaryKey", current.fieldName);
                 }
             }
@@ -139,7 +142,9 @@ public class SQLSchemaParser {
             all.put(nameJson);
             all.put(typeJson);
             all.put(lengthJson);
-            all.put(primaryKey);
+            if (primaryKey != null) {
+                all.put(primaryKey);
+            }
             result.put(tName, all);
         }
         tableJSON = result;
@@ -149,10 +154,10 @@ public class SQLSchemaParser {
     public static void main(String[] args) {
         String rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key auto_increment," +
+                "user_id integer auto_increment," +
                 "username text not null," +
                 "email text not null," +
-                "pw_hash text not null);" +
+                "pw_hash text not null, primary key (user_id));" +
                 "drop table follower;" +
                 "create table follower (" +
                 "who_id integer," +

@@ -107,7 +107,7 @@ private CategoryDataset createDatasetTest()
 
 To run chart plotting with test data as included in main in BarChart.java:
 ```java
-	final BarChart demo = new BarChart("Bar Chart Demo");
+		final BarChart demo = new BarChart("Bar Chart Demo");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
@@ -115,7 +115,17 @@ To run chart plotting with test data as included in main in BarChart.java:
 
 **Test**
 
-ApacheCommonsDBCPTest.java
+>ApacheCommonsDBCPTest.java
+
+```java
+		setup();
+    	testInsertionFromJSON();
+    	cleanUpTables();
+    	testBatchInsertionFromJSON();
+    	testDeletion();
+    	testUpdate();
+    	testJoin();
+```
 
 **POOLING**
 

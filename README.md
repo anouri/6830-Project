@@ -68,9 +68,9 @@ public static void shema_creation_all(String createProcedure)
 - creates a specified schema in all supported databases in batch 
 - Sample shema looks like:
                     "DROP TABLE IF EXISTS follower;" +
-                    "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY(who_id));"+
+                    "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+
                     "DROP TABLE IF EXISTS message;" +
-                    "CREATE TABLE message (message_id int, text VARCHAR(20), PRIMARY KEY(message_id));"
+                    "CREATE TABLE message (message_id int, text text, PRIMARY KEY (message_id));"
 - Fields attributes supported: "NOT NULL" and "PRIMARY KEY" but NOT "AUTO_INCREMENT"
 - Unique primary key is handled by data generation
 

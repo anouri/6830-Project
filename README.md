@@ -66,13 +66,13 @@ public static void set_cassandra_keyspace(String keyspaceName)
 
 public static void shema_creation_all(String createProcedure)
 - creates a specified schema in all supported databases in batch 
+- Only supports "PRIMARY KEY" but *NOT* "AUTO_INCREMENT" or "NOT NULL"
+- Unique primary key is handled by data generation
 - Sample shema looks like:
                     "DROP TABLE IF EXISTS follower;" +
                     "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+
                     "DROP TABLE IF EXISTS message;" +
                     "CREATE TABLE message (message_id int, text text, PRIMARY KEY (message_id));"
-- Only supports "PRIMARY KEY" but *NOT* "AUTO_INCREMENT" or "NOT NULL"
-- Unique primary key is handled by data generation
 
 public static void dropTables(String[] tableNames)
 - drops the tables in the list in all databases

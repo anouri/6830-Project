@@ -68,7 +68,7 @@ public static void shema_creation_all(String createProcedure)
 - creates a specified schema in all supported databases in batch 
 - Only supports "PRIMARY KEY" but *NOT* "AUTO_INCREMENT" or "NOT NULL"
 - Unique primary key is handled by data generation
-- In the case of mongo, the primary key is created as a unique index called "primary_key"
+- In the case of mongo, the primary key is created as a unique index called "primary_key" --> check using db.getIndexes()
 - Sample shema looks like:
                     "DROP TABLE IF EXISTS follower;" +
                     "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+

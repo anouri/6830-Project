@@ -1,6 +1,5 @@
 **NOTE: DON'T INCLUDE YOUR OWN JAR IF YOU DON' HAVE TOO. PLEASE USE POM.XML TO INCLUDE YOUR DEPENDENCY**
 
-===================================================================================================
 # IDE Setup
 
 **Maven**:
@@ -52,7 +51,6 @@ db is: mongo run time is: 107
 
 db is: mysql run time is: 7
 
-===================================================================================================
 #Running Queries and Plotting
 
 **API**
@@ -139,7 +137,6 @@ Can run callable stored procedures:
 
 http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callable.html
 
-===================================================================================================
 #Testing
 
 Example Input Schema
@@ -280,7 +277,6 @@ Output JSON Grammar from Data Generator:
 }
 ```
 
-===================================================================================================
 #Data Generator
 
 create a new FastDataGenerator with 
@@ -301,7 +297,6 @@ Since foreign keys must reference a primary key of another table to ensure it ex
 
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
 
-===================================================================================================
 # Installing DBs
 
 **MySQL**

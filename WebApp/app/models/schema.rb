@@ -14,6 +14,18 @@ class Schema < ActiveRecord::Base
 		result
 	end
 
+	def tables_to_fields_exclude_primary_key
+		result = {}
+		self.tables.each do |table|
+			fields = []
+			table.fields.each do |field|
+				fields << field.name if field.name != table.primary_key
+			end
+			result[table.name] = fields
+		end
+		result
+	end
+
 	def next_query
 		p = Random.rand(100.0)
 		cumulative = 0.0

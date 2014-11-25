@@ -17,7 +17,7 @@
 					<th>Maximum Value</th>
 				</tr>
 				<% table.fields.each do |f| %>
-					<% if f == table.primary_key %>
+					<% if f.name == table.primary_key %>
 						<tr>
 							<td><%= f.category %></td>
 							<td><%= f.name %> (primary key)</td>

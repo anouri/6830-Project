@@ -17,14 +17,14 @@ class BenchmarkController < ApplicationController
     schema_json = JSON.parse(SQLSchemaParser.getJSON().toString())
     create_models_from_schema_json(@schema, schema_json) # Use json to create Table and Field objects
     # 1) Use raw schema to create tables    
-    create_database_tables()
+    #create_database_tables()
   end
 
   def queries
     update_models(params) # Update cardinality, distribution, distinct, mean, stdv, min, max
     @schema = Schema.find(params[:schema_id])
     @tables_to_fields = @schema.tables_to_fields  # Used in the view
-    
+    @tables_to_fields_exclude_primary_key = @schema.tables_to_fields_exclude_primary_key  # Used in the view for UPDATE
     schema_distribution_hash = create_schema_distribution_hash(@schema)
 
     # 2) Generate and run insert statements based on DataGenerator
@@ -40,9 +40,9 @@ class BenchmarkController < ApplicationController
               "{category:String,length:128,name:text,distribution:uniform,"+
                 "distinct:2,mean:0,stdv:0,min:3,max:6},"+
               "]}}"
-    json_data = DataGenerator.generateJsonData(json_string) # Kristin
-    insert_statements = InsertData.InsertStatementFromJSON(json_data) # Tran
-    insert_statements.each { |s| QueryExecutorAll.run_all(s) }
+    #json_data = DataGenerator.generateJsonData(json_string) # Kristin
+    #insert_statements = InsertData.InsertStatementFromJSON(json_data) # Tran
+    #insert_statements.each { |s| QueryExecutorAll.run_all(s) }
   end
 
   def add_query
@@ -54,7 +54,7 @@ class BenchmarkController < ApplicationController
 
   def show_comparison
     schema = Schema.find(params[:schema_id])
-    5.times { |i| QueryExecutorAll.run_all(schema.next_query) }
+    2.times { |i| QueryExecutorAll.run_all(schema.next_query) }
   end
 
 end

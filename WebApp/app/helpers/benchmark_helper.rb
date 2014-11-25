@@ -4,15 +4,17 @@ module BenchmarkHelper
 =begin
 	{"follower"=>[{"columnName"=>["who_id", "whom_id"]}, 
 								{"columnType"=>["Integer", "Integer"]}, 
-								{"columnLength"=>[4, 4]},
+								{"columnLength"=>[4, 4]}
 							 ], 
 	 "message"=>[{"columnName"=>["message_id", "author_id", "text", "pub_date"]}, 
 	             {"columnType"=>["Integer", "Integer", "String", "Integer"]}, 
-	             {"columnLength"=>[4, 4, 128, 4]}
+	             {"columnLength"=>[4, 4, 128, 4]},
+	             {"primaryKey"=>"message_id"}
 	            ], 
 	 "user"=>[{"columnName"=>["user_id", "username", "email", "pw_hash"]}, 
 	          {"columnType"=>["Integer", "String", "String", "String"]}, 
-	          {"columnLength"=>[4, 128, 128, 128]}
+	          {"columnLength"=>[4, 128, 128, 128]},
+	          {"primaryKey=>"user_id"}
 	         ], 
 	 "table"=>["user", "follower", "message"]
 	}
@@ -26,8 +28,10 @@ module BenchmarkHelper
 			column_names = data[0]["columnName"]		 # ["who_id", "whom_id"]
 			column_types = data[1]["columnType"]  	 # ["Integer", "Integer"]
 			column_lengths = data[2]["columnLength"] # [4, 4]
-			primary_key = data[3]["primaryKey"]
-			table.update_attribute(:primary_key, primary_key)
+			if data.size > 3
+				primary_key = data[3]["primaryKey"]
+				table.update_attribute(:primary_key, primary_key)
+			end
 			for i in 0...column_names.length
 				field = table.fields.create(category: column_types[i], name: column_names[i], length: column_lengths[i])
 			end
@@ -239,6 +243,7 @@ module BenchmarkHelper
 		query.update_attributes(groupby_fields: groupby_fields, orderby_fields: orderby_fields, orderby_direction: orderby_direction)
 	end
 
+	# Pass raw schema & give to shirley
 	def create_database_tables()
 		# QueryExecutorAll.set_cassandra_keyspace("test");
     shortQuery = SQLSchemaParser.getRawSchema.split(";")
@@ -247,6 +252,19 @@ module BenchmarkHelper
       # QueryExecutorAll.create_table_cassandra(query)
       # Creation for MySQL
       QueryExecutorAll.create_table_mysql(query)
+      QueryExecutorAll.create_table_mongo(query) # Look at this 
     end
 	end
+
+	# def benchmark(schema)
+	# 	run_times = {}
+	# 	2.times do |i|
+	# 		result = QueryExecutorAll.run_all(schema.next_query)
+	# 		result.each do |db, time|
+	# 			(run_times.has_key? db) ? run_times[db] += time : run_times[db] = time
+	# 		end
+	# 	end
+	# 	run_times
+	# end
+
 end

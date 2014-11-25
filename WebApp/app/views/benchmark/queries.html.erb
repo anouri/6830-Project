@@ -11,6 +11,11 @@
 	</div></br>
 	
 	<span id="set_tag">SET</span></br>
+	<div>
+		<% @tables_to_fields_exclude_primary_key.each do |table, fields| %>
+			<%= select_tag "set_fields-#{table}", options_for_select(fields), multiple: true, class:"set_fields" %>
+		<% end %>
+	</div></br>
 
 	<span id="select_fields_tag">Select Field(s):</span>
 	<div>

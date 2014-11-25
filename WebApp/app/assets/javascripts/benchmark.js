@@ -6,6 +6,7 @@ $(document).ready(function() {
 	var tables = $("#tables");
 
 	var set_tag = $("#set_tag");
+	var set_fields = $(".set_fields");
 	var select_fields_tag = $("#select_fields_tag");
 	var select_fields = $(".select_fields");	
 	var where_tag = $("#where_tag");
@@ -18,7 +19,7 @@ $(document).ready(function() {
 	var orderby_direction = $("#orderby_direction");
 
 
-	var listing = [set_tag, select_fields_tag, select_fields, where_tag, add_predicate_button, predicates, groupby_tag, groupby_fields, orderby_tag, orderby_fields, orderby_direction];
+	var listing = [set_tag, set_fields, select_fields_tag, select_fields, where_tag, add_predicate_button, predicates, groupby_tag, groupby_fields, orderby_tag, orderby_fields, orderby_direction];
 
 	hideListing(listing);
 
@@ -31,7 +32,7 @@ $(document).ready(function() {
 			tables.attr("multiple", false);	
 			if (type == "UPDATE") {
 				set_tag.show();
-				$("#select_fields-"+tables.val()).show();
+				$("#set_fields-"+tables.val()).show();
 			} else if (type == "DELETE") {
 				showWhereTagAndPredicates();
 			}
@@ -51,7 +52,7 @@ $(document).ready(function() {
 			}
 		} else if (query_type.val() == "UPDATE") {
 			set_tag.show();
-			$("#select_fields-"+$(this).val()).show();
+			$("#set_fields-"+$(this).val()).show();
 		} else if (query_type.val() == "DELETE") {
 			showWhereTagAndPredicates();
 		}

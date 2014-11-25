@@ -1,5 +1,8 @@
 **NOTE: DON'T INCLUDE YOUR OWN JAR IF YOU DON' HAVE TOO. PLEASE USE POM.XML TO INCLUDE YOUR DEPENDENCY**
 
+===================================================================================================
+# IDE Setup
+
 **Maven**:
 Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
 
@@ -8,31 +11,21 @@ This project is managed using maven. In order to have the jar that include all o
 
 For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaParser
 
-**Dataset For Test**:
-The smallest version that contains the context and the freebase id is ~5GB in size and since github has a limit on file size, I only included the first 5 out of 109 files in here for reference. 
-
-To download the entire 5GB dataset, run the following command:
-```shell
-for (( i=1; i<110; i++)) do echo "Downloading file $i of 109"; f=`printf "%03d" $i` ; wget http://iesl.cs.umass.edu/downloads/wiki-link/context-only/$f.gz ; done ; echo "Downloaded all files, verifying MD5 checksums (might take some time)" ; diff --brief <(wget -q -O - http://iesl.cs.umass.edu/downloads/wiki-link/context-only/md5sum) <(md5sum *.gz) ; if [ $? -eq 1 ] ; then echo "ERROR: Download incorrect\!" ; else echo "Download correct" ; fi
-```
-
-===================================================================================================
-**How to Create a user defined library in Eclipse**
+**Create a user defined library in Eclipse**
 
 1. Right click on the project and select properties
 2. Create a Library -> User Library called “xxx”, in this case, can be called "Unity Library"
 3. Add in all external libraries necessary
 4. Finish
 
-===================================================================================================
+
 **Unity for Consistent Multi-db Accesses**
 
 **Dependencies**
 
 All of the dependecies can be found in UnityJar folder on root directory
 
-
-First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (signed up for a free trial)
+First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (Shirley signed up for a free trial)
 
 Then, manually add in the following dependencies: *This step is no longer needed*
 - unityjdbc.jar
@@ -51,52 +44,85 @@ In cassandra.yaml (you can find this in the dsc-cassandra-2.1.1/conf directory),
 
 Make sure port is set to 9160.
 
-**Query Runner**
-
-QueryExecutorAll.java
-
-**Test**
-
-ApacheCommonsDBCPTest.java
-
-*NOTE: PATH IS SET HARD IN THESE FILES
-Another thing to point out: for large queries, need to set aside large heap space:
-JVM command line parameters: -Xms500m -Xmx500m
-These parameters set heap space to 500 MB.  Do not set higher than 80% of physical machine memory size.
-
-**POOLING**
-
-Pooling is supported by ApacheCommonsDBCP, and libraries are in pom.xml
-Why pooling? With connection pooling, a pool of connections can be used over and over again, avoiding the expense of creating a new connection for every database access. 
-
-**Running Queries in QueryExecutorAll.java**
-
-CREATE TABLES
-
-create_table_mongo(String creation_q);
-
-create_table_cassandra(String creation_q);
-
-create_table_mysql(String creation_q);
-
-
-For Mysql and Cassandra, you need to create tables and keyspaces first with the right table creation syntax (different between mysql and cassandra)
-
-For Mongo, don't need to apply schema or create json. Just run a SELECT statement.
-
-OTHER QUERIES
-
-run_all(String query);
-
-Samples are in ApacheCommonsDBCPTest.
-
-**Benchmarking Output**
+**Benchmarking Output Sample**
 
 db is: cassandra run time is: 96
 
 db is: mongo run time is: 107
 
 db is: mysql run time is: 7
+
+===================================================================================================
+#Running Queries and Plotting
+
+**API**
+
+>QueryExecutorAll.java
+
+```java
+public static Properties initializeProp()
+- Initializes db config defined in db.properties
+
+public static void set_cassandra_keyspace(String keyspaceName)
+- Sets Cassandra keyspace
+
+public static void shema_creation_all(String createProcedure)
+- creates a specified schema in all supported databases in batch 
+- Sample shema looks like:
+                    "DROP TABLE IF EXISTS follower;" +
+                    "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY(who_id));"+
+                    "DROP TABLE IF EXISTS message;" +
+                    "CREATE TABLE message (message_id int, text VARCHAR(20), PRIMARY KEY(message_id));"
+- Fields attributes supported: "NOT NULL" and "PRIMARY KEY" but NOT "AUTO_INCREMENT"
+- Unique primary key is handled by data generation
+
+public static void dropTables(String[] tableNames)
+- drops the tables in the list in all databases
+
+public static HashMap<String, Long> run_all(String rawSQLQuery)
+- Runs a raw SQLQuery on all dbs supported. 
+- Currently supports, insert, update, delete, select, join statements
+```
+
+For large queries, need to set aside large heap space:
+JVM command line parameters: -Xms500m -Xmx500m
+These parameters set heap space to 500 MB.  Do not set higher than 80% of physical machine memory size.
+
+>BarChart.java
+
+```java
+public BarChart(final String title, HashMap<String, HashMap<String, Long>> results)
+- Constructor taking in a hashmap of hashmap
+	- outer hashmap: key: query type; value: runtime map
+	- inner hashmap: key: db name; value: runtime for that db 
+	
+public BarChart(final String title)
+- Constructor using test data
+
+private CategoryDataset createDataset(HashMap<String, HashMap<String, Long>> results) 
+- creates chart with a hashmap of hashmap
+
+private CategoryDataset createDatasetTest()
+- creates chart with test data
+
+```
+
+To run chart plotting with test data as included in main in BarChart.java:
+```java
+	final BarChart demo = new BarChart("Bar Chart Demo");
+        demo.pack();
+        RefineryUtilities.centerFrameOnScreen(demo);
+        demo.setVisible(true);
+```
+
+**Test**
+
+ApacheCommonsDBCPTest.java
+
+**POOLING**
+
+Pooling is supported by ApacheCommonsDBCP, and libraries are in pom.xml
+Why pooling? With connection pooling, a pool of connections can be used over and over again, avoiding the expense of creating a new connection for every database access. 
 
 **Additional Resources**
 
@@ -106,42 +132,6 @@ http://www.unityjdbc.com/mongojdbc/mongosqltranslate.php
 
 http://www.unityjdbc.com/mongojdbc/code/ExampleMongoTranslate.java
 
-===================================================================================================
-**MySQL**
-
-Download:
-
-http://dev.mysql.com/downloads/mysql/
-
-Start/end server:
-
-sudo /usr/local/mysql/support-files/mysql.server start
-
-sudo /usr/local/mysql/support-files/mysql.server stop
-
-===================================================================================================
-**Sybase Setup**
-
-Download the Sybase ASE Enterprise installer pushed in the repo (i signed up for trial, if it doesn't work sign up for an account):
-
-Create /opt/sybase and /var/sybase directories, and make sure the user you are have write permission.
-
-Run the following command to start the installer:
-
-> sudo sh setup.bin LAX_VM /usr/bin/java
-
-Click through to install the free developer version.
-
-MAKE SURE THAT THE INSTALLER SAID INSTALLATION WAS SUCCESSFUL.
-
-Your Sybase is installed here:
-ASE-16_0/
-
-Guideline for an earlier version:
-
-http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15.5
-
-===================================================================================================
 
 **Batch Queries**
 
@@ -150,16 +140,7 @@ Can run callable stored procedures:
 http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callable.html
 
 ===================================================================================================
-
-** Plotting results**
-
-BarChar.java
-
-Sample also included in the main class.
-
-===================================================================================================
-
-**Example for Testing**
+#Testing
 
 Example Input Schema
 ```shell
@@ -299,7 +280,8 @@ Output JSON Grammar from Data Generator:
 }
 ```
 
-**Run the Data Generator:**
+===================================================================================================
+#Data Generator
 
 create a new FastDataGenerator with 
 ```shell
@@ -318,6 +300,42 @@ Because allowing the user to specify primary key columns could lead to major bot
 Since foreign keys must reference a primary key of another table to ensure it exists and is unique, users will only be able to have foreign keys that reference our automatically included ID fields on other tables.  Because we know the min and max values these IDs can have (from 0 to the cardinality of that table), we can automatically assume the distribution on the foreign key column to be {distribution: uniform, min: 0, max: cardinality of other table}, which should be included in the JSON input to the data generator.  We can show this in the UI for choosing distributions as unchangeable, or just not show it there at all.  
 
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
+
+===================================================================================================
+# Installing DBs
+
+**MySQL**
+
+Download:
+
+http://dev.mysql.com/downloads/mysql/
+
+Start/end server:
+
+sudo /usr/local/mysql/support-files/mysql.server start
+
+sudo /usr/local/mysql/support-files/mysql.server stop
+
+**Sybase**
+
+Download the Sybase ASE Enterprise installer pushed in the repo (i signed up for trial, if it doesn't work sign up for an account):
+
+Create /opt/sybase and /var/sybase directories, and make sure the user you are have write permission.
+
+Run the following command to start the installer:
+
+> sudo sh setup.bin LAX_VM /usr/bin/java
+
+Click through to install the free developer version.
+
+MAKE SURE THAT THE INSTALLER SAID INSTALLATION WAS SUCCESSFUL.
+
+Your Sybase is installed here:
+ASE-16_0/
+
+Guideline for an earlier version:
+
+http://www.petersap.nl/SybaseWiki/index.php?title=Installation_guidelines_ASE_15.5
 
 **MongoDB**:
 

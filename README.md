@@ -68,6 +68,7 @@ public static void shema_creation_all(String createProcedure)
 - creates a specified schema in all supported databases in batch 
 - Only supports "PRIMARY KEY" but *NOT* "AUTO_INCREMENT" or "NOT NULL"
 - Unique primary key is handled by data generation
+- In the case of mongo, the primary key is created as a unique index called "primary_key"
 - Sample shema looks like:
                     "DROP TABLE IF EXISTS follower;" +
                     "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+
@@ -118,9 +119,9 @@ To run chart plotting with test data as included in main in BarChart.java:
 >ApacheCommonsDBCPTest.java
 
 ```java
-		setup();
-    	testInsertionFromJSON();
-    	cleanUpTables();
+		setup(); // creates all tables and sets keyspaces
+    	testInsertionFromJSON(); // inserts form json
+    	cleanUpTables(); // deletes all tables
     	testBatchInsertionFromJSON();
     	testDeletion();
     	testUpdate();

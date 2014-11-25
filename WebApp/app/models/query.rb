@@ -48,7 +48,11 @@ class Query < ActiveRecord::Base
 		update_fields = self.update_fields.split(",")
 		update_fields.each do |f|
 			val = GetDataValue.getValueFromColumnTable(f, self.tables)
-			basic = "#{f} = #{val}"
+			if val.is_a? String
+				basic = "#{f} = " + "'#{val}'"	# Must adhere to raw SQL for strings
+			else
+				basic = "#{f} = #{val}"
+			end
 			(f == update_fields.first) ? raw_update_fields += "#{basic}" : raw_update_fields += ", #{basic}"
 		end
 
@@ -75,7 +79,11 @@ class Query < ActiveRecord::Base
 			predicates.each do |p|
 				if p.field2 == "?"
 					val = getPredicateVal(p.field1, tables)
-					basic = "#{p.field1} #{p.operator} #{val}"
+					if val.is_a? String
+						basic = "#{p.field1} #{p.operator} " + "'#{val}'"	# Must adhere to raw SQL for strings
+					else
+						basic = "#{p.field1} #{p.operator} #{val}"
+					end
 				else
 					basic = "#{p.field1} #{p.operator} #{p.field2}"
 				end

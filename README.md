@@ -71,7 +71,7 @@ public static void shema_creation_all(String createProcedure)
                     "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+
                     "DROP TABLE IF EXISTS message;" +
                     "CREATE TABLE message (message_id int, text text, PRIMARY KEY (message_id));"
-- Fields attributes supported: "NOT NULL" and "PRIMARY KEY" but NOT "AUTO_INCREMENT"
+- Only supports "PRIMARY KEY" but *NOT* "AUTO_INCREMENT" or "NOT NULL"
 - Unique primary key is handled by data generation
 
 public static void dropTables(String[] tableNames)

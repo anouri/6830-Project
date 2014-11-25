@@ -30,9 +30,12 @@ public class BarChart extends ApplicationFrame {
      *
      * @param title  the frame title.
      */
+	private HashMap<String, HashMap<String, Long>> results;
+	
     public BarChart(final String title, HashMap<String, HashMap<String, Long>> results) {
 
         super(title);
+        this.results = results;
         final CategoryDataset dataset = createDataset(results);
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
@@ -42,7 +45,6 @@ public class BarChart extends ApplicationFrame {
     }
     
     public BarChart(final String title) {
-
         super(title);
         final CategoryDataset dataset = createDatasetTest();
         final JFreeChart chart = createChart(dataset);

@@ -60,6 +60,8 @@ public class InsertDataTest {
         	HashMap<String, Long> result =  QueryExecutorAll.run_all(s);
 	        if (result != null){
 	        	results.put("insertion_"+i, result);
+	        	System.out.println("insertion_"+i);
+	        	System.out.println(s);
         	}
         	
         }

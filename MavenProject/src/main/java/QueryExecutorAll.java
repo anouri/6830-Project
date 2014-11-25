@@ -6,13 +6,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.sql.Connection;
+
 import javax.sql.DataSource;
-import javax.swing.JFrame;
 
 import org.apache.commons.dbcp.BasicDataSource;
  
@@ -38,6 +38,16 @@ public class QueryExecutorAll {
 		props.setProperty("CASSANDRA_DB_URL", url_base+ "/" + keyspaceName);
 	}
 	
+	public static void shema_creation_all(String createProcedure){
+		System.out.println("here");
+		create_table_mysql(createProcedure);
+		System.out.println("here1");
+		set_cassandra_keyspace("test");
+		create_table_cassandra(createProcedure);
+		System.out.println("here2");
+		create_table_mongo(createProcedure);
+	}
+	
 	
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
@@ -48,17 +58,39 @@ public class QueryExecutorAll {
 	}
 	
 	public static void create_table_cassandra(String creation_q){
-		System.out.println("cassandra");
 		String[] stmts = creation_q.split(";");
 		for(String s : stmts){
 			executeQuery(getDataSource("cassandra"), s);
 		}
 	}
 	public static void create_table_mongo(String creation_q){
-		executeQuery(getDataSource("mongo"), creation_q);
+		String[] stmts = creation_q.split(";");
+		for(String s : stmts){
+			Pattern p_d = Pattern.compile("DROP TABLE .* (.*?)\\z", Pattern.CASE_INSENSITIVE);
+			Matcher m_d = p_d.matcher(s);
+			if (m_d.find()){
+				String tName = m_d.group(1);
+				String index_str = "DROP TABLE " + tName;
+				executeQuery(getDataSource("mongo"), index_str);
+			}
+		///// some level of parsing for the primary key case
+			Pattern p = Pattern.compile("CREATE TABLE (.*?) .*PRIMARY KEY \\((.*?)\\)", Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(s);
+			if (m.find()){
+				String tName = m.group(1);
+				String keys = m.group(2);
+				String index_str = "CREATE UNIQUE INDEX primary_key ON " + tName + " (" + keys + ");";
+				executeQuery(getDataSource("mongo"), index_str);
+			}
+		}
 	}
+	
 	public static void create_table_mysql(String creation_q){
-		System.out.println("mysql");
+		creation_q =
+        		"CREATE PROCEDURE mysql_create()"+
+                "BEGIN " +
+                creation_q +
+                "END";
 		createProcedure(getDataSource("mysql"), "mysql_create", creation_q);
 		executeProcedure(getDataSource("mysql"), "mysql_create()");
 		deleteProcedure(getDataSource("mysql"), "mysql_create");
@@ -246,5 +278,11 @@ public class QueryExecutorAll {
     		run_all("DROP table " + t + ";");
     	}
     }
+    
+//    public static void main(String[] args){
+//    	String createProcedure =
+//            	"DROP TABLE IF EXISTS blah;";
+//    	create_table_mongo(createProcedure);
+//    }
     
 }

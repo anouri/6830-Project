@@ -297,7 +297,7 @@ Since foreign keys must reference a primary key of another table to ensure it ex
 
 Adhering to these assumptions means we'll be able to analyze joins while keeping runtime of data generation reasonable.
 
-# Installing DBs
+# Installing DBs and Rails
 
 **MySQL**
 

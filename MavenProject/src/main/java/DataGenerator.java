@@ -8,6 +8,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 
+// TODO: add back in distinct int values
+// TODO: throw exceptions if the distribution is too narrow to get x distinct values fast
+// TODO: throw exceptions if distinct values take too long to generate
+// TODO: add auto-incrementing distribution
+
 public class DataGenerator {
 
 	private static Iterator<Integer> generateIntegerData(JSONObject colInfo, int count) {

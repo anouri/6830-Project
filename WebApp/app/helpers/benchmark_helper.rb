@@ -24,12 +24,12 @@ module BenchmarkHelper
 		table_names = json["table"]
 		table_names.each do |table_name|
 			table = schema.tables.create(name: table_name)
-			data = json[table_name]
-			column_names = data[0]["columnName"]		 # ["who_id", "whom_id"]
-			column_types = data[1]["columnType"]  	 # ["Integer", "Integer"]
-			column_lengths = data[2]["columnLength"] # [4, 4]
-			if data.size > 3
-				primary_key = data[3]["primaryKey"]
+			table_data = json[table_name]
+			column_names = table_data[0]["columnName"]		 # ["who_id", "whom_id"]
+			column_types = table_data[1]["columnType"]  	 # ["Integer", "Integer"]
+			column_lengths = table_data[2]["columnLength"] # [4, 4]
+			if table_data.size > 3
+				primary_key = table_data[3]["primaryKey"]
 				table.update_attribute(:primary_key, primary_key)
 			end
 			for i in 0...column_names.length
@@ -40,16 +40,16 @@ module BenchmarkHelper
 
 	def update_models(params)
 		params.each do |k, v|	# k = "1-cardinality", v = "1000"
-			name = k.split("-")
-			if name.size != 1
-				id = name[0]
-				prop = name[1]
-				if prop == "cardinality"
+			id_property = k.split("-")
+			if id_property.size != 1
+				id = id_property[0]
+				property = id_property[1]
+				if property == "cardinality"
 					Table.find(id.to_i).update_attribute(:cardinality, v.to_i)
 				else
 					if v != ""
-						value = (prop == "distribution") ? v : v.to_i
-						field = Field.find(id.to_i).update_attribute(prop.to_sym, value)
+						value = (property == "distribution") ? v : v.to_i
+						Field.find(id.to_i).update_attribute(property.to_sym, value)
 					end
 				end
 			end
@@ -59,7 +59,7 @@ module BenchmarkHelper
 	# Example output
 =begin
 	{"user"=>{"cardinality"=>1000, 
-						"fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"user_id", "distribution"=>"normal", "distinct"=>10, "mean"=>5, "stdv"=>1, "min"=>nil, "max"=>nil}, 
+						"fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"user_id", "distribution"=>"auto_increment", "distinct"=>nil, "mean"=>nil, "stdv"=>nil, "min"=>nil, "max"=>nil}, 
 											 {"category"=>"String", "length"=>128, "name"=>"username", "distribution"=>"uniform", "distinct"=>50, "mean"=>nil, "stdv"=>nil, "min"=>4, "max"=>8}, 
 											 {"category"=>"String", "length"=>128, "name"=>"email", "distribution"=>"delta", "distinct"=>100, "mean"=>nil, "stdv"=>nil, "min"=>6, "max"=>18}, 
 											 {"category"=>"String", "length"=>128, "name"=>"pw_hash", "distribution"=>"normal", "distinct"=>nil, "mean"=>10, "stdv"=>4, "min"=>nil, "max"=>nil}
@@ -71,7 +71,7 @@ module BenchmarkHelper
 	 												]
 	 							}, 
 	 "message"=>{"cardinality"=>3000, 
-	 						 "fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"uniform", "distinct"=>10, "mean"=>nil, "stdv"=>nil, "min"=>1, "max"=>100}, 
+	 						 "fields"=>[{"category"=>"Integer", "length"=>4, "name"=>"message_id", "distribution"=>"auto_increment", "distinct"=>nil, "mean"=>nil, "stdv"=>nil, "min"=>nil, "max"=>nil}, 
 	 						 						{"category"=>"Integer", "length"=>4, "name"=>"author_id", "distribution"=>"normal", "distinct"=>10, "mean"=>2, "stdv"=>1, "min"=>nil, "max"=>nil}, 
 	 						 						{"category"=>"String", "length"=>128, "name"=>"text", "distribution"=>"delta", "distinct"=>20, "mean"=>nil, "stdv"=>nil, "min"=>10, "max"=>40}, 
 	 						 						{"category"=>"Integer", "length"=>4, "name"=>"pub_date", "distribution"=>"uniform", "distinct"=>18, "mean"=>nil, "stdv"=>nil, "min"=>20, "max"=>60}
@@ -83,22 +83,18 @@ module BenchmarkHelper
 		relevant_attributes = [:category, :length, :name, :distribution, :distinct, :mean, :stdv, :min, :max]
 		result = {}
 		schema.tables.each do |table|
-			data = {}
-			data["cardinality"] = table.cardinality
+			table_data = {}
+			table_data["cardinality"] = table.cardinality
 			fields_array = []
 
 			table.fields.each do |field|
-				if field.name != table.primary_key
-					field_hash = {}
-					relevant_attributes.each do |att|
-						field_hash[att.to_s] = field[att]
-					end
-					fields_array << field_hash
-				end
+				field_data = {}
+				relevant_attributes.each { |attribute| field_data[attribute.to_s] = field[attribute] }
+				fields_array << field_data
 			end
 
-			data["fields"] = fields_array
-			result[table.name] = data
+			table_data["fields"] = fields_array
+			result[table.name] = table_data
 		end
 		result
 	end

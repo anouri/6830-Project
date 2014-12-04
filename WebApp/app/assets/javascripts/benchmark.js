@@ -21,10 +21,10 @@ $(document).ready(function() {
 
 	var listing = [set_tag, set_fields, select_fields_tag, select_fields, where_tag, add_predicate_button, predicates, groupby_tag, groupby_fields, orderby_tag, orderby_fields, orderby_direction];
 
-	hideListing(listing);
+	hide_listing(listing);
 
 	query_type.on("change", function() {
-		hideListing(listing);
+		hide_listing(listing);
 		var type = $(this).val();
 		if (type == "SELECT") {
 			tables.attr("multiple", true);
@@ -34,13 +34,13 @@ $(document).ready(function() {
 				set_tag.show();
 				$("#set_fields-"+tables.val()).show();
 			} else if (type == "DELETE") {
-				showWhereTagAndPredicates();
+				show_where_tag_and_predicates();
 			}
 		}
 	});
 
 	tables.on("change", function() {
-		hideListing(listing);
+		hide_listing(listing);
 		predicates.empty();
 		if (query_type.val() == "SELECT") {
 			var table_names = $(this).val();
@@ -54,29 +54,50 @@ $(document).ready(function() {
 			set_tag.show();
 			$("#set_fields-"+$(this).val()).show();
 		} else if (query_type.val() == "DELETE") {
-			showWhereTagAndPredicates();
+			show_where_tag_and_predicates();
 		}
 	})
 
 	select_fields.on("change", function() {
-		showWhereTagAndPredicates();
+		show_where_tag_and_predicates();
 		if (query_type.val() == "SELECT") {
-			showGroupOrderBy();
+			show_groupby_orderby();
 		}
 	})
 
 	add_predicate_button.click(function(e) {
 		e.preventDefault();
-		addPredicateForm(jQuery.parseJSON(tables_to_fields.val()), $("#predicates div").length);
+		add_predicate_form(jQuery.parseJSON(tables_to_fields.val()), $("#predicates div").length);
 	})
 
-	function addPredicateForm(tables_to_fields, index) {
-		var htmlToAppend = '<div>';
+	predicates.on("click", ".remove_field", function(e) {
+		e.preventDefault();
+		$(this).parent('div').remove();
+	})
+
+	$(".distribution").on("change", function() {
+		var tr = $(this).closest("tr");
+		if ($(this).val() == "normal") {
+			tr.find(".mean").prop("disabled", false);
+			tr.find(".stdv").prop("disabled", false);
+			tr.find(".min").prop("disabled", true);
+			tr.find(".max").prop("disabled", true);
+		} else {
+			tr.find(".mean").prop("disabled", true);
+			tr.find(".stdv").prop("disabled", true);
+			tr.find(".min").prop("disabled", false);
+			tr.find(".max").prop("disabled", false);
+		}
+	})
+
+	function add_predicate_form(tables_to_fields, index) {
+		var html_to_append = '<div>';
 		var prefix = '<select id="' + index + '-prefix" name="' + index + '-prefix"><option value="AND">AND</option><option value="OR">OR</option></select>';
 		var operator = '<select id="' + index + '-operator" name="' + index + '-operator"><option value="=">=</option><option value="!=">!=</option><option value=">">&gt;</option><option value="<">&lt;</option><option value=">=">&gt;=</option><option value="<=">&lt;=</option></select>';
 		var field1 = '<select id="' + index + '-field1" name="' + index + '-field1">';
 		var field2 = '<select id="' + index + '-field2" name="' + index + '-field2"><option value="?">?</option>';
-		
+		var remove_field = '<a href="#" class="remove_field">Remove</a>'
+
 		if (query_type.val() == "SELECT") {
 			var table_names = tables.val();
 			for (var i = 0; i < table_names.length; i++) {
@@ -99,26 +120,26 @@ $(document).ready(function() {
 		field2 += '</select>';
 		
 		if (index == 0) {
-			htmlToAppend += field1 += operator += field2 += '</div>';
+			html_to_append += field1 += operator += field2 += remove_field += '</div>';
 		} else {
-			htmlToAppend += prefix += field1 += operator += field2 += '</div>';
+			html_to_append += prefix += field1 += operator += field2 += remove_field += '</div>';
 		}
-		predicates.append(htmlToAppend);
+		predicates.append(html_to_append);
 	}
 
-	function hideListing(listing) {
+	function hide_listing(listing) {
 		for (var i = 0; i < listing.length; i++) {
 			listing[i].hide();
 		}
 	}
 
-	function showWhereTagAndPredicates() {
+	function show_where_tag_and_predicates() {
 		where_tag.show();
 		add_predicate_button.show();
 		predicates.show();
 	}
 
-	function showGroupOrderBy() {
+	function show_groupby_orderby() {
 		groupby_tag.show();
 		var table_names = tables.val();
 		for (var i = 0; i < table_names.length; i++) {
@@ -130,20 +151,5 @@ $(document).ready(function() {
 		}
 		orderby_direction.show();
 	}
-
-	$(".distribution").on("change", function() {
-		var tr = $(this).closest("tr");
-		if ($(this).val() == "normal") {
-			tr.find(".mean").prop("disabled", false);
-			tr.find(".stdv").prop("disabled", false);
-			tr.find(".min").prop("disabled", true);
-			tr.find(".max").prop("disabled", true);
-		} else {
-			tr.find(".mean").prop("disabled", true);
-			tr.find(".stdv").prop("disabled", true);
-			tr.find(".min").prop("disabled", false);
-			tr.find(".max").prop("disabled", false);
-		}
-	})
 
 });

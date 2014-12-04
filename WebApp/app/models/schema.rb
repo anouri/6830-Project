@@ -5,11 +5,9 @@ class Schema < ActiveRecord::Base
 	def tables_to_fields
 		result = {}
 		self.tables.each do |table|
-			fields = []
-			table.fields.each do |field|
-				fields << field.name
-			end
-			result[table.name] = fields
+			field_names = []
+			table.fields.each { |field| field_names << field.name }
+			result[table.name] = field_names
 		end
 		result
 	end
@@ -17,11 +15,9 @@ class Schema < ActiveRecord::Base
 	def tables_to_fields_exclude_primary_key
 		result = {}
 		self.tables.each do |table|
-			fields = []
-			table.fields.each do |field|
-				fields << field.name if field.name != table.primary_key
-			end
-			result[table.name] = fields
+			field_names = []
+			table.fields.each { |field| field_names << field.name if field.name != table.primary_key }
+			result[table.name] = field_names
 		end
 		result
 	end

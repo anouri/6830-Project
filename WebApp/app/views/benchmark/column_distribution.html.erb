@@ -7,7 +7,6 @@
 			<table>
 				<tr>
 					<th>Type</th>
-					<!-- <th>Length</th> -->
 					<th>Field</th>
 					<th>Distribution</th>
 					<th>Number of Distinct Values</th>
@@ -21,7 +20,7 @@
 						<tr>
 							<td><%= f.category %></td>
 							<td><%= f.name %> (primary key)</td>
-							<td>N/A</td>
+							<td>auto increment<%= hidden_field_tag "#{f.id}-distribution", "auto_increment", class: "distribution" %>
 							<td>N/A</td>
 							<td>N/A</td>
 							<td>N/A</td>
@@ -31,7 +30,6 @@
 					<% else %>
 						<tr>
 							<td><%= f.category %></td>
-							<!-- <td><%= f.length %></td> -->
 							<td><%= f.name %></td>
 							<td><%= select_tag "#{f.id}-distribution", options_for_select(["uniform", "normal", "delta"]), class: "distribution" %></td>
 							<td><%= number_field_tag("#{f.id}-distinct", nil, min: 0, class: "distinct") %></td>

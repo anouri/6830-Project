@@ -163,7 +163,8 @@ http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callab
 
 #Testing
 
-Example Input Schema (user input)
+Example Input Schema
+  (User input -> SQLSchemaParser -> WebApp)
 ```shell
 DROP TABLE follower; 
 CREATE TABLE follower (who_id int, whom_id int, primary key (who_id)); 
@@ -171,7 +172,8 @@ DROP TABLE message;
 CREATE TABLE message (message_id int, text text, primary key (message_id));
 ```
 
-Example Schema Distribution JSON (output from web app, input for Krisin)
+Example Schema Distribution JSON 
+  (WebApp -> FastDataGenerator)
 ```shell
 { 
   "follower": {
@@ -225,7 +227,8 @@ Example Schema Distribution JSON (output from web app, input for Krisin)
 }
 
 ```
-Example Data Generated JSON (output from Kristin, input to Tran to create insert statements)
+Example Data Generated JSON 
+  (FastDataGenerator -> InsertData)
 ```shell
 { 
   "follower": {

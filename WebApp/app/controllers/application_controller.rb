@@ -5,4 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include ApplicationHelper
   include BenchmarkHelper
+  include ColumnDistributionHelper
+  include QueriesHelper
+  include AddQueryHelper
 end

@@ -43,6 +43,19 @@ In cassandra.yaml (you can find this in the dsc-cassandra-2.1.1/conf directory),
 
 Make sure port is set to 9160.
 
+**Configure MySQL**
+
+start mysql client using:
+
+```shell
+sudo mysql
+```
+
+Then run:
+```shell
+GRANT ALL PRIVILEGES ON *.* TO '*'@'localhost';
+```
+
 **Benchmarking Output Sample**
 
 db is: cassandra run time is: 96

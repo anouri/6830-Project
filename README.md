@@ -172,6 +172,16 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
   "user" : {
     "cardinality" : 1000, 
     "fields" : [{
+      "category": "Integer", 
+      "length": 4, 
+      "name": "user_id", 
+      "distribution": "auto_increment", 
+      "distinct": nil, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": nil, 
+      "max": nil
+    }, {
       "category": "String", 
       "length": 128, 
       "name": "username", 
@@ -231,6 +241,16 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
   "message": {
     "cardinality": 3000, 
     "fields": [{
+      "category": "Integer", 
+      "length": 4, 
+      "name": "message_id", 
+      "distribution": "auto_increment", 
+      "distinct": nil, 
+      "mean": nil, 
+      "stdv": nil, 
+      "min": nil, 
+      "max": nil
+    }, {
       "category": "Integer", 
       "length": 4, 
       "name": "author_id", 

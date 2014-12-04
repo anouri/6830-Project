@@ -163,80 +163,27 @@ http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callab
 
 #Testing
 
-Example Input Schema
+Example Input Schema (user input)
 ```shell
-DROP TABLE user;
-CREATE TABLE user (user_id integer PRIMARY KEY auto_increment,
-                   username text NOT NULL, email text NOT NULL,
-                    pw_hash text NOT NULL);
-
-DROP TABLE follower;
-
-CREATE TABLE follower (who_id integer,whom_id integer);
-
-DROP TABLE message;
-
-CREATE TABLE message (message_id integer PRIMARY KEY auto_increment,author_id integer NOT NULL,text text NOT NULL,pub_date integer);
+DROP TABLE follower; 
+CREATE TABLE follower (who_id int, whom_id int, primary key (who_id)); 
+DROP TABLE message; 
+CREATE TABLE message (message_id int, text text, primary key (message_id));
 ```
 
-Example JSON Output for Distribution (Kristin can expect this format to generate data set)
+Example Schema Distribution JSON (output from web app, input for Krisin)
 ```shell
 { 
-  "user" : {
-    "cardinality" : 1000, 
-    "fields" : [{
-      "category": "Integer", 
-      "length": 4, 
-      "name": "user_id", 
-      "distribution": "autoincrement", 
-      "distinct": nil, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": nil, 
-      "max": nil
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "username", 
-      "distribution": "uniform", 
-      "distinct": 50, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 4, 
-      "max": 8
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "email", 
-      "distribution": "delta", 
-      "distinct": 100, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 6, 
-      "max": 18
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "pw_hash", 
-      "distribution": "normal", 
-      "distinct": nil, 
-      "mean": 10, 
-      "stdv": 4, 
-      "min": nil, 
-      "max": nil
-    }]
-  }, 
   "follower": {
-    "cardinality": 2000, 
+    "cardinality": 3, 
     "fields": [{
       "category": "Integer", 
       "length": 4, 
       "name": "who_id", 
-      "distribution": 
-      "normal", 
-      "distinct": 10, 
-      "mean": 5, 
-      "stdv": 1, 
+      "distribution": "autoincrement",
+      "distinct": nil, 
+      "mean": nil, 
+      "stdv": nil, 
       "min": nil, 
       "max": nil
     }, {
@@ -244,15 +191,15 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
       "length": 4, 
       "name": "whom_id", 
       "distribution": "delta", 
-      "distinct": 10, 
+      "distinct": nil, 
       "mean": nil, 
       "stdv": nil, 
       "min": 1, 
-      "max": 100
+      "max": 10
     }]
   }, 
   "message": {
-    "cardinality": 3000, 
+    "cardinality": 4, 
     "fields": [{
       "category": "Integer", 
       "length": 4, 
@@ -264,37 +211,31 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
       "min": nil, 
       "max": nil
     }, {
-      "category": "Integer", 
-      "length": 4, 
-      "name": "author_id", 
-      "distribution": "normal", 
-      "distinct": 10, 
-      "mean": 2, 
-      "stdv": 1, 
-      "min": nil, 
-      "max": nil
-    }, {
       "category": "String", 
       "length": 128, 
       "name": "text", 
-      "distribution": "delta",
-      "distinct": 20, 
+      "distribution": "uniform",
+      "distinct": 2, 
       "mean": nil, 
       "stdv": nil, 
-      "min": 10, 
-      "max": 40
-    }, {
-      "category": "Integer", 
-      "length": 4, 
-      "name": "pub_date", 
-      "distribution": "uniform", 
-      "distinct": 18, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 20, 
-      "max": 60
+      "min": 3, 
+      "max": 6
     }]
   }
+}
+
+```
+Example Data Generated JSON (output from Kristin, input to Tran to create insert statements)
+```shell
+{ 
+  "follower": {
+    "colNames": ["who_id", "whom_id"], 
+    "colData": [[8, 5], [1, 5], [2, 5]]
+  }, 
+  "message": {
+    "colNames": ["message_id", "text"], 
+    "colData":[[55, "lRD"], [47, "lRD"], [48, "lRD"], [52, "RUavj"]]
+  } 
 }
 ```
 

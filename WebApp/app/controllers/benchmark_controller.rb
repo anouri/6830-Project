@@ -5,6 +5,7 @@ QueryExecutorAll = JavaUtilities.get_proxy_class("QueryExecutorAll")
 DataGenerator = JavaUtilities.get_proxy_class("DataGenerator")
 GetDataValue = JavaUtilities.get_proxy_class("GetDataValue")
 InsertData = JavaUtilities.get_proxy_class("InsertData")
+#BarChart = JavaUtilities.get_proxy_class("BarChart")
 
 class BenchmarkController < ApplicationController
 
@@ -16,8 +17,9 @@ class BenchmarkController < ApplicationController
     SQLSchemaParser.new(params[:schema])
     schema_json = JSON.parse(SQLSchemaParser.getJSON().toString())
     create_models_from_schema_json(@schema, schema_json) # Use json to create Table and Field objects
+    
     # 1) Use raw schema to create tables    
-    #create_database_tables()
+    create_database_tables()
   end
 
   def queries
@@ -40,9 +42,20 @@ class BenchmarkController < ApplicationController
               "{category:String,length:128,name:text,distribution:uniform,"+
                 "distinct:2,mean:0,stdv:0,min:3,max:6},"+
               "]}}"
-    #json_data = DataGenerator.generateJsonData(json_string) # Kristin
-    #insert_statements = InsertData.InsertStatementFromJSON(json_data) # Tran
-    #insert_statements.each { |s| QueryExecutorAll.run_all(s) }
+    json_data = DataGenerator.generateJsonData(json_string) 
+    insert_statements = InsertData.InsertStatementFromJSON(json_data)
+    
+    @run_times = {}  # {"mongo"=>-5670856046566, "cassandra"=>8, "mysql"=>169}
+    insert_statements.each do |s| 
+      result = QueryExecutorAll.run_all(s)
+      result.each do |db, time|
+        (@run_times.has_key? db) ? @run_times[db] += time : @run_times[db] = time
+      end
+    end
+    
+    # bar_chart = create_bar_chart(run_times)
+    # bar_chart.display()
+
   end
 
   def add_query
@@ -54,7 +67,7 @@ class BenchmarkController < ApplicationController
 
   def show_comparison
     schema = Schema.find(params[:schema_id])
-    2.times { |i| QueryExecutorAll.run_all(schema.next_query) }
+    # 2.times { |i| QueryExecutorAll.run_all(schema.next_query) }
   end
 
 end

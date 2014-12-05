@@ -39,12 +39,9 @@ public class QueryExecutorAll {
 	}
 	
 	public static void shema_creation_all(String createProcedure){
-		System.out.println("here");
 		create_table_mysql(createProcedure);
-		System.out.println("here1");
 		set_cassandra_keyspace("test");
 		create_table_cassandra(createProcedure);
-		System.out.println("here2");
 		create_table_mongo(createProcedure);
 	}
 	

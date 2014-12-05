@@ -28,3 +28,15 @@ Restore oldest version with distinct option for integer types and for string typ
 *  Schema + fast data generator + Test (Kristin)
 *  Create_table_all() + Steps for table creation, insertion, plotting etc + API (Shirley; done)
 *  generate automatic query generator: think of the different work load to feed into the random generator.
+*  
+
+*Final Report*:
+======================
+* Introduction
+* Motivation
+* Related Work
+* Components
+* Implementation
+* Results
+* Discussion
+* Conclusion

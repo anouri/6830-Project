@@ -163,17 +163,15 @@ http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callab
 
 #Testing
 
-Example Input Schema
-  (User input -> SQLSchemaParser -> WebApp)
+Example Input Schema (User input -> SQLSchemaParser -> WebApp) IF EXISTS is absolutely necessary for MySQL to create the tables. Just drop on command line and remove the DROP TABLE statements when entering it into the Web App.
 ```shell
-DROP TABLE follower; 
+DROP TABLE IF EXISTS follower; 
 CREATE TABLE follower (who_id int, whom_id int, primary key (who_id)); 
-DROP TABLE message; 
+DROP TABLE IF EXISTS message; 
 CREATE TABLE message (message_id int, text text, primary key (message_id));
 ```
 
-Example Schema Distribution JSON 
-  (WebApp -> FastDataGenerator)
+Example Schema Distribution JSON (WebApp -> FastDataGenerator)
 ```shell
 { 
   "follower": {
@@ -227,8 +225,7 @@ Example Schema Distribution JSON
 }
 
 ```
-Example Data Generated JSON 
-  (FastDataGenerator -> InsertData)
+Example Data Generated JSON (FastDataGenerator -> InsertData)
 ```shell
 { 
   "follower": {

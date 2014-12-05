@@ -1,5 +1,4 @@
 require 'java'
-GetDataValue = JavaUtilities.get_proxy_class("GetDataValue")
 
 class Query < ActiveRecord::Base
 	has_many :predicates

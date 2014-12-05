@@ -1,1 +1,6 @@
-success!
+<div>
+  <h3>Time To Run Benchmark</h3>
+  <% @run_times.each do |db, time| %>
+    <div><%= db %>: <%= time %> milliseconds</div>
+  <% end %>
+</div></br>

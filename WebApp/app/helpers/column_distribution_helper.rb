@@ -28,10 +28,7 @@ module ColumnDistributionHelper
 			column_names = table_data[0]["columnName"]		 # ["who_id", "whom_id"]
 			column_types = table_data[1]["columnType"]  	 # ["Integer", "Integer"]
 			column_lengths = table_data[2]["columnLength"] # [4, 4]
-			if table_data.size > 3
-				primary_key = table_data[3]["primaryKey"]
-				table.update_attribute(:primary_key, primary_key)
-			end
+			table.update_attribute(:primary_key, SQLSchemaParser.getPrimaryKey(table_name))
 			for i in 0...column_names.length
 				field = table.fields.create(category: column_types[i], name: column_names[i], length: column_lengths[i])
 			end

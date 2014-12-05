@@ -1,4 +1,5 @@
 module BenchmarkHelper
+	
 	# run_times = {"mongo"=>13, "cassandra"=>6, "mysql"=>5}
 	def create_bar_chart(run_times)
 		# Bar chart input {"Query Type" => {"mongo"=>13, "cassandra"=>6, "mysql"=>5}}
@@ -9,15 +10,15 @@ module BenchmarkHelper
 		return BarChart.new("Benchmark", result_java_hashmap)
 	end
 
-	# def benchmark(schema)
-	# 	run_times = {}
-	# 	2.times do |i|
-	# 		result = QueryExecutorAll.run_all(schema.next_query)
-	# 		result.each do |db, time|
-	# 			(run_times.has_key? db) ? run_times[db] += time : run_times[db] = time
-	# 		end
-	# 	end
-	# 	run_times
-	# end
+	def run_benchmark(schema)
+		run_times = {}
+		5.times do |i|
+			result = QueryExecutorAll.run_all(schema.next_query)
+			result.each do |db, time|
+				(run_times.has_key? db) ? run_times[db] += time : run_times[db] = time
+			end
+		end
+		run_times
+	end
 
 end

@@ -150,7 +150,7 @@ public class FastDataGenerator {
     	this.outputTemplate = outputJson;
 	}
 	
-    private String generateMoreData() {
+    public String generateMoreData() {
     	JSONObject outputJson = new JSONObject(this.outputTemplate.toString()); //deep clone
     	ArrayList data = null;
     	for (Table t : tables) {

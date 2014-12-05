@@ -1,7 +1,7 @@
 module BenchmarkHelper
-	# run_times = {"mongo"=>-5670856046566, "cassandra"=>8, "mysql"=>169}
+	# run_times = {"mongo"=>13, "cassandra"=>6, "mysql"=>5}
 	def create_bar_chart(run_times)
-		# Bar chart input {"Query Type" => {"mongo"=>-5670856046566, "cassandra"=>8, "mysql"=>169}}
+		# Bar chart input {"Query Type" => {"mongo"=>13, "cassandra"=>6, "mysql"=>5}}
 		run_times_java_hashmap = java.util.HashMap.new()
 		run_times.each { |db, time| run_times_java_hashmap.put(db, time) }
 		result_java_hashmap = java.util.HashMap.new()

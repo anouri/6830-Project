@@ -37,12 +37,5 @@ module ColumnDistributionHelper
 			end
 		end
 	end
-
-	def create_database_tables()
-		shortQuery = SQLSchemaParser.getRawSchema.split(";")
-		shortQuery.each do |query| 
-			QueryExecutorAll.shema_creation_all(query)
-		end
-	end
 	
 end

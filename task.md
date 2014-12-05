@@ -32,7 +32,7 @@ Restore oldest version with distinct option for integer types and for string typ
 
 *Final Report*:
 ======================
-*Introduction
+* Introduction
 * Motivation
 * Related Work
 * Components

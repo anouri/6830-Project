@@ -1,7 +1,9 @@
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -98,50 +100,71 @@ public class GetDataValue {
      * @return row in the format (columnValue1, columnValue2, columnValue3)
      */
     public static String[] getRowFromTable(String table) {
-        String sqlQuery = String.format("Select * from %s limit 1;", table);
-        ResultSet results =  executeAndGet(sqlQuery);
-        if (results == null) {
-            return null;
-        }
         String[] columnValues = new String[2];
+        TupleDesc metaData = SQLSchemaParser.getTupleDescription(table);
         try {
-            ResultSetMetaData metaData = results.getMetaData();
             List<String> metaList = new ArrayList<String>();
-            for (int i = 1 ;i <= metaData.getColumnCount(); i ++) {
-                if (!metaData.isAutoIncrement(i)) {
-                    metaList.add(metaData.getColumnName(i));
-                }
+            for (int i = 0 ;i < metaData.numFields(); i ++) {
+                metaList.add(metaData.getFieldName(i));
             }
             columnValues[0] = getDatabaseFormat(metaList);
             StringBuffer buffer = null;
-            while (results.next()) {
-                 buffer = new StringBuffer("(");
-                for (int i = 1; i <= metaData.getColumnCount(); i ++) {
-                    if (metaData.isAutoIncrement(i)) {
-                        if (i == metaData.getColumnCount()) {
-                            buffer.replace(buffer.length()-1,buffer.length(),")");
-                        }
-                        continue;
-                    }
-                    if (metaData.getColumnType(i) == Types.INTEGER) {
-                        buffer.append(results.getInt(i));
-                    } else {
-                        buffer.append('\'').append(results.getString(i)).append('\'');
-                    }
-                    if (i == metaData.getColumnCount()) {
-                        buffer.append(")");
-                    } else {
-                        buffer.append(",");
-                    }
+            int maxID = getMaxID(table);
+            assert maxID != -1;
+            List<Object> columnValue = getRandomColumnFromTable(table,maxID);
+
+            buffer = new StringBuffer("(");
+            for (int i = 0; i < metaData.numFields(); i ++) {
+                if (metaData.getFieldName(i).equalsIgnoreCase(SQLSchemaParser.getPrimaryKey(table))) {
+                    buffer.append(maxID+1);
+                } else if (metaData.getFieldType(i).type == Type.SupportedType.INT_TYPE) {
+                    buffer.append(columnValue.get(i));
+                } else {
+                    buffer.append('\'').append(columnValue.get(i)).append('\'');
+                }
+                if (i == metaData.numFields()-1) {
+                    buffer.append(")");
+                } else {
+                    buffer.append(",");
                 }
             }
             columnValues[1] =  buffer.toString();
-        } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             close();
         }
         return columnValues;
+    }
+
+    private static List<Object> getRandomColumnFromTable(String table, int maxID) {
+        List<Object> result = new ArrayList<Object>();
+        Random rand = new Random();
+        Iterator<TupleDesc.TDItem> tdItem = SQLSchemaParser.getTupleDescription(table).iterator();
+        while (tdItem.hasNext()) {
+            TupleDesc.TDItem current = tdItem.next();
+            String sqlQuery = String.format("Select %s from %s where %s=%d;", current.fieldName,table, SQLSchemaParser.getPrimaryKey(table),rand.nextInt(maxID));
+            ResultSet queryResult =  executeAndGet(sqlQuery);
+            try {
+                while (queryResult.next()) {
+                    result.add(queryResult.getObject(1).toString());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static int getMaxID(String table) {
+        String sqlQuery = String.format("Select max(%s) from %s;", SQLSchemaParser.getPrimaryKey(table), table);
+        ResultSet queryResult =  executeAndGet(sqlQuery);
+        try {
+            while (queryResult.next()) {
+                return queryResult.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+        }
+        return -1;
     }
 
     private static String getDatabaseFormat(List<String> iterator) {

@@ -24,11 +24,12 @@ public class GetDataValueTest {
         try {
             conn = ds.getConnection();
             stmt = conn.createStatement();
-            stmt.execute("CREATE TABLE if not exists users (lastname text,age int,city text,email text, firstname text, id int auto_increment, primary key (id));");
-            String firstInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Kristin', 25, 'Austin', 'kristin@example.com', 'Bob');";
-            String secondInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tony', 10, 'California', 'tuantran@example.com', 'Bob');";
-            String thirdInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Tran', 12, 'Seattle', 'viettran@example.com', 'Bob');";
-            String forthInsert = "INSERT INTO users (lastname, age, city, email, firstname) VALUES ('Shirley', 20, 'Beijing', 'shirley@example.com', 'Bob');";
+            stmt.execute("CREATE TABLE users (lastname text,age int,city text,email text, firstname text, id int, primary key (id));");
+            SQLSchemaParser.setRawSqlSchema("CREATE TABLE users (lastname text,age int,city text,email text, firstname text, id int, primary key (id));");
+            String firstInsert = "INSERT INTO users (lastname, age, city, email, firstname, id) VALUES ('Kristin', 25, 'Austin', 'kristin@example.com', 'Bob', 0);";
+            String secondInsert = "INSERT INTO users (lastname, age, city, email, firstname, id) VALUES ('Tony', 10, 'California', 'tuantran@example.com', 'Bob', 1);";
+            String thirdInsert = "INSERT INTO users (lastname, age, city, email, firstname, id) VALUES ('Tran', 12, 'Seattle', 'viettran@example.com', 'Bob', 2);";
+            String forthInsert = "INSERT INTO users (lastname, age, city, email, firstname, id) VALUES ('Shirley', 20, 'Beijing', 'shirley@example.com', 'Bob', 3);";
             List<String> sqlStatement = new ArrayList<String>(
                     Arrays.asList(firstInsert, secondInsert, thirdInsert, forthInsert));
             for (String sql : sqlStatement) {
@@ -94,31 +95,28 @@ public class GetDataValueTest {
     public void testGetRowFromTable() throws Exception {
         GetDataValue getDataValue = new GetDataValue();
         // users (lastname, age, city, email, firstname) VALUES ('Jones', 35, 'Austin', 'bob@example.com', 'Bob')";
-        Set<String> expected = new HashSet<String>(
-                Arrays.asList("('Kristin',25,'Austin','kristin@example.com','Bob')","('Tony',10,'California','tuantran@example.com','Bob')",
-                        "('Tran',12,'Seattle','viettran@example.com','Bob')", "('Shirley',20,'Beijing','shirley@example.com','Bob')")
+        Set<String> expectedLastName = new HashSet<String>(
+                Arrays.asList("Kristin","Tony","Bob","Tran")
         );
-
+        Set<String> expectedAge = new HashSet<String>(
+                Arrays.asList("25","10","12","20")
+        );
         String[] actual = getDataValue.getRowFromTable("users");
-        Assert.assertTrue(expected.contains(actual[1]));
-        Assert.assertEquals("(lastname,age,city,email,firstname)", actual[0]);
-    }
-
-    @Test
-    public void testAutoIncrementedFromTable() throws Exception {
-        DataSource ds = QueryExecutorAll.getDataSource("mysql");
-        conn = ds.getConnection();
-        stmt = conn.createStatement();
-
-        Set<Integer> expected = new HashSet<Integer>(
-                Arrays.asList(1,2,3,4));
-        if (stmt.execute("Select id from users")) {
-            ResultSet actual = stmt.getResultSet();
-            while (actual.next()) {
-                Assert.assertTrue(expected.contains(actual.getInt(1)));
+        boolean containLastName = false;
+        for (String s : expectedLastName) {
+            if (actual[1].contains(s)) {
+                containLastName = true;
             }
-        } else {
-            Assert.assertTrue(false);
         }
+        Assert.assertTrue(containLastName);
+        boolean containAge = false;
+        for (String s : expectedAge) {
+            if (actual[1].contains(s)) {
+                containAge = true;
+            }
+        }
+        Assert.assertTrue(containAge);
+        Assert.assertTrue(actual[1].split(",")[5].contains("4"));
+        Assert.assertEquals("(lastname,age,city,email,firstname,id)", actual[0]);
     }
 }

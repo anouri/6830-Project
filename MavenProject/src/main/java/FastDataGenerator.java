@@ -8,7 +8,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
-// TODO: add auto-incrementing distribution
 // TODO: update README with new documentation
 // TODO: write unit tests
 
@@ -82,7 +81,7 @@ public class FastDataGenerator {
 				this.dist = 3;
 				this.inc = new Incrementor(Integer.MAX_VALUE);
 			} else {
-				this.max = colInfo.getInt("max");
+				this.max = colInfo.getInt("max")+1;
 				this.min = colInfo.getInt("min");
 				this.generator = new Random();
 				if (distribution.equalsIgnoreCase("delta")) {
@@ -90,8 +89,8 @@ public class FastDataGenerator {
 					if (category.equalsIgnoreCase("integer")) {
 						this.delta = generator.nextInt(max-min) + min;
 					} else {
-						int wordLen = generator.nextInt(max-min) + min;
-						this.delta = RandomStringUtils.randomAlphabetic(wordLen);
+						int wordLen = Math.max(1, (int) generator.nextInt(max-min) + min);
+						this.delta = wordLen;
 					}
 				} else {
 					this.dist = 1;
@@ -112,9 +111,9 @@ public class FastDataGenerator {
 				}
 			} else {
 				switch (dist) {
-				case 0: return delta;
-				case 1: return RandomStringUtils.randomAlphabetic(generator.nextInt(max-min) + min);
-				case 2: return RandomStringUtils.randomAlphabetic((int) normal.sample());
+				case 0: return RandomStringUtils.randomAlphabetic((Integer) delta);
+				case 1: return RandomStringUtils.randomAlphabetic(Math.max(1, generator.nextInt(max-min) + min));
+				case 2: return RandomStringUtils.randomAlphabetic(Math.max(1, (int) normal.sample()));
 				case 3: throw new RuntimeException("auto-incrementing distributions must go with category: Integer");
 				}
 			}
@@ -150,7 +149,7 @@ public class FastDataGenerator {
     	this.outputTemplate = outputJson;
 	}
 	
-    private String generateMoreData() {
+    String generateMoreData() {
     	JSONObject outputJson = new JSONObject(this.outputTemplate.toString()); //deep clone
     	ArrayList data = null;
     	for (Table t : tables) {
@@ -173,20 +172,25 @@ public class FastDataGenerator {
         		"follower: {cardinality:3, fields:"+
         			"[{category:Integer,length:4,name:ID,distribution:autoincrement,"+
         				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
-        			"{category:Integer,length:4,name:who_id,distribution:uniform,"+
+        			"{category:Integer,length:4,name:uniform,distribution:uniform,"+
         				"distinct:3,mean:0,stdv:0,min:1,max:10},"+
-        			"{category:Integer,length:4,name:whom_id,distribution:delta,"+
-        				"distinct:0,mean:0,stdv:0,min:1,max:10}]},"+
+        			"{category:Integer,length:4,name:normal,distribution:normal,"+
+        				"distinct:0,mean:50,stdv:10,min:0,max:0},"+
+        			"{category:Integer,length:4,name:delta,distribution:delta,"+
+        				"distinct:0,mean:0,stdv:0,min:1,max:1}]},"+
         		"message: {cardinality:4, fields:"+
         			"[{category:Integer,length:4,name:ID,distribution:autoincrement,"+
         				"distinct:0,mean:0,stdv:0,min:0,max:0},"+
-        			"{category:Integer,length:4,name:message_id,distribution:normal,"+
-        				"distinct:0,mean:50,stdv:10,min:0,max:0},"+
-        			"{category:String,length:128,name:text,distribution:uniform,"+
+        			"{category:String,length:128,name:deltatext,distribution:delta,"+
+        				"distinct:2,mean:0,stdv:0,min:3,max:3},"+
+        			"{category:String,length:128,name:uniformtext,distribution:uniform,"+
         				"distinct:2,mean:0,stdv:0,min:3,max:6},"+
+        			"{category:String,length:128,name:normaltext,distribution:normal,"+
+        				"distinct:2,mean:5,stdv:1,min:0,max:0},"+
         			"]}}";
         
-        FastDataGenerator fdg = new FastDataGenerator(sampleTables);
+        
+        FastDataGenerator fdg = new FastDataGenerator(args[0]);
         System.out.println(fdg.generateMoreData());
         System.out.println(fdg.generateMoreData());
         System.out.println(fdg.generateMoreData());

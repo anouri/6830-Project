@@ -493,7 +493,108 @@ Adding Gemset to Existing Application and Installing Rails
 
 > For me, I did sudo mv local_policy.jar /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/security
 
+**Sample SQL schema (input to SQLSchemaParser)**
+``` shell
+CREATE TABLE patients 
+  ( 
+     subject_id          INT, 
+     sex                 INT, 
+     dob                 INT, 
+     dod                 INT, 
+     hospital_expire_flg INT, 
+     PRIMARY KEY (subject_id) 
+  ); 
 
+CREATE TABLE chartitems 
+  ( 
+     itemid      INT, 
+     label       TEXT, 
+     category    TEXT, 
+     description TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE labitems 
+  ( 
+     itemid      INT, 
+     test_name   TEXT, 
+     fluid       TEXT, 
+     category    TEXT, 
+     description TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE meditems 
+  ( 
+     itemid   INT, 
+     label    TEXT, 
+     category TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE icustayevents 
+  ( 
+     icustay_id INT, 
+     subject_id INT, 
+     intime     INT, 
+     outtime    INT, 
+     PRIMARY KEY (icustay_id) 
+  ); 
+
+CREATE TABLE chartevents 
+  ( 
+     chartevent_id INT, 
+     subject_id    INT, 
+     icustay_id    INT, 
+     itemid        INT, 
+     charttime     INT, 
+     elemid        INT, 
+     resultstatus  TEXT, 
+     annotation    TEXT, 
+     PRIMARY KEY (chartevent_id) 
+  ); 
+
+CREATE TABLE labevents 
+  ( 
+     labevent_id INT, 
+     subject_id  INT, 
+     icustay_id  INT, 
+     itemid      INT, 
+     charttime   INT, 
+     labvalue    TEXT, 
+     PRIMARY KEY (labevent_id) 
+  ); 
+
+CREATE TABLE meddurations 
+  ( 
+     meddurations_id INT, 
+     icustay_id      INT, 
+     itemid          INT, 
+     medevent        INT, 
+     starttime       INT, 
+     endtime         INT, 
+     duration        INT, 
+     PRIMARY KEY (meddurations_id) 
+  ); 
+
+CREATE TABLE medevents 
+  ( 
+     medevent_id INT, 
+     subject_id  INT, 
+     icustay_id  INT, 
+     itemid      INT, 
+     medduration INT, 
+     charttime   INT, 
+     volume      INT, 
+     dose        INT, 
+     solution    TEXT, 
+     route       TEXT, 
+     stopped     TEXT, 
+     site        TEXT, 
+     annotation  TEXT, 
+     PRIMARY KEY (medevent_id) 
+  ); 
+```
 **Sample Distribution JSON (input to Data Generator)**
 
 ``` shell

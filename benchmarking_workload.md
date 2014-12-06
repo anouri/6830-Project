@@ -23,6 +23,12 @@ Workload F: Read-modify-write
 
 > https://github.com/brianfrankcooper/YCSB/tree/master/workloads
 
+
 **Resource 2**
 
 > http://www.datastax.com/wp-content/uploads/2013/02/WP-Benchmarking-Top-NoSQL-Databases.pdf
+
+
+**Resource 3 -- Past paper**
+
+> http://www.cubrid.org/blog/dev-platform/nosql-benchmarking/

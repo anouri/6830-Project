@@ -1,12 +1,11 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.util.Incrementor;
-import org.apache.commons.lang.RandomStringUtils;
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 // TODO: update README with new documentation
 // TODO: write unit tests
@@ -188,8 +187,8 @@ public class FastDataGenerator {
         			"{category:String,length:128,name:normaltext,distribution:normal,"+
         				"distinct:2,mean:5,stdv:1,min:0,max:0},"+
         			"]}}";
-        
-        
+
+
         FastDataGenerator fdg = new FastDataGenerator(args[0]);
         System.out.println(fdg.generateMoreData());
         System.out.println(fdg.generateMoreData());

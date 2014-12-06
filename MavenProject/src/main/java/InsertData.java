@@ -2,6 +2,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -55,15 +56,30 @@ public class InsertData {
     }
 
     public static void main(String argsp[]) {
-        SQLSchemaParser schemaParser = new SQLSchemaParser("drop table follower;" +
-                "create table follower (" +
-                "who_id integer," +
-                "whom_id integer);" +
-                "drop table message;" +
-                "create table message (" +
-                "message_id integer primary key autoincrement," +
-                "text text not null);");
-        System.out.println(InsertStatementFromJSON("{\"follower\":{\"colNames\":[\"who_id\",\"whom_id\"],\"colData\":[[4,1],[2,1],[4,1]]},\"message\":{\"colNames\":[\"message_id\",\"text\"],\"colData\":[[43,\"ecM\"],[56,\"ecM\"],[28,\"ecM\"],[51,\"ecM\"]]}}"));
-
+        SQLSchemaParser schemaParser = new SQLSchemaParser(SQLSchemaParser.EXAMPLE_SCHEMA.trim());
+        String createProcedure = SQLSchemaParser.getRawSchema();
+        QueryExecutorAll.shema_creation_all(createProcedure);
+        FastDataGenerator fdg = new FastDataGenerator(SQLSchemaParser.EXAMPLE_DISTRIBUTION);
+        HashMap<String, Long> results = new HashMap<String, Long>();
+        while (true) {
+            String distribution = fdg.generateMoreData();
+            if (distribution == null) {
+                break;
+            }
+            for (String s : InsertStatementFromJSON(distribution)) {
+                HashMap<String, Long> result =  QueryExecutorAll.run_all(s);
+                for (String key : result.keySet()) {
+                    if (results.containsKey(key)) {
+                        result.put(key, results.get(key) + result.get(key));
+                    } else {
+                        result.put(key, result.get(key));
+                    }
+                }
+            };
+        }
+        for (String db: results.keySet()){
+            long run = results.get(db);
+            System.out.println("db is: "+ db + " run time is: " + run);
+        }
     }
 }

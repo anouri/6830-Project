@@ -163,80 +163,27 @@ http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-statements-callab
 
 #Testing
 
-Example Input Schema
+Example Input Schema (User input -> SQLSchemaParser -> WebApp) IF EXISTS is absolutely necessary for MySQL to create the tables. Just drop on command line and remove the DROP TABLE statements when entering it into the Web App.
 ```shell
-DROP TABLE user;
-CREATE TABLE user (user_id integer PRIMARY KEY auto_increment,
-                   username text NOT NULL, email text NOT NULL,
-                    pw_hash text NOT NULL);
-
-DROP TABLE follower;
-
-CREATE TABLE follower (who_id integer,whom_id integer);
-
-DROP TABLE message;
-
-CREATE TABLE message (message_id integer PRIMARY KEY auto_increment,author_id integer NOT NULL,text text NOT NULL,pub_date integer);
+DROP TABLE IF EXISTS follower; 
+CREATE TABLE follower (who_id int, whom_id int, primary key (who_id)); 
+DROP TABLE IF EXISTS message; 
+CREATE TABLE message (message_id int, text text, primary key (message_id));
 ```
 
-Example JSON Output for Distribution (Kristin can expect this format to generate data set)
+Example Schema Distribution JSON (WebApp -> FastDataGenerator)
 ```shell
 { 
-  "user" : {
-    "cardinality" : 1000, 
-    "fields" : [{
-      "category": "Integer", 
-      "length": 4, 
-      "name": "user_id", 
-      "distribution": "auto_increment", 
-      "distinct": nil, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": nil, 
-      "max": nil
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "username", 
-      "distribution": "uniform", 
-      "distinct": 50, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 4, 
-      "max": 8
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "email", 
-      "distribution": "delta", 
-      "distinct": 100, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 6, 
-      "max": 18
-    }, {
-      "category": "String", 
-      "length": 128, 
-      "name": "pw_hash", 
-      "distribution": "normal", 
-      "distinct": nil, 
-      "mean": 10, 
-      "stdv": 4, 
-      "min": nil, 
-      "max": nil
-    }]
-  }, 
   "follower": {
-    "cardinality": 2000, 
+    "cardinality": 3, 
     "fields": [{
       "category": "Integer", 
       "length": 4, 
       "name": "who_id", 
-      "distribution": 
-      "normal", 
-      "distinct": 10, 
-      "mean": 5, 
-      "stdv": 1, 
+      "distribution": "autoincrement",
+      "distinct": nil, 
+      "mean": nil, 
+      "stdv": nil, 
       "min": nil, 
       "max": nil
     }, {
@@ -244,57 +191,51 @@ Example JSON Output for Distribution (Kristin can expect this format to generate
       "length": 4, 
       "name": "whom_id", 
       "distribution": "delta", 
-      "distinct": 10, 
+      "distinct": nil, 
       "mean": nil, 
       "stdv": nil, 
       "min": 1, 
-      "max": 100
+      "max": 10
     }]
   }, 
   "message": {
-    "cardinality": 3000, 
+    "cardinality": 4, 
     "fields": [{
       "category": "Integer", 
       "length": 4, 
       "name": "message_id", 
-      "distribution": "auto_increment", 
+      "distribution": "autoincrement", 
       "distinct": nil, 
       "mean": nil, 
       "stdv": nil, 
       "min": nil, 
       "max": nil
     }, {
-      "category": "Integer", 
-      "length": 4, 
-      "name": "author_id", 
-      "distribution": "normal", 
-      "distinct": 10, 
-      "mean": 2, 
-      "stdv": 1, 
-      "min": nil, 
-      "max": nil
-    }, {
       "category": "String", 
       "length": 128, 
       "name": "text", 
-      "distribution": "delta",
-      "distinct": 20, 
+      "distribution": "uniform",
+      "distinct": 2, 
       "mean": nil, 
       "stdv": nil, 
-      "min": 10, 
-      "max": 40
-    }, {
-      "category": "Integer", 
-      "length": 4, 
-      "name": "pub_date", 
-      "distribution": "uniform", 
-      "distinct": 18, 
-      "mean": nil, 
-      "stdv": nil, 
-      "min": 20, 
-      "max": 60
+      "min": 3, 
+      "max": 6
     }]
   }
+}
+
+```
+Example Data Generated JSON (FastDataGenerator -> InsertData)
+```shell
+{ 
+  "follower": {
+    "colNames": ["who_id", "whom_id"], 
+    "colData": [[8, 5], [1, 5], [2, 5]]
+  }, 
+  "message": {
+    "colNames": ["message_id", "text"], 
+    "colData":[[55, "lRD"], [47, "lRD"], [48, "lRD"], [52, "RUavj"]]
+  } 
 }
 ```
 
@@ -552,3 +493,110 @@ Adding Gemset to Existing Application and Installing Rails
 
 > For me, I did sudo mv local_policy.jar /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/security
 
+**Sample SQL schema (input to SQLSchemaParser)**
+``` shell
+CREATE TABLE patients 
+  ( 
+     subject_id          INT, 
+     sex                 INT, 
+     dob                 INT, 
+     dod                 INT, 
+     hospital_expire_flg INT, 
+     PRIMARY KEY (subject_id) 
+  ); 
+
+CREATE TABLE chartitems 
+  ( 
+     itemid      INT, 
+     label       TEXT, 
+     category    TEXT, 
+     description TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE labitems 
+  ( 
+     itemid      INT, 
+     test_name   TEXT, 
+     fluid       TEXT, 
+     category    TEXT, 
+     description TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE meditems 
+  ( 
+     itemid   INT, 
+     label    TEXT, 
+     category TEXT, 
+     PRIMARY KEY (itemid) 
+  ); 
+
+CREATE TABLE icustayevents 
+  ( 
+     icustay_id INT, 
+     subject_id INT, 
+     intime     INT, 
+     outtime    INT, 
+     PRIMARY KEY (icustay_id) 
+  ); 
+
+CREATE TABLE chartevents 
+  ( 
+     chartevent_id INT, 
+     subject_id    INT, 
+     icustay_id    INT, 
+     itemid        INT, 
+     charttime     INT, 
+     elemid        INT, 
+     resultstatus  TEXT, 
+     annotation    TEXT, 
+     PRIMARY KEY (chartevent_id) 
+  ); 
+
+CREATE TABLE labevents 
+  ( 
+     labevent_id INT, 
+     subject_id  INT, 
+     icustay_id  INT, 
+     itemid      INT, 
+     charttime   INT, 
+     labvalue    TEXT, 
+     PRIMARY KEY (labevent_id) 
+  ); 
+
+CREATE TABLE meddurations 
+  ( 
+     meddurations_id INT, 
+     icustay_id      INT, 
+     itemid          INT, 
+     medevent        INT, 
+     starttime       INT, 
+     endtime         INT, 
+     duration        INT, 
+     PRIMARY KEY (meddurations_id) 
+  ); 
+
+CREATE TABLE medevents 
+  ( 
+     medevent_id INT, 
+     subject_id  INT, 
+     icustay_id  INT, 
+     itemid      INT, 
+     medduration INT, 
+     charttime   INT, 
+     volume      INT, 
+     dose        INT, 
+     solution    TEXT, 
+     route       TEXT, 
+     stopped     TEXT, 
+     site        TEXT, 
+     annotation  TEXT, 
+  fl   PRIMARY KEY (medevent_id) 
+  ); 
+```
+**Sample Distribution JSON (input to Data Generator)**
+
+``` shell
+{patients:{cardinality:100,fields:[{category:Integer,length:4,name:subject_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:sex,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1},{category:Integer,length:4,name:dob,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:dod,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:hospital_expire_flag,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1}]},icustayevents:{cardinality:1000,fields:[{category:Integer,length:4,name:icustay_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:subject_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:intime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:outtime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000}]},chartevents:{cardinality:300,fields:[{category:Integer,length:4,name:chartevent_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:subject_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:icustay_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1000},{category:Integer,length:4,name:itemid,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:charttime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:elemid,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:String,length:4,name:resultstatus,distribution:normal,distinct:null,mean:7,stdv:3,min:null,max:null},{category:String,length:4,name:annotation,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:200}]},chartitems:{cardinality:100,fields:[{category:Integer,length:4,name:itemid,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:String,length:4,name:label,distribution:uniform,distinct:null,mean:null,stdv:null,min:5,max:15},{category:String,length:4,name:category,distribution:delta,distinct:null,mean:null,stdv:null,min:3,max:3},{category:String,length:4,name:description,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:200}]},labitems:{cardinality:50,fields:[{category:Integer,length:4,name:itemid,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:String,length:4,name:test_name,distribution:normal,distinct:null,mean:15,stdv:5,min:null,max:null},{category:String,length:4,name:fluid,distribution:uniform,distinct:null,mean:null,stdv:null,min:5,max:10},{category:String,length:4,name:category,distribution:delta,distinct:null,mean:null,stdv:null,min:3,max:3},{category:String,length:4,name:description,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:200}]},labevents:{cardinality:200,fields:[{category:Integer,length:4,name:labevent_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:subject_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:icustay_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1000},{category:Integer,length:4,name:itemid,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:50},{category:Integer,length:4,name:charttime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:String,length:4,name:labvalue,distribution:uniform,distinct:null,mean:null,stdv:null,min:10,max:50}]},medevents:{cardinality:250,fields:[{category:Integer,length:4,name:medevent_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:icustay_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1000},{category:Integer,length:4,name:subject_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:itemid,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:medduration,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:charttime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:volume,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:10000},{category:Integer,length:4,name:dose,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:10000},{category:String,length:4,name:solution,distribution:uniform,distinct:null,mean:null,stdv:null,min:10,max:20},{category:String,length:4,name:route,distribution:delta,distinct:null,mean:null,stdv:null,min:3,max:3},{category:String,length:4,name:stopped,distribution:uniform,distinct:null,mean:null,stdv:null,min:5,max:15},{category:String,length:4,name:site,distribution:normal,distinct:null,mean:10,stdv:3,min:null,max:null},{category:String,length:4,name:annotation,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:200}]},meditems:{cardinality:100,fields:[{category:Integer,length:4,name:itemid,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:String,length:4,name:label,distribution:uniform,distinct:null,mean:null,stdv:null,min:5,max:15},{category:String,length:4,name:category,distribution:delta,distinct:null,mean:null,stdv:null,min:3,max:3}]},meddurations:{cardinality:100,fields:[{category:Integer,length:4,name:meddurations_id,distribution:autoincrement,distinct:null,mean:null,stdv:null,min:null,max:null},{category:Integer,length:4,name:icustay_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:1000},{category:Integer,length:4,name:subject_id,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100},{category:Integer,length:4,name:medevent,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:250},{category:Integer,length:4,name:starttime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:endtime,distribution:uniform,distinct:null,mean:null,stdv:null,min:-2000000,max:1500000},{category:Integer,length:4,name:duration,distribution:uniform,distinct:null,mean:null,stdv:null,min:0,max:100000}]}}
+```

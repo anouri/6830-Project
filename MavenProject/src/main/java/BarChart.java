@@ -54,6 +54,12 @@ public class BarChart extends ApplicationFrame {
 
     }
 
+    public void display() {
+        this.pack();
+        RefineryUtilities.centerFrameOnScreen(this);
+        this.setVisible(true);
+    }
+
     /**
      * Returns a sample dataset.
      * 

@@ -13,13 +13,13 @@ public class SQLSchemaParserTest {
     public void testGetTupleDescription() throws Exception {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key auto_increment," +
+                "user_id integer," +
                 "username text not null," +
                 "email text not null," +
-                "pw_hash text not null);";
+                "pw_hash text not null, primary key (user_id));";
         sqlSchemaParser = new SQLSchemaParser(rawSchema);
-        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE, true), new Type(Type.SupportedType.STRING_TYPE, false),
-                new Type(Type.SupportedType.STRING_TYPE, false), new Type(Type.SupportedType.STRING_TYPE, false)}, new String[] {"user_id","username","email", "pw_hash"});
+        TupleDesc expected = new TupleDesc(new Type[] {new Type(Type.SupportedType.INT_TYPE), new Type(Type.SupportedType.STRING_TYPE),
+                new Type(Type.SupportedType.STRING_TYPE), new Type(Type.SupportedType.STRING_TYPE)}, new String[] {"user_id","username","email", "pw_hash"});
         TupleDesc actual = sqlSchemaParser.getTupleDescription("user");
         Assert.assertEquals(actual, expected);
 
@@ -29,20 +29,20 @@ public class SQLSchemaParserTest {
     public void testGetTableName() throws Exception {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key auto_increment," +
+                "user_id integer," +
                 "username text not null," +
                 "email text not null," +
-                "pw_hash text not null);" +
+                "pw_hash text not null, primary key (user_id));"+
                 "drop table follower;" +
                 "create table follower (" +
                 "who_id integer," +
-                "whom_id integer);" +
+                "whom_id integer, primary key (who_id));" +
                 "drop table message;" +
                 "create table message (" +
-                "message_id integer primary key auto_increment," +
+                "message_id integer," +
                 "author_id integer not null," +
                 "text text not null," +
-                "pub_date integer);";
+                "pub_date integer, primary key (message_id));";
         sqlSchemaParser = new SQLSchemaParser(rawSchema);
         String[] expectedTableName = new String[] {"user", "follower", "message"};
         String[] actualTableName = sqlSchemaParser.getTableName();
@@ -53,10 +53,10 @@ public class SQLSchemaParserTest {
     public void testGetJSON() {
         rawSchema = "drop table user;" +
                 "create table user (" +
-                "user_id integer primary key auto_increment," +
+                "user_id integer," +
                 "username text not null," +
                 "email text not null," +
-                "pw_hash text not null);";
+                "pw_hash text not null, primary key (user_id));";
         sqlSchemaParser = new SQLSchemaParser(rawSchema);
         JSONObject expected = new JSONObject();
         expected.put("table", new String[] {"user",});

@@ -14,37 +14,37 @@ module AddQueryHelper
 	end
 
 	def create_query_select(params)
-		query = create_base_query(params)
-		add_select_or_update_fields(query, params)
-		create_predicates(query, params)
-		add_groupby_and_orderby_fields(query, params)
-		return query
+		query_object = create_base_query(params)
+		add_select_fields(query_object, params)
+		create_predicates(query_object, params)
+		add_groupby_and_orderby_fields(query_object, params)
+		return query_object
 	end
 
 	def create_query_update(params)
-		query = create_base_query(params)
-		add_select_or_update_fields(query, params)
-		create_predicates(query, params)
-		return query
+		query_object = create_base_query(params)
+		add_update_fields(query_object, params)
+		create_predicates(query_object, params)
+		return query_object
 	end
 
 	def create_query_insert(params)
-		query = create_base_query(params)
-		return query
+		query_object = create_base_query(params)
+		return query_object
 	end
 
 	def create_query_delete(params)
-		query = create_base_query(params)
-		create_predicates(query, params)
-		return query
+		query_object = create_base_query(params)
+		create_predicates(query_object, params)
+		return query_object
 	end
 
 
 	def create_base_query(params)
 		schema = Schema.find(params[:schema_id])
-		query = schema.queries.create(percentage: params[:percent].to_i, 
-																	kind: params[:query_type],
-																	tables: params[:tables].join(","))
+		query_object = schema.queries.create(percentage: params[:percent].to_i, 
+																				 kind: params[:query_type],
+																				 tables: params[:tables].join(","))
 	end
 
 	# Example data we want from params hash
@@ -54,19 +54,24 @@ module AddQueryHelper
 	"select_fields-user"=>["email", "pw_hash"]
 =end
 
-	def add_select_or_update_fields(query, params)
+	def add_select_fields(query_object, params)
 		fields = []
-		params.keys.each do |k|
-			if k.include?("select_fields")
-				fields += params[k]
-			end
-		end
+		params.keys.each { |k| fields += params[k] if k.include?("select_fields") }
 		fields = fields.join(",")
-		if query.kind == "SELECT"
-			query.update_attribute(:select_fields, fields)
-		elsif query.kind == "UPDATE"
-			query.update_attribute(:update_fields, fields)
-		end
+		query_object.update_attribute(:select_fields, fields)
+	end
+
+	# Example data we want from params hash
+=begin 
+	"update_fields-follower"=>["whom_id"], 
+	"update_fields-message"=>["message_id", "author_id", "text"], 
+	"update_fields-user"=>["email", "pw_hash"]
+=end
+	def add_update_fields(query_object, params)
+		fields = []
+		params.keys.each { |k| fields += params[k] if k.include?("update_fields") }
+		fields = fields.join(",")
+		query_object.update_attribute(:update_fields, fields)
 	end
 
 	# Example params hash
@@ -102,13 +107,11 @@ module AddQueryHelper
 		return predicates_hash
 	end 
 
-	def create_predicates(query, params)
+	def create_predicates(query_object, params)
 		predicates_hash = create_predicates_hash(params)
 		predicates_hash.each do |id, data|
-			predicate = query.predicates.new
-			data.each do |k, v|
-				predicate[k.to_sym] = v
-			end
+			predicate = query_object.predicates.new
+			data.each { |k, v| predicate[k.to_sym] = v }
 			predicate.save
 		end
 	end
@@ -119,7 +122,7 @@ module AddQueryHelper
 	"orderby_fields-follower"=>"whom_id", "orderby_fields-message"=>"author_id", "orderby_fields-user"=>"", 
 	"orderby_direction"=>"DESC"
 =end
-	def add_groupby_and_orderby_fields(query, params)
+	def add_groupby_and_orderby_fields(query_object, params)
 		groupby_fields = []
 		orderby_fields = []
 		orderby_direction = 1 # Default 1 = ASC, 0 = DESC
@@ -137,7 +140,7 @@ module AddQueryHelper
 		groupby_fields = groupby_fields.join(",")
 		orderby_fields = orderby_fields.join(",")
 
-		query.update_attributes(groupby_fields: groupby_fields, orderby_fields: orderby_fields, orderby_direction: orderby_direction)
+		query_object.update_attributes(groupby_fields: groupby_fields, orderby_fields: orderby_fields, orderby_direction: orderby_direction)
 	end
 
 end

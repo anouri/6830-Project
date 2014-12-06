@@ -164,7 +164,7 @@ class Query < ActiveRecord::Base
 	end
 
 	def create_format_insert
-		format_insert = "INSERT INTO #{self.tables} VALUES ( "
+		format_insert = "INSERT INTO #{self.tables} VALUES ("
 		table = Table.find_by_name(self.tables)
 		num_fields = table.fields.size
 		num_fields.times { |i| (i == num_fields-1) ? format_insert += "?);" : format_insert += "?, " }

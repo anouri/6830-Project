@@ -17,10 +17,10 @@
 		<%= select_tag "tables", options_for_select(@tables_to_fields.keys), multiple: true %>
 	</div></br>
 	
-	<span id="set_tag">SET</span></br>
+	<span id="update_tag">SET</span></br>
 	<div>
 		<% @tables_to_fields_exclude_primary_key.each do |table, fields| %>
-			<%= select_tag "set_fields-#{table}", options_for_select(fields), multiple: true, class:"set_fields" %>
+			<%= select_tag "update_fields-#{table}", options_for_select(fields), multiple: true, class:"update_fields" %>
 		<% end %>
 	</div></br>
 

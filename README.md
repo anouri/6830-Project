@@ -592,7 +592,7 @@ CREATE TABLE medevents
      stopped     TEXT, 
      site        TEXT, 
      annotation  TEXT, 
-  fl   PRIMARY KEY (medevent_id) 
+     PRIMARY KEY (medevent_id) 
   ); 
 ```
 **Sample Distribution JSON (input to Data Generator)**

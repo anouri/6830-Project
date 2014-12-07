@@ -6,17 +6,11 @@ class Query < ActiveRecord::Base
 
 	# RAW QUERY METHODS: replace ? with actual GetDataValue queried from GetDataValuebase using GetGetDataValueValue.java
 	def create_raw_select
-		raw_select_fields = ""
 		select_fields = self.select_fields.split(",")
-		select_fields.each do |f|
-			(f == select_fields.first) ? raw_select_fields += "#{f}" : raw_select_fields += ", #{f}"
-		end
+		raw_select_fields = build_comma_separated_string("", select_fields)
 
-		raw_tables = ""
 		tables = self.tables.split(",")
-		tables.each do |t|
-			(t == tables.first) ? raw_tables += "#{t}" : raw_tables += ", #{t}"
-		end
+		raw_tables = build_comma_separated_string("", tables)
 
 		raw_predicates = create_raw_predicates(self.predicates, tables)
 
@@ -25,17 +19,13 @@ class Query < ActiveRecord::Base
 		groupby_fields = self.groupby_fields.split(",")
 		unless groupby_fields.empty?
 			raw_select += " GROUP BY "
-			groupby_fields.each do |f|
-				(f == groupby_fields.first) ? raw_select += "#{f}" : raw_select += ", #{f}"
-			end
+			raw_select = build_comma_separated_string(raw_select, groupby_fields)
 		end
 
 		orderby_fields = self.orderby_fields.split(",")
 		unless orderby_fields.empty?
 			raw_select += " ORDER BY "
-			orderby_fields.each do |f|
-				(f == orderby_fields.first) ? raw_select += "#{f}" : raw_select += ", #{f}"
-			end
+			raw_select = build_comma_separated_string(raw_select, orderby_fields)
 			self.orderby_direction ? raw_select += " DESC" : raw_select += " ASC"
 		end
 

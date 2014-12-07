@@ -33,10 +33,10 @@
 							<td><%= f.name %></td>
 							<td><%= select_tag "#{f.id}-distribution", options_for_select(["uniform", "normal", "delta"]), class: "distribution" %></td>
 							<td><%= number_field_tag("#{f.id}-distinct", nil, min: 0, class: "distinct") %></td>
-							<td><%= number_field_tag("#{f.id}-mean", nil, min: 0, class: "mean") %></td>
+							<td><%= number_field_tag("#{f.id}-mean", nil, class: "mean") %></td>
 							<td><%= number_field_tag("#{f.id}-stdv", nil, min: 0, class: "stdv") %></td>
-							<td><%= number_field_tag("#{f.id}-min", nil, min: 0, class: "min") %></td>
-							<td><%= number_field_tag("#{f.id}-max", nil, min: 0, class: "max") %></td>
+							<td><%= number_field_tag("#{f.id}-min", nil, class: "min") %></td>
+							<td><%= number_field_tag("#{f.id}-max", nil, class: "max") %></td>
 						</tr>
 					<% end %>
 				<% end %>

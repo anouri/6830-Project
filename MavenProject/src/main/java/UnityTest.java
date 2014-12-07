@@ -1,5 +1,9 @@
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.jfree.ui.RefineryUtilities;
 
@@ -82,6 +86,11 @@ public class UnityTest {
     
     public static void main(String[] args) throws Exception{
     	setup();
+    	List<String> loggers = Collections.<String>list(LogManager.getLogManager().getLoggerNames());
+    	for ( String logger : loggers ) {
+    		System.out.println(logger);
+//    		LogManager.getLogManager().getLogger(logger).setLevel(Level.INFO);
+    	}
     	testInsertionFromJSON();
 //    	cleanUpTables();
 //    	testBatchInsertionFromJSON();

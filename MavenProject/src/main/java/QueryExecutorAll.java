@@ -272,7 +272,9 @@ public class QueryExecutorAll {
     
     public static void dropTables(String[] tableNames){
     	for (String t: tableNames){
-    		run_all("DROP table " + t + ";");
+    		executeQuery(getDataSource("mysql"), "DROP table " + t + ";");
+    		executeQuery(getDataSource("cassandra"), "DROP table test." + t + ";");
+    		executeQuery(getDataSource("mongo"), "DROP table " + t + ";");
     	}
     }
     

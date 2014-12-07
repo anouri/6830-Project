@@ -12,12 +12,12 @@ recordcount=1000
 
 operationcount=1000
 
-Default data size: 
+Default data sizes: 
 
-* 1 GB Kristin
-* 500 MB Tran
-* 100 MB Shirley
-* 1 MB Tony
+* 1 GB
+* 500 MB
+* 100 MB
+* 1 MB
 
 Insertion: table
 

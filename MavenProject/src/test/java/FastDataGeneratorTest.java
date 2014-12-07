@@ -31,12 +31,23 @@ public class FastDataGeneratorTest {
         			"]}}";
         
         FastDataGenerator fdg = new FastDataGenerator(sampleTables);
-
         
-        String integerData = fdg.generateMoreData();
-        assertNotNull(integerData);
-        // test Integer data
-        JSONObject intData = new JSONObject(integerData);
+        String firstDataStr = fdg.generateMoreData();
+        assertNotNull(firstDataStr);
+        JSONObject firstData = new JSONObject(firstDataStr);
+        
+        String secondDataStr = fdg.generateMoreData();
+        assertNotNull(secondDataStr);
+        JSONObject secondData = new JSONObject(secondDataStr);
+        
+        JSONObject intData = firstData;
+        JSONObject strData = secondData;
+        if (firstData.getJSONObject("integers").getJSONArray("colData").length() != 10) {
+        	intData = secondData;
+        	strData = firstData;
+        }
+        	
+    
         JSONArray intColData = intData.getJSONObject("integers").getJSONArray("colData");
         assertEquals(intColData.length(), 10);
         // check that the integer values match their distributions properly
@@ -57,10 +68,6 @@ public class FastDataGeneratorTest {
         JSONArray stringColData = intData.getJSONObject("strings").getJSONArray("colData");
         assertEquals(stringColData.length(), 0);
         
-        String stringData = fdg.generateMoreData();
-        assertNotNull(stringData);
-        // test String data
-        JSONObject strData = new JSONObject(stringData);
         JSONArray stringColData2 = strData.getJSONObject("strings").getJSONArray("colData");
         assertEquals(stringColData2.length(), 10);
         // check that the integer values match their distributions properly

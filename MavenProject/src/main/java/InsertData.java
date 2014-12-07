@@ -56,6 +56,8 @@ public class InsertData {
     }
 
     public static void main(String argsp[]) {
+        String[] tableName = new String[] {"chartevents","chartitems","follower","icustayevents","labevents","labitems","meddurations","medevents","meditems", "message","patients"};
+        QueryExecutorAll.dropTables(tableName);
         SQLSchemaParser schemaParser = new SQLSchemaParser(SQLSchemaParser.EXAMPLE_SCHEMA.trim());
         String createProcedure = SQLSchemaParser.getRawSchema();
         QueryExecutorAll.shema_creation_all(createProcedure);
@@ -70,12 +72,17 @@ public class InsertData {
                 HashMap<String, Long> result =  QueryExecutorAll.run_all(s);
                 for (String key : result.keySet()) {
                     if (results.containsKey(key)) {
-                        result.put(key, results.get(key) + result.get(key));
+                        results.put(key, results.get(key) + result.get(key));
                     } else {
-                        result.put(key, result.get(key));
+                        results.put(key, result.get(key));
                     }
+
                 }
             };
+            for (String db: results.keySet()){
+                long run = results.get(db);
+                System.out.println("db is: "+ db + " run time is: " + run);
+            }
         }
         for (String db: results.keySet()){
             long run = results.get(db);

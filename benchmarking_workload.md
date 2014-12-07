@@ -27,7 +27,15 @@ Update: table, field, predicates where, relation and/or
 
 Select: tables (as join), fields, predicates, relation and/or, groupby (0/1), orderby (0/1) -- asc/desc
 
-Examples: 
+Examples:
+
+INSERT INTO chartitems VALUES (?, ?, ?, ?);
+
+DELETE FROM chartitems WHERE chartitems.itemid = ? OR chartitems.category = ?;
+
+UPDATE chartitems SET chartitems.label = ?, chartitems.category = ?, chartitems.description = ? WHERE chartitems.itemid = ?;
+
+SELECT patients.subject_id, chartitems.itemid FROM patients, chartitems WHERE patients.subject_id = chartitems.category GROUP BY patients.dod ORDER BY chartitems.category ASC;
 
 **Workload A: Update heavy workload**
 

@@ -119,7 +119,7 @@ Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 50
 
 Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 400 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: (icustay_id !=20) or itemid == 10 --> 400 times
 
 updateproportion=0
 

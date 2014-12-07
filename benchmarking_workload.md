@@ -6,18 +6,114 @@ YCBS currently supports Cassandra, HBase, MongoDB, Voldemort and JDBC. If tests 
 
 YCSB comes with 6 out of the box workloads, each testing a different common use case
 
-Workload A: Update heavy workload This workload has a mix of 50/50 reads and writes. An application example is a session store recording recent actions.
+**Cardinality**
 
-Workload B: Read mostly workload This workload has a 95/5 reads/write mix. Application example: photo tagging; add a tag is an update, but most operations are to read tags.
+recordcount=1000
 
-Workload C: Read only This workload is 100% read. Application example: user profile cache, where profiles are constructed elsewhere (e.g., Hadoop).
+operationcount=1000
 
-Workload D: Read latest workload In this workload, new records are inserted, and the most recently inserted records are the most popular. Application example: user status updates; people want to read the latest.
+Default data size: 
 
-Workload E: Short ranges In this workload, short ranges of records are queried, instead of individual records. Application example: threaded conversations, where each scan is for the posts in a given thread (assumed to be clustered by thread id).
+* 1 GB Kristin
+* 500 MB Tran
+* 100 MB Shirley
+* 1 MB Tony
 
-Workload F: Read-modify-write
 
+**Workload A: Update heavy workload**
+
+Application example: Session store recording recent actions
+
+Read/update ratio: 50/50
+
+readproportion=0.5
+
+updateproportion=0.5
+
+scanproportion=0
+
+insertproportion=0
+
+
+**Workload B: Read mostly workload**
+
+Application example: photo tagging; add a tag is an update, but most operations are to read tags
+                        
+Read/update ratio: 95/5
+
+readproportion=0.95
+
+updateproportion=0.05
+
+scanproportion=0
+
+insertproportion=0
+
+
+**Workload C: Read only**
+
+Application example: user profile cache, where profiles are constructed elsewhere (e.g., Hadoop)
+                        
+Read/update ratio: 100/0
+
+readproportion=1.0
+
+updateproportion=0
+
+scanproportion=0
+
+insertproportion=0
+
+
+**Workload D: Read latest workload**
+
+Application example: user status updates; people want to read the latest.
+
+Read/update/insert ratio: 95/0/5
+
+readproportion=0.95
+
+updateproportion=0
+
+scanproportion=0
+
+insertproportion=0.05
+
+
+**Workload E: Short ranges**
+
+In this workload, short ranges of records are queried, instead of individual records. 
+
+Application example: threaded conversations, where each scan is for the posts in a given thread (assumed to be clustered by thread id).
+
+Scan/insert ratio: 95/5
+
+readproportion=0
+
+updateproportion=0
+
+scanproportion=0.95
+
+insertproportion=0.05
+
+
+**Workload F: Read-modify-write**
+
+Application example: user database, where user records are read and modified by the user or to record user activity.
+
+Read/read-modify-write ratio: 50/50
+
+readproportion=0.5
+
+updateproportion=0
+
+scanproportion=0
+
+insertproportion=0
+
+readmodifywriteproportion=0.5
+
+**Links**
 
 > https://github.com/brianfrankcooper/YCSB#getting-started
 

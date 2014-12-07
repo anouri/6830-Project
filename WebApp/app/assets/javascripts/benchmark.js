@@ -25,15 +25,13 @@ $(document).ready(function() {
 
 	query_type.on("change", function() {
 		hide_listing(listing);
+		predicates.empty();
 		var type = $(this).val();
 		if (type == "SELECT") {
 			tables.attr("multiple", true);
 		} else {
 			tables.attr("multiple", false);	
-			if (type == "UPDATE") {
-				update_tag.show();
-				$("#update_fields-"+tables.val()).show();
-			} else if (type == "DELETE") {
+			if (type == "DELETE") {
 				show_where_tag_and_predicates();
 			}
 		}
@@ -53,6 +51,7 @@ $(document).ready(function() {
 		} else if (query_type.val() == "UPDATE") {
 			update_tag.show();
 			$("#update_fields-"+$(this).val()).show();
+			show_where_tag_and_predicates();
 		} else if (query_type.val() == "DELETE") {
 			show_where_tag_and_predicates();
 		}
@@ -60,9 +59,7 @@ $(document).ready(function() {
 
 	select_fields.on("change", function() {
 		show_where_tag_and_predicates();
-		if (query_type.val() == "SELECT") {
-			show_groupby_orderby();
-		}
+		show_groupby_orderby();
 	})
 
 	add_predicate_button.click(function(e) {
@@ -102,19 +99,30 @@ $(document).ready(function() {
 			var table_names = tables.val();
 			for (var i = 0; i < table_names.length; i++) {
 				var fields = tables_to_fields[table_names[i]];
-				for (var j = 0; j < fields.length; j++) {
-					var option = '<option value="' + fields[j] + '">' + fields[j] + '</option>';
+				for (var display_field_name in fields) {
+					var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
 					field1 += option;
-					field2 += option;
+					field2 += option;				
 				}
+				// for (var j = 0; j < fields.length; j++) {
+				// 	var option = '<option value="' + fields[j] + '">' + fields[j] + '</option>';
+				// 	field1 += option;
+				// 	field2 += option;
+				// }
+
 			}
 		}	else {
 			var fields = tables_to_fields[tables.val()];
-			for (var i = 0; i < fields.length; i++) {
-				var option = '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+			for (var display_field_name in fields) {
+				var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
 				field1 += option;
-				field2 += option;
+				field2 += option;				
 			}
+			// for (var i = 0; i < fields.length; i++) {
+			// 	var option = '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+			// 	field1 += option;
+			// 	field2 += option;
+			// }
 		}
 		field1 += '</select>';
 		field2 += '</select>';

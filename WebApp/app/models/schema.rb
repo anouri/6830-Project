@@ -2,6 +2,7 @@ class Schema < ActiveRecord::Base
 	has_many :tables
 	has_many :queries
 
+	# { "tableName" => ["field1", "field2"] }
 	def tables_to_fields
 		result = {}
 		self.tables.each do |table|
@@ -12,15 +13,41 @@ class Schema < ActiveRecord::Base
 		result
 	end
 
-	def tables_to_fields_exclude_primary_key
+	# { "tableName" => {"subject_id" => "employee.subject_id"} }
+	def tables_to_fields_select
 		result = {}
 		self.tables.each do |table|
-			field_names = []
-			table.fields.each { |field| field_names << field.name if field.name != table.primary_key }
+			field_names = {}
+			table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" }	# "subject_id" => "employee.subject_id"
 			result[table.name] = field_names
 		end
 		result
 	end
+
+	def tables_to_fields_update
+		result = {}
+		self.tables.each do |table|
+			field_names = {}
+			table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" if field.name != table.primary_key }
+			result[table.name] = field_names
+		end
+		result
+	end
+
+	# def group_by_order_by_fields
+	# 	field_names = {}
+	# 	self.tables.each do |table|
+	# 		table.fields.each do |field| 
+	# 			if field_names.has_key? field.name
+	# 				field_names["#{table.name}.#{field.name}"] = "#{table.name}.#{field.name}"
+	# 			else
+	# 				field_names[field.name] = "#{table.name}.#{field.name}"
+	# 			end
+	# 		end
+	# 	end
+	# 	field_names[""] = ""
+	# 	field_names
+	# end
 
 	def next_query
 		p = Random.rand(100.0)

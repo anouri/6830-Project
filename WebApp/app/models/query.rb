@@ -36,7 +36,7 @@ class Query < ActiveRecord::Base
 			orderby_fields.each do |f|
 				(f == orderby_fields.first) ? raw_select += "#{f}" : raw_select += ", #{f}"
 			end
-			self.orderby_direction ? raw_select += " ASC" : raw_select += " DESC"
+			self.orderby_direction ? raw_select += " DESC" : raw_select += " ASC"
 		end
 
 		return raw_select += ";"
@@ -114,17 +114,23 @@ class Query < ActiveRecord::Base
 
 	# FORMAT QUERY METHODS: insert ? where GetDataValue is to be inputted
 	def create_format_select
-		format_select_fields = ""
+		# format_select_fields = ""
 		select_fields = self.select_fields.split(",")
-		select_fields.each do |f|
-			(f == select_fields.first) ? format_select_fields += "#{f}" : format_select_fields += ", #{f}"
-		end
+		
+		format_select_fields = build_comma_separated_string("", select_fields)
 
-		format_tables = ""
+		# select_fields.each do |f|
+		# 	(f == select_fields.first) ? format_select_fields += "#{f}" : format_select_fields += ", #{f}"
+		# end
+
+		# format_tables = ""
 		tables = self.tables.split(",")
-		tables.each do |t|
-			(t == tables.first) ? format_tables += "#{t}" : format_tables += ", #{t}"
-		end
+
+		format_tables = build_comma_separated_string("", tables)
+
+		# tables.each do |t|
+		# 	(t == tables.first) ? format_tables += "#{t}" : format_tables += ", #{t}"
+		# end
 		
 		format_predicates = create_format_predicates(self.predicates)
 
@@ -133,30 +139,34 @@ class Query < ActiveRecord::Base
 		groupby_fields = self.groupby_fields.split(",")
 		unless groupby_fields.empty?
 			format_select += " GROUP BY "
-			groupby_fields.each do |f|
-				(f == groupby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
-			end
+			format_select = build_comma_separated_string(format_select, groupby_fields)
+			# groupby_fields.each do |f|
+			# 	(f == groupby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
+			# end
 		end
 
 		orderby_fields = self.orderby_fields.split(",")
 		unless orderby_fields.empty?
 			format_select += " ORDER BY "
-			orderby_fields.each do |f|
-				(f == orderby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
-			end
-			self.orderby_direction ? format_select += " ASC" : format_select += " DESC"
+			format_select = build_comma_separated_string(format_select, orderby_fields)
+			# orderby_fields.each do |f|
+			# 	(f == orderby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
+			# end
+			self.orderby_direction ? format_select += " DESC" : format_select += " ASC"
 		end
 
 		return format_select += ";"
 	end
 
 	def create_format_update
-		format_update_fields = ""
+		# format_update_fields = ""
 		update_fields = self.update_fields.split(",")
-		update_fields.each do |f|
-			basic = "#{f} = ?"
-			(f == update_fields.first) ? format_update_fields += "#{basic}" : format_update_fields += ", #{basic}"
-		end
+
+		format_update_fields = build_comma_separated_string_update(update_fields)
+		# update_fields.each do |f|
+		# 	basic = "#{f} = ?"
+		# 	(f == update_fields.first) ? format_update_fields += "#{basic}" : format_update_fields += ", #{basic}"
+		# end
 
 		format_predicates = create_format_predicates(self.predicates)
 
@@ -187,6 +197,32 @@ class Query < ActiveRecord::Base
 		else
 			return ""
 		end
+	end
+
+	def build_comma_separated_string(str, list)
+		list.delete ""
+		if list.size == 1
+			str += "#{list[0]}"
+		elsif list.size > 1
+			str += "#{list[0]}" 
+			for i in 1...list.size
+				str += ", #{list[i]}"
+			end
+		end
+		return str
+	end
+
+	def build_comma_separated_string_update(list)
+		str = ""
+		if list.size == 1
+			str += "#{list[0]} = ?"
+		elsif list.size > 1
+			str += "#{list[0]} = ?"
+			for i in 1...list.size
+				str += ", #{list[i]} = ?"
+			end
+		end
+		return str
 	end
 
 end

@@ -43,14 +43,23 @@ Application example: Session store recording recent actions
 
 Read/update ratio: 50/50
 
-readproportion=0.5
+readproportion=0.5 = 500
+
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 200 times
+
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 200 times
+
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 100 times
 
 updateproportion=0.5
+
+Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100) --> 200 times
+
+Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400) --> 300 times
 
 scanproportion=0
 
 insertproportion=0
-
 
 **Workload B: Read mostly workload**
 
@@ -60,7 +69,17 @@ Read/update ratio: 95/5
 
 readproportion=0.95
 
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 150 times
+
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 400 times
+
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+
 updateproportion=0.05
+
+Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100) --> 20 times
+
+Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400) --> 30 times
 
 scanproportion=0
 
@@ -74,6 +93,12 @@ Application example: user profile cache, where profiles are constructed elsewher
 Read/update ratio: 100/0
 
 readproportion=1.0
+
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 300 times
+
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 300 times
+
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
 
 updateproportion=0
 
@@ -90,12 +115,21 @@ Read/update/insert ratio: 95/0/5
 
 readproportion=0.95
 
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 150 times
+
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 400 times
+
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+
 updateproportion=0
 
 scanproportion=0
 
 insertproportion=0.05
 
+Table: medevents --> 30
+
+Table: meddurations --> 20
 
 **Workload E: Short ranges**
 
@@ -111,8 +145,17 @@ updateproportion=0
 
 scanproportion=0.95
 
+Table: medevents, fields: *, where: (subject_id < 500 and itemid > 20) --> 150 times
+
+Table: labevents, fields: *, where: icustay_id == 2, orderby charttime asc --> 400 times
+
+Table: chartevents, fields: *, where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+
 insertproportion=0.05
 
+Table: medevents --> 30
+
+Table: meddurations --> 20
 
 **Workload F: Read-modify-write**
 
@@ -122,6 +165,12 @@ Read/read-modify-write ratio: 50/50
 
 readproportion=0.5
 
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 200 times
+
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 200 times
+
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 100 times
+
 updateproportion=0
 
 scanproportion=0
@@ -129,6 +178,25 @@ scanproportion=0
 insertproportion=0
 
 readmodifywriteproportion=0.5
+
+1. 250 times
+Select
+
+- Table: patients, fields: [subject_id, sex], where: (subject_id < 100) 
+
+Update
+
+- Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100)
+
+2. 250 times
+Select
+
+- Table: icustayevents, fields:*, where: (subject_id < 150) 
+
+Update
+
+- Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400)
+
 
 **Links**
 

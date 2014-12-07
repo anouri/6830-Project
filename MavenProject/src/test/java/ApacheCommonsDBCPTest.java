@@ -57,22 +57,6 @@ public class ApacheCommonsDBCPTest {
     	QueryExecutorAll.dropTables(tables);
     }
     
-    public static void testBatchInsertionFromJSON() throws Exception {
-    	
-    }
-    
-    public static void testDeletion() throws Exception {
-    	
-    }
-    
-    public static void testUpdate() throws Exception {
-    	
-    }
-    
-    public static void testJoin() throws Exception {
-    	
-    }
-    
     public static void plotResult(){
     	 final BarChart demo = new BarChart("Bar Chart Demo", results);
          demo.pack();

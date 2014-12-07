@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -11,11 +10,11 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.sql.Connection;
-
+import org.apache.commons.collections.iterators.*;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
- 
+
 public class QueryExecutorAll {
 	private static Properties props = initializeProp();
 	public static Properties initializeProp(){
@@ -45,6 +44,16 @@ public class QueryExecutorAll {
 		create_table_mongo(createProcedure);
 	}
 	
+	public static HashMap<String, Long> bulk_run_insertion(QueryArgs q_a){
+		HashMap<String, Long> result = new HashMap<String, Long>();
+		System.out.println("mysql");
+		result.put("mysql", executeQuery_bulk(getDataSource("mysql"),q_a));
+		System.out.println("mongo");
+		result.put("mongo", executeQuery_bulk(getDataSource("mongo"), q_a));
+		System.out.println("cassandra");
+		result.put("cassandra", executeQuery_bulk(getDataSource("cassandra"), q_a));
+		return result;
+	}
 	
 	public static HashMap<String, Long> run_all(String rawSQLQuery){
 		HashMap<String, Long> result = new HashMap<String, Long>();
@@ -113,7 +122,7 @@ public class QueryExecutorAll {
         }else{
             return null;
         }
-         
+        
         return ds;
     }
     
@@ -197,6 +206,52 @@ public class QueryExecutorAll {
     	    }
     	}
     }
+	
+	public static long executeQuery_bulk(DataSource ds, QueryArgs q_a) {
+    	long fStart = 0;
+    	long fEnd = 0;
+    	Connection conn = null;
+    	try {
+        	conn = ds.getConnection();
+        	PreparedStatement ps = conn.prepareStatement(q_a.get_query());
+        	ArrayIterator args_itr = q_a.get_iterator();
+        	fStart = System.currentTimeMillis();
+    		while(args_itr.hasNext()){
+    			Arguments arg = (Arguments) args_itr.next();
+    			Data[] dts = arg.get_data();
+    			for (int i = 0; i < dts.length; i++)
+                {
+    				Data dt = dts[i];
+        			if(dt.isInt){
+            			ps.setInt(i+1, dt.intVal);
+            		} else{
+            			ps.setString(i+1, dt.strVal);
+            		}
+            		
+                }
+    			ps.executeUpdate();
+    		}
+        	fEnd = System.currentTimeMillis();
+			return (fEnd - fStart);
+    	    
+    	}
+    	catch (SQLException ex){
+    	    System.out.println("SQLException: " + ex.getMessage());
+    	    System.out.println("SQLState: " + ex.getSQLState());
+    	    System.out.println("VendorError: " + ex.getErrorCode());
+    	    return (fEnd - fStart);
+    	}
+    	finally {
+    	   if (conn != null) {
+    	        try {
+    	            conn.close();
+    	        } catch (SQLException sqlEx) { } // ignore
+
+    	        conn = null;
+    	    }
+    	}
+    }
+	
     public static long executeQuery(DataSource ds, String rawSQLQuery) {
     	long fStart = 0;
     	long fEnd = 0;
@@ -211,29 +266,6 @@ public class QueryExecutorAll {
     	        rs = stmt.getResultSet();
     	    }
     	    fEnd = System.currentTimeMillis();
-//    	    System.out.println("\n\nTHE RESULTS:");	
-//			int i=0;
-//			ResultSetMetaData meta = null;
-//            
-//			// Print out a row of column headers
-//			if(rs != null){
-//				meta = rs.getMetaData();
-//				System.out.println("Total columns: " + meta.getColumnCount());
-//				System.out.print(meta.getColumnName(1));
-//				for (int j = 2; j <= meta.getColumnCount(); j++)
-//					System.out.print(", " + meta.getColumnName(j));
-//				System.out.println();
-//				// Print out all rows in the ResultSet
-//				while (rs.next()) 
-//				{
-//					System.out.print(rs.getObject(1));
-//					for (int j = 2; j <= meta.getColumnCount(); j++)
-//						System.out.print(", " + rs.getObject(j));
-//					System.out.println();
-//					i++;
-//				}	
-//			}
-//			
 			return (fEnd - fStart);
     	    
     	}
@@ -278,10 +310,36 @@ public class QueryExecutorAll {
     	}
     }
     
-//    public static void main(String[] args){
-//    	String createProcedure =
-//            	"DROP TABLE IF EXISTS blah;";
-//    	create_table_mongo(createProcedure);
-//    }
+    public static void main(String[] args){
+    	String createProcedure =
+             	"DROP TABLE IF EXISTS follower;" +
+                 "CREATE TABLE follower (who_id int, whom_id int, PRIMARY KEY (who_id));"+
+                 "DROP TABLE IF EXISTS message;" +
+                 "CREATE TABLE message (message_id int, text text, PRIMARY KEY (message_id));";
+     QueryExecutorAll.shema_creation_all(createProcedure);
+     String insertion =  "INSERT INTO follower"
+    			+ "(who_id, whom_id) VALUES"
+    			+ "(?,?)";
+     Data d1 = new Data(true, 1);
+     Data d2 = new Data(true, 2);
+     Data d3 = new Data(false, "blah");
+     Data d4 = new Data(false, "blahblah");
+     Arguments ags1 = new Arguments(new Data[]{d1, d2});
+     Arguments ags2 = new Arguments(new Data[]{d2, d1});
+     Arguments[] ags_all = {ags1, ags2};
+     QueryArgs  q_a = new QueryArgs(insertion,ags_all);
+     bulk_run_insertion(q_a);
+     System.out.println("testing text");
+     String insertion_text =  "INSERT INTO message"
+ 			+ "(message_id, text) VALUES"
+ 			+ "(?,?)";
+     
+     Arguments ags3 = new Arguments(new Data[]{d1, d3});
+     Arguments ags4 = new Arguments(new Data[]{d2, d4});
+     Arguments[] ags_all_2 = {ags3, ags4};
+     QueryArgs  q_a_2 = new QueryArgs(insertion_text,ags_all_2);
+     bulk_run_insertion(q_a_2);
+     
+    }
     
 }

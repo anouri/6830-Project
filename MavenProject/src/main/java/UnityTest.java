@@ -86,11 +86,6 @@ public class UnityTest {
     
     public static void main(String[] args) throws Exception{
     	setup();
-    	List<String> loggers = Collections.<String>list(LogManager.getLogManager().getLoggerNames());
-    	for ( String logger : loggers ) {
-    		System.out.println(logger);
-//    		LogManager.getLogManager().getLogger(logger).setLevel(Level.INFO);
-    	}
     	testInsertionFromJSON();
 //    	cleanUpTables();
 //    	testBatchInsertionFromJSON();

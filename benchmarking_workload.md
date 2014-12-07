@@ -180,6 +180,7 @@ insertproportion=0
 readmodifywriteproportion=0.5
 
 1. 250 times
+
 Select
 
 - Table: patients, fields: [subject_id, sex], where: (subject_id < 100) 
@@ -189,6 +190,7 @@ Update
 - Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100)
 
 2. 250 times
+
 Select
 
 - Table: icustayevents, fields:*, where: (subject_id < 150) 

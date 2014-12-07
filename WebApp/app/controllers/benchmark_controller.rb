@@ -20,16 +20,15 @@ class BenchmarkController < ApplicationController
     schema_json = JSON.parse(SQLSchemaParser.getJSON().toString())
     create_models_from_schema_json(@schema, schema_json) # Use JSON to create Table and Field objects in Rails
     # QueryExecutorAll.dropTables(["patients", "chartitems", "labitems", "meditems", "icustayevents", "chartevents", "labevents", "meddurations", "medevents"])
-    QueryExecutorAll.shema_creation_all(raw_schema) # [1] Use raw schema to create tables in the actual databases 
+    # QueryExecutorAll.shema_creation_all(raw_schema) # [1] Use raw schema to create tables in the actual databases 
   end
 
   def queries
     # @schema = Schema.find(1)
     @schema = Schema.find(params[:schema_id])
     update_models(params) # Update cardinality, distribution, distinct, mean, stdv, min, max
-    @tables_to_fields = @schema.tables_to_fields
-    @tables_to_fields_select = @schema.tables_to_fields_select  # Used in the view
-    @tables_to_fields_update = @schema.tables_to_fields_update  # Used in the view for UPDATE (can't update primary key fields)
+    @tables_to_fields = @schema.tables_to_fields # Used in the view
+    @tables_to_fields_exclude_primary_key = @schema.tables_to_fields_exclude_primary_key  # Used in the view for UPDATE (can't update primary key fields)
 
     schema_distribution_hash = create_schema_distribution_hash(@schema)
 

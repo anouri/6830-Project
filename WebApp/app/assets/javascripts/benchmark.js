@@ -99,30 +99,30 @@ $(document).ready(function() {
 			var table_names = tables.val();
 			for (var i = 0; i < table_names.length; i++) {
 				var fields = tables_to_fields[table_names[i]];
-				for (var display_field_name in fields) {
-					var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
-					field1 += option;
-					field2 += option;				
-				}
-				// for (var j = 0; j < fields.length; j++) {
-				// 	var option = '<option value="' + fields[j] + '">' + fields[j] + '</option>';
+				// for (var display_field_name in fields) {
+				// 	var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
 				// 	field1 += option;
-				// 	field2 += option;
+				// 	field2 += option;				
 				// }
+				for (var j = 0; j < fields.length; j++) {
+					var option = '<option value="' + fields[j] + '">' + fields[j] + '</option>';
+					field1 += option;
+					field2 += option;
+				}
 
 			}
 		}	else {
 			var fields = tables_to_fields[tables.val()];
-			for (var display_field_name in fields) {
-				var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
-				field1 += option;
-				field2 += option;				
-			}
-			// for (var i = 0; i < fields.length; i++) {
-			// 	var option = '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+			// for (var display_field_name in fields) {
+			// 	var option = '<option value="' + fields[display_field_name] + '">' + display_field_name + '</option>';
 			// 	field1 += option;
-			// 	field2 += option;
+			// 	field2 += option;				
 			// }
+			for (var i = 0; i < fields.length; i++) {
+				var option = '<option value="' + fields[i] + '">' + fields[i] + '</option>';
+				field1 += option;
+				field2 += option;
+			}
 		}
 		field1 += '</select>';
 		field2 += '</select>';

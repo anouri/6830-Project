@@ -2,7 +2,7 @@
 
 <%= form_tag("/benchmark/add_query", method: "post", id: "new_query", remote: true) do %>
 	<%= hidden_field_tag(:schema_id, @schema.id) %>
-	<%= hidden_field_tag "tables_to_fields", JSON.generate(@tables_to_fields_select) %>
+	<%= hidden_field_tag "tables_to_fields", JSON.generate(@tables_to_fields) %>
 	<div>Percent: <%= number_field_tag("percent", nil, in: 0..100) %></div></br>
 	
 	<div>Query Type: <%= select_tag "query_type", options_for_select(["SELECT", "UPDATE", "INSERT", "DELETE"]) %></div></br>
@@ -14,14 +14,14 @@
 	
 	<span id="update_tag">SET</span></br>
 	<div>
-		<% @tables_to_fields_update.each do |table, fields| %>
+		<% @tables_to_fields_exclude_primary_key.each do |table, fields| %>
 			<%= select_tag "update_fields-#{table}", options_for_select(fields), multiple: true, class:"update_fields" %>
 		<% end %>
 	</div></br>
 
 	<span id="select_fields_tag">Select Field(s):</span>
 	<div>
-		<% @tables_to_fields_select.each do |table, fields| %>
+		<% @tables_to_fields.each do |table, fields| %>
 			<%= select_tag "select_fields-#{table}", options_for_select(fields), multiple: true, class:"select_fields" %>
 		<% end %>
 	</div></br>
@@ -35,15 +35,15 @@
 
 	<span id="groupby_tag">GROUP BY</span>
 	<div>
-		<% @tables_to_fields_select.each do |table, fields| %>
-			<%= select_tag "groupby_fields-#{table}", options_for_select(fields.clone.merge({""=>""}), selected: ""), class:"groupby_fields" %>
+		<% @tables_to_fields.each do |table, fields| %>
+			<%= select_tag "groupby_fields-#{table}", options_for_select(fields.clone << "", selected: ""), class:"groupby_fields" %>
 		<% end %>
 	</div></br>
 
 	<span id="orderby_tag">ORDER BY</span>
 	<div>
-		<% @tables_to_fields_select.each do |table, fields| %>
-			<%= select_tag "orderby_fields-#{table}", options_for_select(fields.clone.merge({""=>""}), selected: ""), class:"orderby_fields" %>
+		<% @tables_to_fields.each do |table, fields| %>
+			<%= select_tag "orderby_fields-#{table}", options_for_select(fields.clone << "", selected: ""), class:"orderby_fields" %>
 		<% end %>
 		<%= select_tag "orderby_direction", options_for_select(["ASC", "DESC"]) %>
 	</div></br>

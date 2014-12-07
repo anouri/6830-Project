@@ -13,26 +13,36 @@ class Schema < ActiveRecord::Base
 		result
 	end
 
-	# { "tableName" => {"subject_id" => "employee.subject_id"} }
-	def tables_to_fields_select
+	def tables_to_fields_exclude_primary_key
 		result = {}
 		self.tables.each do |table|
-			field_names = {}
-			table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" }	# "subject_id" => "employee.subject_id"
+			field_names = []
+			table.fields.each { |field| field_names << field.name if field.name != table.primary_key }
 			result[table.name] = field_names
 		end
 		result
 	end
 
-	def tables_to_fields_update
-		result = {}
-		self.tables.each do |table|
-			field_names = {}
-			table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" if field.name != table.primary_key }
-			result[table.name] = field_names
-		end
-		result
-	end
+	# { "tableName" => {"subject_id" => "employee.subject_id"} }
+	# def tables_to_fields_select
+	# 	result = {}
+	# 	self.tables.each do |table|
+	# 		field_names = {}
+	# 		table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" }	# "subject_id" => "employee.subject_id"
+	# 		result[table.name] = field_names
+	# 	end
+	# 	result
+	# end
+
+	# def tables_to_fields_update
+	# 	result = {}
+	# 	self.tables.each do |table|
+	# 		field_names = {}
+	# 		table.fields.each { |field| field_names[field.name] = "#{table.name}.#{field.name}" if field.name != table.primary_key }
+	# 		result[table.name] = field_names
+	# 	end
+	# 	result
+	# end
 
 	# def group_by_order_by_fields
 	# 	field_names = {}

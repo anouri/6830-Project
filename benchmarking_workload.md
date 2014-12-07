@@ -19,6 +19,15 @@ Default data size:
 * 100 MB Shirley
 * 1 MB Tony
 
+Insertion: table
+
+Deleteion: table, predicates where, relation and/or
+
+Update: table, field, predicates where, relation and/or
+
+Select: tables (as join), fields, predicates, relation and/or, groupby (0/1), orderby (0/1) -- asc/desc
+
+Examples: 
 
 **Workload A: Update heavy workload**
 

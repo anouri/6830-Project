@@ -168,6 +168,10 @@ Table: medevents --> 30
 
 Table: meddurations --> 20
 
+MySQL: 166806 milliseconds
+
+MongoDB: 36186 milliseconds
+
 **Workload F: Read-modify-write**
 
 Application example: user database, where user records are read and modified by the user or to record user activity.

@@ -85,6 +85,10 @@ scanproportion=0
 
 insertproportion=0
 
+MySQL: 125597 milliseconds
+
+MongoDB: 272406 milliseconds
+
 
 **Workload C: Read only**
 
@@ -107,6 +111,7 @@ scanproportion=0
 insertproportion=0
 
 MySQL: 188062 milliseconds
+
 MongoDB: 14703 milliseconds
 
 **Workload D: Read latest workload**

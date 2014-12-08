@@ -125,7 +125,7 @@ module AddQueryHelper
 	def add_groupby_and_orderby_fields(query_object, params)
 		groupby_fields = []
 		orderby_fields = []
-		orderby_direction = 1 # Default 1 = ASC, 0 = DESC
+		orderby_direction = true # Default true = ASC, false = DESC
 
 		params.keys.each do |k|
 			if k.include?("groupby_fields")
@@ -133,7 +133,7 @@ module AddQueryHelper
 			elsif k.include?("orderby_fields")
 				orderby_fields << params[k]
 			elsif k == "orderby_direction"
-				orderby_direction = params[k]
+				orderby_direction = false if params[k] == "DESC"
 			end
 		end
 

@@ -1,4 +1,9 @@
-
+<div>
+  <h3>Time To Insert Data Into Tables</h3>
+  <% @run_times.each do |db, time| %>
+    <div><%= db %>: <%= time %> milliseconds</div>
+  <% end %>
+</div></br>
 
 <%= form_tag("/benchmark/add_query", method: "post", id: "new_query", remote: true) do %>
 	<%= hidden_field_tag(:schema_id, @schema.id) %>

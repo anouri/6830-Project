@@ -26,7 +26,7 @@ class Query < ActiveRecord::Base
 		unless orderby_fields.empty?
 			raw_select += " ORDER BY "
 			raw_select = build_comma_separated_string(raw_select, orderby_fields)
-			self.orderby_direction ? raw_select += " DESC" : raw_select += " ASC"
+			self.orderby_direction ? raw_select += " ASC" : raw_select += " DESC"
 		end
 
 		return raw_select += ";"
@@ -68,10 +68,10 @@ class Query < ActiveRecord::Base
 			predicates.each do |p|
 				if p.field2 == "?"
 					val = getPredicateVal(p.field1, tables)
-					if val.is_a? String
-						basic = "#{p.field1} #{p.operator} " + "'#{val}'"	# Must adhere to raw SQL for strings
-					else
+					if val.to_i.to_s == val 	# Integer in string quotes since GetDataValue returns strings
 						basic = "#{p.field1} #{p.operator} #{val}"
+					else
+						basic = "#{p.field1} #{p.operator} " + "'#{val}'"	# Must adhere to raw SQL for strings
 					end
 				else
 					basic = "#{p.field1} #{p.operator} #{p.field2}"
@@ -142,7 +142,7 @@ class Query < ActiveRecord::Base
 			# orderby_fields.each do |f|
 			# 	(f == orderby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
 			# end
-			self.orderby_direction ? format_select += " DESC" : format_select += " ASC"
+			self.orderby_direction ? format_select += " ASC" : format_select += " DESC"
 		end
 
 		return format_select += ";"

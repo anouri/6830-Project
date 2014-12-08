@@ -61,6 +61,10 @@ scanproportion=0
 
 insertproportion=0
 
+MySQL: 1781140 milliseconds
+
+MongoDB: 424985 milliseconds
+
 **Workload B: Read mostly workload**
 
 Application example: photo tagging; add a tag is an update, but most operations are to read tags

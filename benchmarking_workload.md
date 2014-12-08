@@ -85,9 +85,9 @@ scanproportion=0
 
 insertproportion=0
 
-MySQL: 125597 milliseconds
+MySQL: 272406 milliseconds
 
-MongoDB: 272406 milliseconds
+MongoDB: 125597 milliseconds
 
 
 **Workload C: Read only**
@@ -137,6 +137,10 @@ insertproportion=0.05
 Table: medevents --> 30
 
 Table: meddurations --> 20
+
+MySQL: 181164 milliseconds
+
+MongoDB: 20025 milliseconds
 
 **Workload E: Short ranges**
 

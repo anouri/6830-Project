@@ -210,6 +210,10 @@ Update
 
 - Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400)
 
+MySQL: 836876 milliseconds
+
+MongoDB: 314502 milliseconds
+
 
 **Links**
 

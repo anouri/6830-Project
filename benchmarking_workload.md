@@ -61,6 +61,10 @@ scanproportion=0
 
 insertproportion=0
 
+MySQL: 1781140 milliseconds
+
+MongoDB: 424985 milliseconds
+
 **Workload B: Read mostly workload**
 
 Application example: photo tagging; add a tag is an update, but most operations are to read tags
@@ -85,6 +89,10 @@ scanproportion=0
 
 insertproportion=0
 
+MySQL: 272406 milliseconds
+
+MongoDB: 125597 milliseconds
+
 
 **Workload C: Read only**
 
@@ -106,6 +114,9 @@ scanproportion=0
 
 insertproportion=0
 
+MySQL: 188062 milliseconds
+
+MongoDB: 14703 milliseconds
 
 **Workload D: Read latest workload**
 
@@ -130,6 +141,10 @@ insertproportion=0.05
 Table: medevents --> 30
 
 Table: meddurations --> 20
+
+MySQL: 181164 milliseconds
+
+MongoDB: 20025 milliseconds
 
 **Workload E: Short ranges**
 
@@ -156,6 +171,10 @@ insertproportion=0.05
 Table: medevents --> 30
 
 Table: meddurations --> 20
+
+MySQL: 166806 milliseconds
+
+MongoDB: 36186 milliseconds
 
 **Workload F: Read-modify-write**
 
@@ -198,6 +217,10 @@ Select
 Update
 
 - Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400)
+
+MySQL: 836876 milliseconds
+
+MongoDB: 314502 milliseconds
 
 
 **Links**

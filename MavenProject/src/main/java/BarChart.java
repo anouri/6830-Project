@@ -125,9 +125,9 @@ public class BarChart extends ApplicationFrame {
         
         // create the chart...
         final JFreeChart chart = ChartFactory.createBarChart(
-            "Runtime Comparison",         // chart title
-            "Query Type",               // domain axis label
-            "Runtime in seconds",                  // range axis label
+            "Runtime Comparison Over 100 Statements",         // chart title
+            "Workload",               // domain axis label
+            "Runtime (ms)",                  // range axis label
             dataset,                  // data
             PlotOrientation.VERTICAL, // orientation
             true,                     // include legend
@@ -145,7 +145,7 @@ public class BarChart extends ApplicationFrame {
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         rangeAxis.setLowerBound(0);
-        rangeAxis.setUpperBound(30);
+        rangeAxis.setUpperBound(2000000);
         
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);
@@ -188,10 +188,44 @@ public class BarChart extends ApplicationFrame {
      */
     public static void main(final String[] args) {
 
-        final BarChart demo = new BarChart("Bar Chart Demo");
-        demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
-        demo.setVisible(true);
+//        final BarChart demo = new BarChart("Bar Chart Demo");
+        HashMap<String, Long> updateHeavy = new HashMap<String, Long>();
+        updateHeavy.put("MySQL", 1781140L);
+        updateHeavy.put("MongoDB", 424985L);
+
+        HashMap<String, Long> readMostly = new HashMap<String, Long>();
+        readMostly.put("MySQL", 272406L);
+        readMostly.put("MongoDB", 125597L);
+
+        HashMap<String, Long> readOnly = new HashMap<String, Long>();
+        readOnly.put("MySQL", 188062L);
+        readOnly.put("MongoDB", 14703L);
+
+        HashMap<String, Long> readLatest = new HashMap<String, Long>();
+        readLatest.put("MySQL", 181164L);
+        readLatest.put("MongoDB", 20025L);
+
+        HashMap<String, Long> shortRanges = new HashMap<String, Long>();
+        shortRanges.put("MySQL", 166806L);
+        shortRanges.put("MongoDB", 36186L);
+
+        HashMap<String, Long> readModifyWrite = new HashMap<String, Long>();
+        readModifyWrite.put("MySQL", 836876L);
+        readModifyWrite.put("MongoDB", 314502L);
+
+        HashMap<String, HashMap<String, Long>> results = new HashMap<String, HashMap<String, Long>>();
+        results.put("Update Heavy", updateHeavy);
+        results.put("Read Mostly", readMostly);
+        results.put("Read Only", readOnly);
+        results.put("Read Latest", readLatest);
+        results.put("Short Ranges", shortRanges);
+        results.put("Read Modify Write", readModifyWrite);
+
+        final BarChart benchmark = new BarChart("Benchmark", results);
+
+        benchmark.pack();
+        RefineryUtilities.centerFrameOnScreen(benchmark);
+        benchmark.setVisible(true);
 
     }
 

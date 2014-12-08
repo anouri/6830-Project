@@ -160,14 +160,11 @@ public class InsertData {
         // }
 
         // Test QueryArgsFromJSON
-        // String[] tableName = new String[] {"chartevents","chartitems","follower","icustayevents","labevents","labitems","meddurations","medevents","meditems", "message","patients"};
-        // QueryExecutorAll.dropTables(tableName);
-        // String rawSchema = "CREATE TABLE follower (who_id int, whom_id int, primary key (who_id)); CREATE TABLE message (message_id int, text text, primary key (message_id));";
+        String[] tableName = new String[] {"chartevents","chartitems","follower","icustayevents","labevents","labitems","meddurations","medevents","meditems", "message","patients"};
+        QueryExecutorAll.dropTables(tableName);
         SQLSchemaParser schemaParser = new SQLSchemaParser(SQLSchemaParser.EXAMPLE_SCHEMA.trim());
         String createProcedure = SQLSchemaParser.getRawSchema();
-        // SQLSchemaParser schemaParser = new SQLSchemaParser(rawSchema);
         QueryExecutorAll.shema_creation_all(createProcedure);
-        // String distributionJSON = "{follower: {cardinality: 3, fields: [{category: Integer, length: 4, name: who_id, distribution: autoincrement,distinct: null, mean: null, stdv: null, min: null, max: null}, { category: Integer, length: 4, name: whom_id, distribution: delta, distinct: null, mean: null, stdv: null, min: 1, max: 10}]}, message: {cardinality: 4, fields: [{category: Integer, length: 4,  name: message_id, distribution: autoincrement, distinct: null, mean: null, stdv: null, min: null, max: null}, {category: String, length: 128, name: text, distribution: uniform,distinct: 2, mean: null, stdv: null, min: 3, max: 6}]}}";
         FastDataGenerator fdg = new FastDataGenerator(SQLSchemaParser.EXAMPLE_DISTRIBUTION);
         HashMap<String, Long> results = new HashMap<String, Long>();
         while (true) {

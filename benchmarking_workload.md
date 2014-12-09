@@ -265,7 +265,7 @@ MongoDB: 1,717,431 milliseconds
 
 **Size of Tables**
 
-MySQL:
+**MySQL:**
 
 medevents: 198 MB
 
@@ -286,7 +286,7 @@ patients: 16 MB
 meditems: 16 MB
 
 
-MongoDB:
+**MongoDB:**
 
 medevents: 472 MB
 
@@ -307,7 +307,7 @@ patients: 42 MB
 meditems: 42 MB
 
 
-Cassandra:
+**Cassandra:**
 
 medevents: 276 MB
 

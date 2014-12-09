@@ -234,7 +234,23 @@ MongoDB: 314502 milliseconds
 
 > http://www.datastax.com/wp-content/uploads/2013/02/WP-Benchmarking-Top-NoSQL-Databases.pdf
 
-
 **Resource 3 -- Past paper**
 
 > http://www.cubrid.org/blog/dev-platform/nosql-benchmarking/
+
+
+**Checking load with Cassandra**
+
+Start the database. In bin folder of cassandra run:
+
+This is the load size for the entire data cluster:
+
+> nodetool status 
+
+Check the size for each keyspace:
+
+> nodetool cfstats
+
+Check latency for each table:
+
+> nodetool cfhistograms <keyspace> <table>

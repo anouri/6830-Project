@@ -45,25 +45,25 @@ Read/update ratio: 50/50
 
 readproportion=0.5 = 500
 
-Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 200 times
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < ? and itemid > ?) --> 200 times
 
-Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 200 times
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == ?, orderby charttime desc --> 200 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 100 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id != ? or itemid == ? --> 100 times
 
 updateproportion=0.5
 
-Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100) --> 200 times
+Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == ?) --> 200 times
 
-Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400) --> 300 times
+Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= ?) --> 300 times
 
 scanproportion=0
 
 insertproportion=0
 
-MySQL: 1781140 milliseconds
+MySQL: 1,781,140 milliseconds
 
-MongoDB: 424985 milliseconds
+MongoDB: 424,985 milliseconds
 
 **Workload B: Read mostly workload**
 
@@ -73,25 +73,25 @@ Read/update ratio: 95/5
 
 readproportion=0.95
 
-Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 150 times
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < ? and itemid > ?) --> 150 times
 
-Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 400 times
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == ?, orderby charttime desc --> 400 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id != ? or itemid == ? --> 400 times
 
 updateproportion=0.05
 
-Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100) --> 20 times
+Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == ?) --> 20 times
 
-Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400) --> 30 times
+Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= ?) --> 30 times
 
 scanproportion=0
 
 insertproportion=0
 
-MySQL: 272406 milliseconds
+MySQL: 272,406 milliseconds
 
-MongoDB: 125597 milliseconds
+MongoDB: 125,597 milliseconds
 
 
 **Workload C: Read only**
@@ -102,11 +102,11 @@ Read/update ratio: 100/0
 
 readproportion=1.0
 
-Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 300 times
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < ? and itemid > ?) --> 300 times
 
-Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 300 times
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == ?, orderby charttime desc --> 300 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id != ? or itemid == ? --> 400 times
 
 updateproportion=0
 
@@ -114,9 +114,9 @@ scanproportion=0
 
 insertproportion=0
 
-MySQL: 188062 milliseconds
+MySQL: 188,062 milliseconds
 
-MongoDB: 14703 milliseconds
+MongoDB: 14,703 milliseconds
 
 **Workload D: Read latest workload**
 
@@ -126,11 +126,11 @@ Read/update/insert ratio: 95/0/5
 
 readproportion=0.95
 
-Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 150 times
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < ? and itemid > ?) --> 150 times
 
-Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 400 times
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == ?, orderby charttime desc --> 400 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: (icustay_id !=20) or itemid == 10 --> 400 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: (icustay_id != ?) or itemid == ? --> 400 times
 
 updateproportion=0
 
@@ -142,9 +142,9 @@ Table: medevents --> 30
 
 Table: meddurations --> 20
 
-MySQL: 181164 milliseconds
+MySQL: 181,164 milliseconds
 
-MongoDB: 20025 milliseconds
+MongoDB: 20,025 milliseconds
 
 **Workload E: Short ranges**
 
@@ -160,11 +160,11 @@ updateproportion=0
 
 scanproportion=0.95
 
-Table: medevents, fields: *, where: (subject_id < 500 and itemid > 20) --> 150 times
+Table: medevents, fields: *, where: (subject_id < ? and itemid > ?) --> 150 times
 
-Table: labevents, fields: *, where: icustay_id == 2, orderby charttime asc --> 400 times
+Table: labevents, fields: *, where: icustay_id == ?, orderby charttime desc --> 400 times
 
-Table: chartevents, fields: *, where: icustay_id not in [1, 3, 5] or itemid == 10 --> 400 times
+Table: chartevents, fields: *, where: icustay_id != ? or itemid == ? --> 400 times
 
 insertproportion=0.05
 
@@ -172,9 +172,9 @@ Table: medevents --> 30
 
 Table: meddurations --> 20
 
-MySQL: 166806 milliseconds
+MySQL: 166,806 milliseconds
 
-MongoDB: 36186 milliseconds
+MongoDB: 36,186 milliseconds
 
 **Workload F: Read-modify-write**
 
@@ -184,11 +184,11 @@ Read/read-modify-write ratio: 50/50
 
 readproportion=0.5
 
-Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < 500 and itemid > 20) --> 200 times
+Table: medevents, fields: [subject_id, charttime, site], where: (subject_id < ? and itemid > ?) --> 200 times
 
-Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == 2, orderby charttime asc --> 200 times
+Table: labevents, fields: [labevent_id, labvalue], where: icustay_id == ?, orderby charttime desc --> 200 times
 
-Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id not in [1, 3, 5] or itemid == 10 --> 100 times
+Table: chartevents, fields: [subject_id, elemid, annotation], where: icustay_id != ? or itemid == ? --> 100 times
 
 updateproportion=0
 
@@ -202,11 +202,11 @@ readmodifywriteproportion=0.5
 
 Select
 
-- Table: patients, fields: [subject_id, sex], where: (subject_id < 100) 
+- Table: patients, fields: [subject_id, sex], where: (subject_id < ?) 
 
 Update
 
-- Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == 100)
+- Table: patients, fields: [dod, hospital_expire_flg], where: (subject_id == ?)
 
 2. 250 times
 
@@ -216,11 +216,11 @@ Select
 
 Update
 
-- Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= 400)
+- Table: icustayevents, fields: [outtime, intime], where: (icustay_id >= ?)
 
-MySQL: 836876 milliseconds
+MySQL: 836,876 milliseconds
 
-MongoDB: 314502 milliseconds
+MongoDB: 314,502 milliseconds
 
 
 **Links**
@@ -254,3 +254,75 @@ Check the size for each keyspace:
 Check latency for each table:
 
 > nodetool cfhistograms <keyspace> <table>
+
+**Time To Insert 1GB Dataset Into Tables**
+
+MySQL: 8,878,946 milliseconds
+
+Cassandra: 1,305,862 milliseconds
+
+MongoDB: 1,717,431 milliseconds
+
+**Size of Tables**
+
+**MySQL:**
+
+medevents: 198 MB
+
+chartevents: 182 MB
+
+icustayevents: 140 MB
+
+labevents: 55 MB
+
+chartitems: 55 MB
+
+labitems: 31 MB
+
+meddurations: 20 MB
+
+patients: 16 MB
+
+meditems: 16 MB
+
+
+**MongoDB:**
+
+medevents: 472 MB
+
+chartevents: 442 MB
+
+icustayevents: 427 MB
+
+labevents: 183 MB
+
+chartitems: 112 MB
+
+labitems: 65 MB
+
+meddurations: 91 MB
+
+patients: 42 MB
+
+meditems: 42 MB
+
+
+**Cassandra:**
+
+medevents: 276 MB
+
+chartevents: 244 MB
+
+icustayevents: 246 MB
+
+labevents: 88 MB
+
+chartitems: 64 MB
+
+labitems: 36 MB
+
+meddurations: 36 MB
+
+patients: 28 MB
+
+meditems: 23 MB

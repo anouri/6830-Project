@@ -79,7 +79,6 @@ class Query < ActiveRecord::Base
 				(p.prefix.nil?) ? raw_predicates += basic : raw_predicates += " #{p.prefix} #{basic}"
 			end
 			return raw_predicates
-
 		else
 			return ""
 		end
@@ -104,24 +103,12 @@ class Query < ActiveRecord::Base
 
 	# FORMAT QUERY METHODS: insert ? where GetDataValue is to be inputted
 	def create_format_select
-		# format_select_fields = ""
 		select_fields = self.select_fields.split(",")
-		
 		format_select_fields = build_comma_separated_string("", select_fields)
 
-		# select_fields.each do |f|
-		# 	(f == select_fields.first) ? format_select_fields += "#{f}" : format_select_fields += ", #{f}"
-		# end
-
-		# format_tables = ""
 		tables = self.tables.split(",")
-
 		format_tables = build_comma_separated_string("", tables)
 
-		# tables.each do |t|
-		# 	(t == tables.first) ? format_tables += "#{t}" : format_tables += ", #{t}"
-		# end
-		
 		format_predicates = create_format_predicates(self.predicates)
 
 		format_select = "SELECT #{format_select_fields} FROM #{format_tables} #{format_predicates}"
@@ -130,18 +117,12 @@ class Query < ActiveRecord::Base
 		unless groupby_fields.empty?
 			format_select += " GROUP BY "
 			format_select = build_comma_separated_string(format_select, groupby_fields)
-			# groupby_fields.each do |f|
-			# 	(f == groupby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
-			# end
 		end
 
 		orderby_fields = self.orderby_fields.split(",")
 		unless orderby_fields.empty?
 			format_select += " ORDER BY "
 			format_select = build_comma_separated_string(format_select, orderby_fields)
-			# orderby_fields.each do |f|
-			# 	(f == orderby_fields.first) ? format_select += "#{f}" : format_select += ", #{f}"
-			# end
 			self.orderby_direction ? format_select += " ASC" : format_select += " DESC"
 		end
 
@@ -149,17 +130,9 @@ class Query < ActiveRecord::Base
 	end
 
 	def create_format_update
-		# format_update_fields = ""
 		update_fields = self.update_fields.split(",")
-
 		format_update_fields = build_comma_separated_string_update(update_fields)
-		# update_fields.each do |f|
-		# 	basic = "#{f} = ?"
-		# 	(f == update_fields.first) ? format_update_fields += "#{basic}" : format_update_fields += ", #{basic}"
-		# end
-
 		format_predicates = create_format_predicates(self.predicates)
-
 		return "UPDATE #{self.tables} SET #{format_update_fields} #{format_predicates};"
 	end
 

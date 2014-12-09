@@ -125,7 +125,7 @@ public class BarChart extends ApplicationFrame {
         
         // create the chart...
         final JFreeChart chart = ChartFactory.createBarChart(
-            "Runtime Comparison Over 100 Statements",         // chart title
+            "Runtime Comparison",         // chart title
             "Workload",               // domain axis label
             "Runtime (ms)",                  // range axis label
             dataset,                  // data
@@ -145,7 +145,7 @@ public class BarChart extends ApplicationFrame {
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         rangeAxis.setLowerBound(0);
-        rangeAxis.setUpperBound(2000000);
+        rangeAxis.setUpperBound(200);
         
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);

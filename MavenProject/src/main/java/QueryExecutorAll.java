@@ -39,8 +39,8 @@ public class QueryExecutorAll {
 	
 	public static void shema_creation_all(String createProcedure){
 		create_table_mysql(createProcedure);
-		set_cassandra_keyspace("test");
-		create_table_cassandra(createProcedure);
+		// set_cassandra_keyspace("test");
+		// create_table_cassandra(createProcedure);
 		create_table_mongo(createProcedure);
 	}
 	
@@ -50,8 +50,8 @@ public class QueryExecutorAll {
 		result.put("mysql", executeQuery_bulk(getDataSource("mysql"),q_a));
 		System.out.println("mongo");
 		result.put("mongo", executeQuery_bulk(getDataSource("mongo"), q_a));
-		System.out.println("cassandra");
-		result.put("cassandra", executeQuery_bulk(getDataSource("cassandra"), q_a));
+		// System.out.println("cassandra");
+		// result.put("cassandra", executeQuery_bulk(getDataSource("cassandra"), q_a));
 		return result;
 	}
 	
@@ -59,7 +59,7 @@ public class QueryExecutorAll {
 		HashMap<String, Long> result = new HashMap<String, Long>();
 		result.put("mysql", executeQuery(getDataSource("mysql"), rawSQLQuery));
 		result.put("mongo", executeQuery(getDataSource("mongo"), rawSQLQuery));
-		result.put("cassandra", executeQuery(getDataSource("cassandra"), rawSQLQuery));
+		// result.put("cassandra", executeQuery(getDataSource("cassandra"), rawSQLQuery));
 		return result;
 	}
 	

@@ -1,7 +1,7 @@
 **Setup**
 =================
 
-# IDE Setup
+*IDE Setup*
 
 **Maven**:
 Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
@@ -57,7 +57,7 @@ Then run:
 GRANT ALL PRIVILEGES ON *.* TO '*'@'localhost';
 ```
 
-# Installing DBs and Rails
+*Installing DBs and Rails*
 
 **MySQL**
 

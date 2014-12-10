@@ -1,9 +1,9 @@
 **Setup**
 =================
 
-*IDE Setup*
+**IDE Setup**
 
-**Maven**:
+*Maven*:
 Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
 
 This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install`` or ``mvn -Dmaven.test.skip=true install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
@@ -19,9 +19,9 @@ For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaPa
 4. Finish
 
 
-**Unity for Consistent Multi-db Accesses**
+*Unity for Consistent Multi-db Accesses*
 
-**Dependencies**
+*Dependencies*
 
 All of the dependecies can be found in UnityJar folder on root directory
 
@@ -32,19 +32,19 @@ Then, manually add in the following dependencies: *This step is no longer needed
 - mongodb_unityjdbc_full.jar
 - cassandra-jdbc-2.1.jar
 
-**DB Configurations**
+*DB Configurations*
 
 All the db configurations are in:
 
 src/main/java/db.properties
 
-**Configure Cassandra**
+*Configure Cassandra*
 
 In cassandra.yaml (you can find this in the dsc-cassandra-2.1.1/conf directory), change thrift_framed_transport_size_in_mb: 18
 
 Make sure port is set to 9160.
 
-**Configure MySQL**
+*Configure MySQL*
 
 start mysql client using:
 
@@ -59,7 +59,7 @@ GRANT ALL PRIVILEGES ON *.* TO '*'@'localhost';
 
 *Installing DBs and Rails*
 
-**MySQL**
+*MySQL*:
 
 Download:
 
@@ -71,7 +71,7 @@ sudo /usr/local/mysql/support-files/mysql.server start
 
 sudo /usr/local/mysql/support-files/mysql.server stop
 
-**MongoDB**:
+*MongoDB*:
 
 *Preferred*: 
 If you have homebrew, you can simply use
@@ -144,7 +144,7 @@ Run with path:
 <path to binary>/mongod
 ```
 
-**Cassandra**:
+*Cassandra*:
 
 Download the Software
 

@@ -246,8 +246,8 @@ Adding Gemset to Existing Application and Installing Rails
 
 > For me, I did sudo mv local_policy.jar /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/security
 
-** Project related **
-
+**Project related**
+======================
 **Sample SQL schema (input to SQLSchemaParser)**
 
 **Benchmarking Output Sample**

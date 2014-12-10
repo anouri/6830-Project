@@ -1,34 +1,10 @@
 **Setup**
 =================
-
-**Maven**:
-Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
-
-This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install`` or ``mvn -Dmaven.test.skip=true install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
-> java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
-
-For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaParser
-
-**Create a user defined library in Eclipse**
-
-1. Right click on the project and select properties
-2. Create a Library -> User Library called “xxx”, in this case, can be called "Unity Library"
-3. Add in all external libraries necessary
-4. Finish
-
-
-**Unity for Consistent Multi-db Accesses**
-
-**Dependencies**
-
-All of the dependecies can be found in UnityJar folder on root directory
-
-First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (Shirley signed up for a free trial)
-
-Then, manually add in the following dependencies: *This step is no longer needed*
-- unityjdbc.jar
-- mongodb_unityjdbc_full.jar
-- cassandra-jdbc-2.1.jar
+1. Setup maven version 1.8
+2. Run `mvn clean install` to generate the uber jar file in the target folder [DatabaseBenchmarking-1.0-SNAPSHOT.jar]
+3. Setting up 3 databases mongodb, cassandra, MySQL and start the server for each (see instruction below)
+4. Setting up ruby on rails
+5. Enjoy =)
 
 **DB Configurations**
 
@@ -248,6 +224,37 @@ Adding Gemset to Existing Application and Installing Rails
 
 **Project related**
 ======================
+
+
+**Maven**:
+Make sure your mvn --version has java version 1.8 otherwise there will be a minor/major error when you do `mvn clean install`.
+
+This project is managed using maven. In order to have the jar that include all of the dependency, use ``mvn package`` or ``mvn clean install`` or ``mvn -Dmaven.test.skip=true install``. It will generate a uber jar file in target name DatabaseBenchmarking-1.0-SNAPSHOT.jar. You can run any class in the jar with the following command:
+> java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar [classname]
+
+For example: > java -cp target/DatabaseBenchmarking-1.0-SNAPSHOT.jar SQLSchemaParser
+
+**Create a user defined library in Eclipse**
+
+1. Right click on the project and select properties
+2. Create a Library -> User Library called “xxx”, in this case, can be called "Unity Library"
+3. Add in all external libraries necessary
+4. Finish
+
+
+**Unity for Consistent Multi-db Accesses**
+
+**Dependencies**
+
+All of the dependecies can be found in UnityJar folder on root directory
+
+First, nstall unity jdbc by running UnityJDBC_Trial_Install.jar (Shirley signed up for a free trial)
+
+Then, manually add in the following dependencies: *This step is no longer needed*
+- unityjdbc.jar
+- mongodb_unityjdbc_full.jar
+- cassandra-jdbc-2.1.jar
+- 
 **Sample SQL schema (input to SQLSchemaParser)**
 
 **Benchmarking Output Sample**
